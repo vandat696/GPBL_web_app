@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海外での困難</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-brand">海外での困難</div>
+        <nav class="navbar-menu">
+            <a href="#" class="nav-item active" data-page="home">Homepage</a>
+            <a href="#" class="nav-item" data-page="issues">一般的な問題</a>
+            <a href="#" class="nav-item" data-page="discussions">話し合う</a>
+        </nav>
+        <div class="navbar-actions">
+            <select id="country-select" class="country-select">
+                <option value="all">国</option>
+                <option value="vietnam">ベトナム</option>
+                <option value="japan">日本</option>
+                <option value="usa">アメリカ</option>
+                <option value="france">フランス</option>
+            </select>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Trang chủ -->
+        <section id="home-page" class="page active">
+            <div class="slideshow-container">
+                <img src="https://placehold.co/1200x800/d1d1d1/212121?text=Quoc+gia+1" alt="Hình ảnh quốc gia" class="slideshow-image">
+                <div class="slideshow-overlay">
+                    <div class="slideshow-text">
+                        <h1>探索してつながる</h1>
+                        <p>経験を共有し困難を乗り越える</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Các vấn đề thường gặp -->
+        <section id="issues-page" class="page">
+            <aside class="sidebar">
+                <h3>Tags</h3>
+                <div id="issue-tags" class="tag-list">
+                    <!-- Tags sẽ được thêm bằng JS -->
+                </div>
+            </aside>
+            <div class="content-area">
+                <h2 class="content-title">一般的な問題</h2>
+                <input type="text" id="issues-search" class="search-input" placeholder="記事を検索...">
+                <div id="issues-list" class="card-list">
+                    <!-- Các bài viết sẽ được thêm bằng JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Thảo luận -->
+        <section id="discussions-page" class="page">
+            <aside class="sidebar">
+                <h3>Tags</h3>
+                <div id="discussion-tags" class="tag-list">
+                    <!-- Tags sẽ được thêm bằng JS -->
+                </div>
+            </aside>
+            <div class="content-area">
+                <h2 class="content-title">話し合う</h2>
+                <button id="post-button" class="post-button">Post</button>
+                <div id="discussions-list" class="card-list">
+                    <!-- Các bài thảo luận sẽ được thêm bằng JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal để hiển thị bài viết/thảo luận đầy đủ -->
+    <div id="post-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="modal-body">
+                <!-- Nội dung bài viết/thảo luận đầy đủ sẽ hiển thị ở đây -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal để đăng bài thảo luận mới -->
+    <div id="new-post-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-new-post-modal">&times;</span>
+            <div class="modal-body">
+                <h2>Đăng bài thảo luận mới</h2>
+                <form id="new-post-form">
+                    <input type="text" id="post-title" placeholder="Tiêu đề bài viết" required>
+                    <textarea id="post-content" placeholder="Nội dung bài viết" required></textarea>
+                    <input type="text" id="post-tags" placeholder="Tags (cách nhau bằng dấu phẩy)">
+                    <input type="text" id="post-image" placeholder="URL hình ảnh">
+                    <input type="text" id="post-video" placeholder="URL video (tùy chọn)">
+                    <button type="submit">Đăng bài</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
