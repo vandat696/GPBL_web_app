@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>海外での困難</title>
+    <title>海外移住の課題</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
     <header class="navbar">
-        <div class="navbar-brand">海外での困難</div>
+        <div class="navbar-brand">移住の課題</div>
         <nav class="navbar-menu">
-            <a href="#" class="nav-item active" data-page="home">Homepage</a>
-            <a href="#" class="nav-item" data-page="issues">一般的な問題</a>
-            <a href="#" class="nav-item" data-page="discussions">話し合う</a>
+            <a href="#" class="nav-item active" data-page="home">ホーム</a>
+            <a href="#" class="nav-item" data-page="issues">よくある質問</a>
+            <a href="#" class="nav-item" data-page="discussions">ディスカッション</a>
         </nav>
         <div class="navbar-actions">
             <select id="country-select" class="country-select">
-                <option value="all">国</option>
+                <option value="all">国を選択</option>
                 <option value="vietnam">ベトナム</option>
                 <option value="japan">日本</option>
                 <option value="usa">アメリカ</option>
                 <option value="france">フランス</option>
             </select>
+            <button id="post-button" class="post-button">投稿する</button>
         </div>
     </header>
 
@@ -32,26 +33,26 @@
         <!-- Trang chủ -->
         <section id="home-page" class="page active">
             <div class="slideshow-container">
-                <img src="https://placehold.co/1200x800/d1d1d1/212121?text=Quoc+gia+1" alt="Hình ảnh quốc gia" class="slideshow-image">
+                <img src="https://placehold.co/1200x800/d1d1d1/212121?text=Quoc+gia+1" alt="国の画像" class="slideshow-image">
                 <div class="slideshow-overlay">
                     <div class="slideshow-text">
-                        <h1>探索してつながる</h1>
-                        <p>経験を共有し困難を乗り越える</p>
+                        <h1>発見とつながり</h1>
+                        <p>海外生活の経験を共有し、課題を乗り越えましょう。</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Các vấn đề thường gặp -->
+        <!-- Trang Các vấn đề thường gặp -->
         <section id="issues-page" class="page">
             <aside class="sidebar">
-                <h3>Tags</h3>
+                <h3>トピック</h3>
                 <div id="issue-tags" class="tag-list">
-                    <!-- Tags sẽ được thêm bằng JS -->
+                    <!-- Các thẻ (tag) sẽ được thêm bằng JS -->
                 </div>
             </aside>
             <div class="content-area">
-                <h2 class="content-title">一般的な問題</h2>
+                <h2 class="content-title">よくある質問</h2>
                 <input type="text" id="issues-search" class="search-input" placeholder="記事を検索...">
                 <div id="issues-list" class="card-list">
                     <!-- Các bài viết sẽ được thêm bằng JS -->
@@ -59,17 +60,17 @@
             </div>
         </section>
 
-        <!-- Thảo luận -->
+        <!-- Trang Thảo luận -->
         <section id="discussions-page" class="page">
             <aside class="sidebar">
-                <h3>Tags</h3>
+                <h3>タグ</h3>
                 <div id="discussion-tags" class="tag-list">
-                    <!-- Tags sẽ được thêm bằng JS -->
+                    <!-- Các thẻ (tag) sẽ được thêm bằng JS -->
                 </div>
             </aside>
             <div class="content-area">
-                <h2 class="content-title">話し合う</h2>
-                <button id="post-button" class="post-button">Post</button>
+                <h2 class="content-title">ディスカッション</h2>
+                <input type="text" id="discussions-search" class="search-input" placeholder="投稿を検索...">
                 <div id="discussions-list" class="card-list">
                     <!-- Các bài thảo luận sẽ được thêm bằng JS -->
                 </div>
@@ -78,29 +79,29 @@
 
     </main>
 
-    <!-- Modal để hiển thị bài viết/thảo luận đầy đủ -->
+    <!-- Cửa sổ modal hiển thị chi tiết bài viết/thảo luận -->
     <div id="post-modal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <div id="modal-body">
-                <!-- Nội dung bài viết/thảo luận đầy đủ sẽ hiển thị ở đây -->
+                <!-- Nội dung chi tiết của bài viết/thảo luận sẽ hiển thị ở đây -->
             </div>
         </div>
     </div>
     
-    <!-- Modal để đăng bài thảo luận mới -->
+    <!-- Cửa sổ modal để đăng bài thảo luận mới -->
     <div id="new-post-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-new-post-modal">&times;</span>
             <div class="modal-body">
-                <h2>Đăng bài thảo luận mới</h2>
+                <h2>新規ディスカッションを投稿</h2>
                 <form id="new-post-form">
-                    <input type="text" id="post-title" placeholder="Tiêu đề bài viết" required>
-                    <textarea id="post-content" placeholder="Nội dung bài viết" required></textarea>
-                    <input type="text" id="post-tags" placeholder="Tags (cách nhau bằng dấu phẩy)">
-                    <input type="text" id="post-image" placeholder="URL hình ảnh">
-                    <input type="text" id="post-video" placeholder="URL video (tùy chọn)">
-                    <button type="submit">Đăng bài</button>
+                    <input type="text" id="post-title" placeholder="投稿のタイトル" required>
+                    <textarea id="post-content" placeholder="投稿内容" required></textarea>
+                    <input type="text" id="post-tags" placeholder="タグ（コンマ区切り）">
+                    <input type="text" id="post-image" placeholder="画像のURL">
+                    <input type="text" id="post-video" placeholder="動画のURL（オプション）">
+                    <button type="submit">投稿する</button>
                 </form>
             </div>
         </div>

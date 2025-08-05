@@ -1,4 +1,4 @@
-/* General */
+/* Thiết lập chung */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -11,7 +11,7 @@ body {
     padding-top: 80px; /* Khoảng trống cho thanh điều hướng cố định */
 }
 
-/* Navi bar */
+/* Thanh điều hướng */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -59,7 +59,6 @@ body {
     padding: 0.5rem;
     border-radius: 5px;
     border: 1px solid #ccc;
-    margin-right: 50px;
 }
 
 .post-button {
@@ -69,13 +68,24 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 10px;
     transition: background-color 0.3s ease;
 }
 
 .post-button:hover {
     background-color: #45a049;
 }
+
+/* Thanh tìm kiếm */
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi chiều rộng */
+}
+
 
 /* Trang chủ */
 .slideshow-container {
@@ -242,10 +252,25 @@ body {
     gap: 1rem;
 }
 
-.post-actions span {
+.post-actions .vote-button {
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.post-actions .vote-button:hover {
+    color: #333;
+}
+
+/* Style cho nút đã bấm */
+.vote-button.liked {
+    color: #4CAF50;
+}
+
+.vote-button.disliked {
+    color: #f44336;
 }
 
 /* Modal */
@@ -379,13 +404,3 @@ body {
         margin: 20px auto;
     }
 }
-
-/* Style cho nút đã bấm */
-.vote-button.liked {
-    color: #4CAF50;
-}
-
-.vote-button.disliked {
-    color: #f44336;
-}
-
