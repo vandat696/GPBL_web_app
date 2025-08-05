@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
     const pages = document.querySelectorAll('.page');
     const countrySelect = document.getElementById('country-select');
+    const issuesSearchInput = document.getElementById('issues-search');
+    const discussionsSearchInput = document.getElementById('discussions-search');
 
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
@@ -21,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 startSlideshow();
             }
+
+            // ページ切り替え時に検索バーとタグをリセット
+            if (issuesSearchInput) issuesSearchInput.value = '';
+            if (discussionsSearchInput) discussionsSearchInput.value = '';
+            document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('selected'));
+            filterAndRender();
         });
     });
 
@@ -102,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     function filterAndRender() {
         const selectedCountry = countrySelect.value;
         const activePage = document.querySelector('.page.active');
@@ -112,11 +119,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedTags = Array.from(activeTagsContainer.querySelectorAll('.tag.selected')).map(tag => tag.dataset.tag);
         
         const dataToRender = pageId === 'issues-page' ? issuesData : discussionsData;
+        const searchInput = pageId === 'issues-page' ? issuesSearchInput : discussionsSearchInput;
+        const searchTerm = searchInput.value.toLowerCase();
         
         const filteredData = dataToRender.filter(item => {
             const matchesCountry = selectedCountry === 'all' || item.country === selectedCountry;
             const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => item.tags.includes(tag));
-            return matchesCountry && matchesTags;
+            const matchesSearch = item.title.toLowerCase().includes(searchTerm) || item.description.toLowerCase().includes(searchTerm);
+            return matchesCountry && matchesTags && matchesSearch;
         });
 
         // インタラクションに基づいてディスカッション投稿をソート
@@ -144,6 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 国の選択変更イベントをリッスン
     countrySelect.addEventListener('change', filterAndRender);
+    issuesSearchInput.addEventListener('input', filterAndRender);
+    discussionsSearchInput.addEventListener('input', filterAndRender);
 
     // 初回レンダリング
     filterAndRender();
@@ -325,7 +337,5 @@ document.addEventListener('DOMContentLoaded', () => {
         filterAndRender();
         document.querySelector('[data-page="discussions"]').click();
     });
-
-    
 
 });
