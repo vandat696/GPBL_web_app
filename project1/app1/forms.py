@@ -21,6 +21,8 @@ class ArticleForm(forms.Form):
             raise forms.ValidationError("国を選択してください")
         return country
 
+
+
 class ArticleModelForm:
     class Meta:
         model=Article
