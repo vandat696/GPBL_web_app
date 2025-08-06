@@ -1,38 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- ナビゲーションバーとページ切り替えの処理 ---
+    // --- Cấu hình API Endpoint ---
+    // Thay đổi URL này để khớp với địa chỉ backend Django của bạn
+    const API_BASE_URL = 'http://127.0.0.1:8000/api/'; 
+
+    // --- Hàm lấy CSRF Token từ cookie ---
+    // Django yêu cầu CSRF token cho các yêu cầu POST, PUT, DELETE để bảo mật
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Kiểm tra xem chuỗi cookie có bắt đầu bằng tên chúng ta muốn không?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // --- Khai báo các phần tử DOM và biến dữ liệu ---
     const navItems = document.querySelectorAll('.nav-item');
     const pages = document.querySelectorAll('.page');
     const countrySelect = document.getElementById('country-select');
     const issuesSearchInput = document.getElementById('issues-search');
     const discussionsSearchInput = document.getElementById('discussions-search');
 
-    navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            navItems.forEach(nav => nav.classList.remove('active'));
-            item.classList.add('active');
-            
-            const pageId = item.dataset.page;
-            pages.forEach(page => page.classList.remove('active'));
-            document.getElementById(`${pageId}-page`).classList.add('active');
-            
-            // ホームページ以外のページに切り替えるときはスライドショーを停止
-            if (pageId !== 'home') {
-                clearInterval(slideshowInterval);
-            } else {
-                startSlideshow();
-            }
+    let issuesData = []; // Dữ liệu Issues sẽ được tải từ API
+    let discussionsData = []; // Dữ liệu Discussions sẽ được tải từ API
+    let allTags = []; // Danh sách Tags sẽ được tải từ API
+    let allCountries = []; // Danh sách Countries sẽ được tải từ API
 
-            // ページ切り替え時に検索バーとタグをリセット
-            if (issuesSearchInput) issuesSearchInput.value = '';
-            if (discussionsSearchInput) discussionsSearchInput.value = '';
-            document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('selected'));
-            filterAndRender();
-        });
-    });
-
-    // --- ホームページのスライドショー機能 ---
+    // --- Chức năng Slideshow trang chủ ---
     const slideshowImages = [
         "https://placehold.co/1200x800/d1d1d1/212121?text=ベトナム",
         "https://placehold.co/1200x800/e0e0e0/333333?text=日本",
@@ -48,27 +51,116 @@ document.addEventListener('DOMContentLoaded', () => {
         slideshowInterval = setInterval(() => {
             currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
             slideshowImageElement.src = slideshowImages[currentImageIndex];
-        }, 5000); // 5秒ごとに画像を切り替える
+        }, 5000); // Thay đổi hình ảnh sau mỗi 5 giây
     }
     
-    startSlideshow();
+    // --- Hàm tải dữ liệu từ API ---
+    async function fetchData() {
+        try {
+            // Tải Tags
+            const tagsResponse = await fetch(`${API_BASE_URL}tags/`);
+            allTags = await tagsResponse.json();
+            renderTags('issue-tags', allTags.map(tag => tag.name));
+            renderTags('discussion-tags', allTags.map(tag => tag.name));
 
-    // --- モックデータ ---
-    const allTags = ['食べ物', '言語', '気候', '手続き', 'ビザ', '仕事', '学習', '文化', '交通'];
+            // Tải Countries
+            const countriesResponse = await fetch(`${API_BASE_URL}countries/`);
+            allCountries = await countriesResponse.json();
+            // Cập nhật select quốc gia
+            countrySelect.innerHTML = '<option value="all">国を選択</option>';
+            allCountries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.name; // Giả định backend trả về tên quốc gia
+                option.textContent = country.name;
+                countrySelect.appendChild(option);
+            });
 
-    const issuesData = [
-        { id: 'i1', title: '日本での就労ビザ申請の課題', description: '日本の就労ビザは多くの複雑な書類と手続きが必要です...', image: 'https://placehold.co/250x150', tags: ['手続き', 'ビザ', '仕事'], country: 'japan', content: '日本の就労ビザ申請に関する詳細内容...' },
-        { id: 'i2', title: 'アメリカでの食文化の違い', description: 'ファーストフードが一般的で、好みの違いや伝統的な食べ物を見つけるのが難しい...', image: 'https://placehold.co/250x150', tags: ['食べ物', '文化'], country: 'usa', content: 'アメリカの食文化に関する詳細内容...' },
-        { id: 'i3', title: 'フランス語学習の挑戦', description: 'フランス語は文法だけでなく、発音も難しい...', image: 'https://placehold.co/250x150', tags: ['言語', '学習'], country: 'france', content: 'フランス語学習に関する詳細内容...' },
-        { id: 'i4', title: 'ベトナムの熱帯気候への適応', description: '暑く湿度が高い天気と不規則な天候の変化は大きな課題です...', image: 'https://placehold.co/250x150', tags: ['気候'], country: 'vietnam', content: 'ベトナムの気候への適応に関する詳細内容...' },
-    ];
-    
-    let discussionsData = [
-        { id: 'd1', title: '東京の地下鉄での移動経験', description: '東京の地下鉄システムは非常に複雑ですが、いくつかの小さなコツで便利になります...', image: 'https://placehold.co/250x150', video: '', tags: ['交通', '文化'], country: 'japan', likes: 15, dislikes: 2, comments: [{ author: 'User1', text: 'とても役立つ投稿です！' }], content: '東京での交通に関するディスカッションの詳細内容...' },
-        { id: 'd2', title: 'アメリカの留学生向けアルバイト探しのアドバイス', description: 'アメリカの留学生でアルバイトを探しています。何か経験のある方はいませんか？', image: 'https://placehold.co/250x150', video: '', tags: ['仕事', '学習'], country: 'usa', likes: 25, dislikes: 1, comments: [{ author: 'User2', text: '学校近くのエリアで探してみるといいかもしれません。' }], content: 'アメリカでの仕事探しに関するディスカッションの詳細内容...' },
-    ];
+            // Tải Issues và Discussions ban đầu
+            await fetchIssues();
+            await fetchDiscussions();
+        } catch (error) {
+            console.error('Lỗi khi tải dữ liệu ban đầu từ API:', error);
+        }
+    }
 
-    // --- タグ、記事、ディスカッションのレンダリング ---
+    // Hàm tải danh sách Issues từ API với các bộ lọc
+    async function fetchIssues() {
+        const selectedCountry = countrySelect.value === 'all' ? '' : countrySelect.value;
+        // Lấy các tag đã chọn từ DOM
+        const selectedTags = Array.from(document.getElementById('issue-tags').querySelectorAll('.tag.selected')).map(tag => tag.dataset.tag).join(',');
+        const searchTerm = issuesSearchInput.value;
+
+        // Xây dựng query parameters
+        let queryParams = new URLSearchParams();
+        if (selectedCountry) queryParams.append('country', selectedCountry);
+        if (selectedTags) queryParams.append('tags', selectedTags);
+        if (searchTerm) queryParams.append('search', searchTerm);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}issues/?${queryParams.toString()}`);
+            if (!response.ok) throw new Error('Failed to fetch issues');
+            issuesData = await response.json(); // Cập nhật dữ liệu Issues
+            renderCards('issues-list', issuesData); // Render lại danh sách
+        } catch (error) {
+            console.error('Lỗi khi tải Issues:', error);
+        }
+    }
+
+    // Hàm tải danh sách Discussions từ API với các bộ lọc
+    async function fetchDiscussions() {
+        const selectedCountry = countrySelect.value === 'all' ? '' : countrySelect.value;
+        // Lấy các tag đã chọn từ DOM
+        const selectedTags = Array.from(document.getElementById('discussion-tags').querySelectorAll('.tag.selected')).map(tag => tag.dataset.tag).join(',');
+        const searchTerm = discussionsSearchInput.value;
+
+        // Xây dựng query parameters
+        let queryParams = new URLSearchParams();
+        if (selectedCountry) queryParams.append('country', selectedCountry);
+        if (selectedTags) queryParams.append('tags', selectedTags);
+        if (searchTerm) queryParams.append('search', searchTerm);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}discussions/?${queryParams.toString()}`);
+            if (!response.ok) throw new Error('Failed to fetch discussions');
+            discussionsData = await response.json(); // Cập nhật dữ liệu Discussions
+            renderCards('discussions-list', discussionsData); // Render lại danh sách
+        } catch (error) {
+            console.error('Lỗi khi tải Discussions:', error);
+        }
+    }
+
+    // --- Xử lý thanh điều hướng và chuyển trang ---
+    navItems.forEach(item => {
+        item.addEventListener('click', async (e) => {
+            e.preventDefault();
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            
+            const pageId = item.dataset.page;
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(`${pageId}-page`).classList.add('active');
+            
+            // Dừng slideshow khi chuyển trang khác Trang chủ
+            if (pageId !== 'home') {
+                clearInterval(slideshowInterval);
+            } else {
+                startSlideshow();
+            }
+
+            // Đặt lại thanh tìm kiếm và các tag đã chọn, sau đó tải lại dữ liệu cho trang mới
+            if (issuesSearchInput) issuesSearchInput.value = '';
+            if (discussionsSearchInput) discussionsSearchInput.value = '';
+            document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('selected'));
+            
+            if (pageId === 'issues') {
+                await fetchIssues();
+            } else if (pageId === 'discussions') {
+                await fetchDiscussions();
+            }
+        });
+    });
+
+    // --- Render tags, issues và discussions ---
     function renderTags(containerId, tags) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
@@ -90,8 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
             card.dataset.id = item.id;
             card.dataset.type = containerId === 'issues-list' ? 'issue' : 'discussion';
 
+            // Sử dụng image_url và video_url từ backend
             const cardHtml = `
-                <img src="${item.image}" alt="${item.title}" class="card-image">
+                <img src="${item.image_url}" alt="${item.title}" class="card-image">
                 <div class="card-body">
                     <h3>${item.title}</h3>
                     <p>${item.description}</p>
@@ -99,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="post-actions">
                             <span><i class="fa-solid fa-thumbs-up"></i> <span class="like-count">${item.likes}</span></span>
                             <span><i class="fa-solid fa-thumbs-down"></i> <span class="dislike-count">${item.dislikes}</span></span>
-                            <span><i class="fa-solid fa-comment"></i> ${item.comments.length}</span>
+                            <span><i class="fa-solid fa-comment"></i> ${item.comments ? item.comments.length : 0}</span>
                         </div>
-                        <span>タグ: ${item.tags.join(', ')}</span>
+                        <span>タグ: ${item.tags ? item.tags.join(', ') : ''}</span>
                     </div>` : ''}
                 </div>
             `;
@@ -110,39 +203,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function filterAndRender() {
-        const selectedCountry = countrySelect.value;
+    // Hàm lọc và render lại dữ liệu (chỉ gọi các hàm fetch tương ứng)
+    async function filterAndRender() {
         const activePage = document.querySelector('.page.active');
         const pageId = activePage.id;
 
-        const activeTagsContainer = pageId === 'issues-page' ? document.getElementById('issue-tags') : document.getElementById('discussion-tags');
-        const selectedTags = Array.from(activeTagsContainer.querySelectorAll('.tag.selected')).map(tag => tag.dataset.tag);
-        
-        const dataToRender = pageId === 'issues-page' ? issuesData : discussionsData;
-        const searchInput = pageId === 'issues-page' ? issuesSearchInput : discussionsSearchInput;
-        const searchTerm = searchInput.value.toLowerCase();
-        
-        const filteredData = dataToRender.filter(item => {
-            const matchesCountry = selectedCountry === 'all' || item.country === selectedCountry;
-            const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => item.tags.includes(tag));
-            const matchesSearch = item.title.toLowerCase().includes(searchTerm) || item.description.toLowerCase().includes(searchTerm);
-            return matchesCountry && matchesTags && matchesSearch;
-        });
-
-        // インタラクションに基づいてディスカッション投稿をソート
-        if (pageId === 'discussions-page') {
-            filteredData.sort((a, b) => (b.likes + b.comments.length) - (a.likes + a.comments.length));
+        if (pageId === 'issues-page') {
+            await fetchIssues();
+        } else if (pageId === 'discussions-page') {
+            await fetchDiscussions();
         }
-
-        const containerId = pageId === 'issues-page' ? 'issues-list' : 'discussions-list';
-        renderCards(containerId, filteredData);
     }
     
-    // サイドバーにタグを追加
-    renderTags('issue-tags', allTags);
-    renderTags('discussion-tags', allTags);
-    
-    // タグクリックイベントをリッスン
+    // Lắng nghe sự kiện click vào tag
     document.querySelectorAll('.tag-list').forEach(tagList => {
         tagList.addEventListener('click', (e) => {
             if (e.target.classList.contains('tag')) {
@@ -152,28 +225,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 国の選択変更イベントをリッスン
+    // Lắng nghe sự kiện thay đổi quốc gia
     countrySelect.addEventListener('change', filterAndRender);
-    issuesSearchInput.addEventListener('input', filterAndRender);
-    discussionsSearchInput.addEventListener('input', filterAndRender);
+    // Lắng nghe sự kiện nhập liệu vào thanh tìm kiếm
+    if (issuesSearchInput) issuesSearchInput.addEventListener('input', filterAndRender);
+    if (discussionsSearchInput) discussionsSearchInput.addEventListener('input', filterAndRender);
 
-    // 初回レンダリング
-    filterAndRender();
+    // Tải dữ liệu ban đầu khi DOM đã sẵn sàng
+    fetchData();
+    startSlideshow(); // Bắt đầu slideshow khi trang tải
 
-    // --- 記事詳細（モーダル）表示と「いいね/悪いね」機能 ---
+    // --- Chức năng xem bài viết chi tiết (Modal) và vote Like/Dislike ---
     const postModal = document.getElementById('post-modal');
     const modalBody = document.getElementById('modal-body');
     const closeButton = postModal.querySelector('.close-button');
 
     document.querySelectorAll('.card-list').forEach(list => {
-        list.addEventListener('click', (e) => {
+        list.addEventListener('click', async (e) => {
             const card = e.target.closest('.card');
             if (card) {
                 const id = card.dataset.id;
                 const type = card.dataset.type;
-                const data = type === 'issue' ? issuesData.find(d => d.id === id) : discussionsData.find(d => d.id === id);
+                let data;
+
+                try {
+                    // Tải chi tiết bài viết từ API
+                    if (type === 'issue') {
+                        const response = await fetch(`${API_BASE_URL}issues/${id}/`);
+                        if (!response.ok) throw new Error('Failed to fetch issue detail');
+                        data = await response.json();
+                    } else { // type === 'discussion'
+                        const response = await fetch(`${API_BASE_URL}discussions/${id}/`);
+                        if (!response.ok) throw new Error('Failed to fetch discussion detail');
+                        data = await response.json();
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi tải chi tiết bài viết:', error);
+                    alert("Đã xảy ra lỗi khi tải chi tiết bài viết. Vui lòng thử lại.");
+                    return;
+                }
                 
-                // localStorageから投票状態を取得してモーダルの色を決定
+                // Lấy trạng thái vote từ localStorage để hiển thị màu sắc trong modal
+                // Lưu ý: Trong môi trường thực tế, trạng thái vote nên được quản lý bởi backend dựa trên người dùng đăng nhập.
                 const userVote = localStorage.getItem(`post-vote-${data.id}`);
                 const likeClass = userVote === 'like' ? 'liked' : '';
                 const dislikeClass = userVote === 'dislike' ? 'disliked' : '';
@@ -181,24 +274,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalBody.innerHTML = `
                     <div class="full-post">
                         <h2>${data.title}</h2>
-                        ${data.image ? `<img src="${data.image}" alt="${data.title}">` : ''}
-                        ${data.video ? `<video controls><source src="${data.video}"></video>` : ''}
+                        ${data.image_url ? `<img src="${data.image_url}" alt="${data.title}">` : ''}
+                        ${data.video_url ? `<video controls><source src="${data.video_url}"></video>` : ''}
                         <p>${data.content}</p>
                         ${type === 'discussion' ? `
                             <div class="card-meta">
                                 <div class="post-actions">
                                     <span class="vote-button like-button ${likeClass}" data-id="${data.id}" data-action="like"><i class="fa-solid fa-thumbs-up"></i> <span class="like-count">${data.likes}</span></span>
                                     <span class="vote-button dislike-button ${dislikeClass}" data-id="${data.id}" data-action="dislike"><i class="fa-solid fa-thumbs-down"></i> <span class="dislike-count">${data.dislikes}</span></span>
-                                    <span><i class="fa-solid fa-comment"></i> ${data.comments.length}</span>
+                                    <span><i class="fa-solid fa-comment"></i> ${data.comments ? data.comments.length : 0}</span>
                                 </div>
-                                <span>タグ: ${data.tags.join(', ')}</span>
+                                <span>タグ: ${data.tags ? data.tags.join(', ') : ''}</span>
                             </div>
                             <div class="comments-section">
                                 <h3>コメント</h3>
                                 <div id="comments-list">
-                                    ${data.comments.map(c => `<div class="comment"><strong>${c.author}:</strong> ${c.text}</div>`).join('')}
+                                    ${data.comments ? data.comments.map(c => `<div class="comment"><strong>${c.author}:</strong> ${c.content}</div>`).join('') : ''}
                                 </div>
-                                <form id="new-comment-form">
+                                <form id="new-comment-form" data-post-id="${data.id}">
                                     <input type="text" placeholder="コメントを書き込む..." required>
                                     <button type="submit">送信</button>
                                 </form>
@@ -208,78 +301,96 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 postModal.style.display = 'block';
                 
-                // コメント送信イベントを追加
+                // Thêm sự kiện gửi bình luận
                 if (type === 'discussion') {
-                    document.getElementById('new-comment-form').addEventListener('submit', (e) => {
+                    document.getElementById('new-comment-form').addEventListener('submit', async (e) => {
                         e.preventDefault();
+                        const postId = e.target.dataset.postId;
                         const commentText = e.target.querySelector('input').value;
-                        const newComment = { author: '匿名ユーザー', text: commentText };
-                        data.comments.push(newComment);
                         
-                        // コメント表示を更新
-                        const commentsList = document.getElementById('comments-list');
-                        const newCommentDiv = document.createElement('div');
-                        newCommentDiv.className = 'comment';
-                        newCommentDiv.innerHTML = `<strong>${newComment.author}:</strong> ${newComment.text}`;
-                        commentsList.appendChild(newCommentDiv);
-                        
-                        e.target.reset();
-                        filterAndRender(); // ディスカッションリストを更新
+                        try {
+                            const response = await fetch(`${API_BASE_URL}discussions/${postId}/comments/`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrftoken // Gửi CSRF token
+                                },
+                                body: JSON.stringify({ content: commentText })
+                            });
+
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(`Failed to post comment: ${JSON.stringify(errorData)}`);
+                            }
+                            const newComment = await response.json(); // Lấy comment mới từ API
+
+                            // Cập nhật lại giao diện bình luận
+                            const commentsList = document.getElementById('comments-list');
+                            const newCommentDiv = document.createElement('div');
+                            newCommentDiv.className = 'comment';
+                            newCommentDiv.innerHTML = `<strong>${newComment.author}:</strong> ${newComment.content}`;
+                            commentsList.appendChild(newCommentDiv);
+                            
+                            e.target.reset();
+                            // Không cần fetchDiscussions() ở đây vì chỉ cập nhật modal,
+                            // nhưng cần cập nhật lại số lượng comment trên card chính
+                            // Có thể gọi lại fetchDiscussions() hoặc cập nhật thủ công nếu cần
+                            await fetchDiscussions(); 
+                        } catch (error) {
+                            console.error('Lỗi khi đăng bình luận:', error);
+                            alert("Đã xảy ra lỗi khi đăng bình luận. Vui lòng thử lại.");
+                        }
                     });
                 }
             }
         });
     });
 
-    // モーダル内の「いいね/悪いね」ボタンのクリックイベントを追加
-    modalBody.addEventListener('click', (e) => {
+    // Lắng nghe sự kiện click vào các nút like/dislike bên trong modal
+    modalBody.addEventListener('click', async (e) => {
         const voteButton = e.target.closest('.vote-button');
         if (voteButton) {
             e.preventDefault();
             const postId = voteButton.dataset.id;
-            const action = voteButton.dataset.action;
-            const post = discussionsData.find(p => p.id === postId);
-            if (!post) return;
+            const action = voteButton.dataset.action; // 'like' hoặc 'dislike'
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}discussions/${postId}/vote/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken // Gửi CSRF token
+                    },
+                    body: JSON.stringify({ vote_type: action })
+                });
 
-            const userVoteKey = `post-vote-${postId}`;
-            const currentUserVote = localStorage.getItem(userVoteKey);
-
-            if (currentUserVote === action) {
-                // 同じアクションに投票済みの場合、何もしない
-                return;
-            } else if (currentUserVote) {
-                // 別の投票済みアクションの場合、古い投票を削除
-                if (currentUserVote === 'like') {
-                    post.likes--;
-                } else {
-                    post.dislikes--;
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Failed to cast vote: ${JSON.stringify(errorData)}`);
                 }
-            }
-            
-            // 新しい投票を追加
-            if (action === 'like') {
-                post.likes++;
-            } else {
-                post.dislikes++;
-            }
+                const updatedPost = await response.json(); // Lấy bài viết đã cập nhật từ API
 
-            // localStorageを更新
-            localStorage.setItem(userVoteKey, action);
+                // Cập nhật localStorage để mô phỏng trạng thái vote của người dùng trên trình duyệt này
+                localStorage.setItem(`post-vote-${postId}`, action);
 
-            // モーダルのUIを更新
-            const likeCountElement = modalBody.querySelector('.like-count');
-            const dislikeCountElement = modalBody.querySelector('.dislike-count');
-            likeCountElement.textContent = post.likes;
-            dislikeCountElement.textContent = post.dislikes;
-            
-            // ボタンの色を変更するためのクラスを更新
-            modalBody.querySelectorAll('.vote-button').forEach(btn => {
-                btn.classList.remove('liked', 'disliked');
-            });
-            voteButton.classList.add(action === 'like' ? 'liked' : 'disliked');
-            
-            // メインリストのUIを更新
-            filterAndRender();
+                // Cập nhật giao diện modal
+                const likeCountElement = modalBody.querySelector('.like-count');
+                const dislikeCountElement = modalBody.querySelector('.dislike-count');
+                likeCountElement.textContent = updatedPost.likes;
+                dislikeCountElement.textContent = updatedPost.dislikes;
+                
+                // Cập nhật class để đổi màu nút
+                modalBody.querySelectorAll('.vote-button').forEach(btn => {
+                    btn.classList.remove('liked', 'disliked');
+                });
+                voteButton.classList.add(action === 'like' ? 'liked' : 'disliked');
+                
+                // Cập nhật UI trên danh sách chính (để số like/dislike trên card cũng thay đổi)
+                await fetchDiscussions();
+            } catch (error) {
+                console.error('Lỗi khi vote:', error);
+                alert("Đã xảy ra lỗi khi vote. Vui lòng thử lại.");
+            }
         }
     });
 
@@ -293,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 新規ディスカッション投稿機能 ---
+    // --- Chức năng đăng bài thảo luận mới ---
     const newPostModal = document.getElementById('new-post-modal');
     const postButton = document.getElementById('post-button');
     const closeNewPostModal = document.getElementById('close-new-post-modal');
@@ -307,35 +418,50 @@ document.addEventListener('DOMContentLoaded', () => {
         newPostModal.style.display = 'none';
     });
 
-    newPostForm.addEventListener('submit', (e) => {
+    newPostForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const title = document.getElementById('post-title').value;
         const content = document.getElementById('post-content').value;
-        const tags = document.getElementById('post-tags').value.split(',').map(tag => tag.trim());
-        const image = document.getElementById('post-image').value || 'https://placehold.co/250x150';
+        // Lấy các tag từ input và lọc bỏ các tag rỗng
+        const tags = document.getElementById('post-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+        const image = document.getElementById('post-image').value;
         const video = document.getElementById('post-video').value;
-        const country = countrySelect.value; // 選択中の国を割り当て
+        const countryName = countrySelect.value; // Lấy tên quốc gia từ select
 
-        const newPost = {
-            id: `d${discussionsData.length + 1}`,
-            title,
-            description: content.substring(0, 100) + '...', // 内容の一部を説明として取得
-            image,
-            video,
-            tags,
-            country,
-            likes: 0,
-            dislikes: 0,
-            comments: [],
-            content
+        const newPostData = {
+            title: title,
+            description: content.substring(0, 100) + '...',
+            image_url: image || 'https://placehold.co/250x150', // Sử dụng image_url và placeholder nếu không có
+            video_url: video,
+            content: content,
+            tags: tags, // Gửi mảng tên tag (backend sẽ xử lý tạo/lấy tag)
+            country: countryName // Gửi tên quốc gia (backend sẽ xử lý tạo/lấy quốc gia)
         };
-        discussionsData.push(newPost);
-        newPostForm.reset();
-        newPostModal.style.display = 'none';
-        
-        // ディスカッションリストを更新
-        filterAndRender();
-        document.querySelector('[data-page="discussions"]').click();
+
+        try {
+            const response = await fetch(`${API_BASE_URL}discussions/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken // Gửi CSRF token
+                },
+                body: JSON.stringify(newPostData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Failed to post discussion: ${JSON.stringify(errorData)}`);
+            }
+            
+            newPostForm.reset();
+            newPostModal.style.display = 'none';
+            
+            await fetchDiscussions(); // Tải lại danh sách bài thảo luận từ backend
+            document.querySelector('[data-page="discussions"]').click(); // Chuyển đến trang thảo luận
+        } catch (error) {
+            console.error("Lỗi khi đăng bài: ", error);
+            alert("Đã xảy ra lỗi khi đăng bài. Vui lòng thử lại."); // Sử dụng alert tạm thời, nên thay bằng modal tùy chỉnh
+        }
     });
 
 });
