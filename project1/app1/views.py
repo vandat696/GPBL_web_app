@@ -7,7 +7,9 @@ from .models import Article,Comment
 class IndexView(View):
     def get(self,request):
         form=ArticleModelForm()
-        return render(request,"app1/index.html",{"form":form})
+        articles=Article.objects.all()
+        comments=Comment.objects.all()
+        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments})
     def post(self,request):
         form=ArticleModelForm(request.POST,request.FILES)
         if form.is_valid():
@@ -33,7 +35,7 @@ class CommentView(View):
             comment.save()
 
             article=get_object_or_404(Article,id=id)
-            article.likes=article.comments+1
+            article.comments=article.comments+1
             article.save()
             return redirect("app1:index")
         return render(request,"app1/index.html",{"form":form})
@@ -49,8 +51,7 @@ class LikeView(View):
         article=get_object_or_404(Article,id=id)
         article.likes=article.likes+1
         article.save()
-        form=ArticleModelForm()
-        return render(request,"app1/index.html",{"form":form})
+        return redirect("app1:index")
 
 
 class DislikeView(View):
@@ -58,8 +59,7 @@ class DislikeView(View):
         article=get_object_or_404(Article,id=id)
         article.dislikes=article.dislikes+1
         article.save()
-        form=ArticleModelForm()
-        return render(request,"app1/index.html",{"form":form})
+        return redirect("app1:index")
 
 
 
