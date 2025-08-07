@@ -110,11 +110,9 @@
             <div class="modal-body">
                 <h2>新規ディスカッションを投稿</h2>
                 <form id="new-post-form" method="POST" enctype="multipart/form-data">
-<<<<<<< HEAD
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit">投稿する</button>
-=======
                     <!-- <input type="text" id="post-title" placeholder="投稿のタイトル" required>
                     <textarea id="post-content" placeholder="投稿内容" required></textarea>
                     <input type="text" id="post-tags" placeholder="タグ（コンマ区切り）">
@@ -127,10 +125,10 @@
 
                         <select class="form-control" name="country" id="id_country" style="height: 50px;">
                             <option value="default">国を選択</option>
-                            <option value="Vietnam">ベトナム</option>
-                            <option value="Japan">日本</option>
-                            <option value="America">アメリカ</option>
-                            <option value="France">フランス</option>
+                            <option value="ベトナム">ベトナム</option>
+                            <option value="日本">日本</option>
+                            <option value="アメリカ">アメリカ</option>
+                            <option value="フランス">フランス</option>
                         </select>
                         <select class="form-control" name="tag" id="id_tag" style="height: 50px;">
                             <option value="default">タグを選択</option>
@@ -148,7 +146,6 @@
                         <input class="form-control" type="file" name="picture" accept="image/*" id="id_picture">
 
                     <button type="submit" class="btn btn-outline-primary">投稿</button>
->>>>>>> 849ffb65d7a59336129ed7c5a2a58238dcee2061
                 </form>
             </div>
         </div>

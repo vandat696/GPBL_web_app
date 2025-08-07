@@ -4,5 +4,5 @@ app_name="app1"
 
 urlpatterns=[
   path("",views.index , name="index"),
-  path("/comment/post/<uuid:id>/",views.comment_post , name="comment_post"),
+  path("comment/post/<uuid:id>",views.comment_post , name="comment_post"),
 ] 
