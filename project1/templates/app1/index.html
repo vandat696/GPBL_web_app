@@ -38,7 +38,7 @@
         <!-- Trang chủ -->
         <section id="home-page" class="page active">
             <div class="slideshow-container">
-                <img src="https://placehold.co/1200x800/d1d1d1/212121?text=Quoc+gia+1" alt="国の画像" class="slideshow-image">
+                <img class="slideshow-image" src="https://abvietnamtravel.com/img/logo/75B82SV64B_408255330_739691568182256_1104935954509976190_n.jpg" alt="slideshow">
                 <div class="slideshow-overlay">
                     <div class="slideshow-text">
                         <h1>発見とつながり</h1>
@@ -60,7 +60,15 @@
                 <h2 class="content-title">よくある質問</h2>
                 <input type="text" id="issues-search" class="search-input" placeholder="記事を検索...">
                 <div id="issues-list" class="card-list">
-                    <!-- Các bài viết sẽ được thêm bằng JS -->
+                    {% for issue in issues %}
+                    <div class="card" data-id="{{ issue.id }}" data-type="issue">
+                        <img src="{{ issue.image }}" alt="{{ issue.title }}" class="card-image">
+                        <div class="card-body">
+                            <h3>{{ issue.title }}</h3>
+                            <p>{{ issue.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
@@ -101,28 +109,9 @@
             <span class="close-button" id="close-new-post-modal">&times;</span>
             <div class="modal-body">
                 <h2>新規ディスカッションを投稿</h2>
-                <form id="new-post-form",method="POST",enctype="multipart/form-data">
-                    <!-- <input type="text" id="post-title" placeholder="投稿のタイトル" required>
-                    <textarea id="post-content" placeholder="投稿内容" required></textarea>
-                    <input type="text" id="post-tags" placeholder="タグ（コンマ区切り）">
-                    <input type="text" id="post-image" placeholder="画像のURL">
-                    <input type="text" id="post-video" placeholder="動画のURL（オプション）"> -->
-
+                <form id="new-post-form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                        <input type="text" name="title" required id="id_title" placeholder="投稿のタイトル">
-
-                        <select class="form-control" name="country" id="id_country" style="height: 50px;">
-                            <option value="default">国を選択</option>
-                            <option value="Vietnam">ベトナム</option>
-                            <option value="Japan">日本</option>
-                            <option value="America">アメリカ</option>
-                            <option value="France">フランス</option>
-                        </select>
-                        <textarea type="text" name="body" required id="id_body" placeholder="投稿内容" style="height: 100px;"></textarea>
-                        <input type="text" name="tags" required id="id_tags" placeholder="タグ">
-                        <input class="form-control" type="file" name="picture" accept="image/*" id="id_picture">
-
-
+                    {{ form.as_p }}
                     <button type="submit">投稿する</button>
                 </form>
             </div>

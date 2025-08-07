@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- ナビゲーションバーとページ切り替えの処理 ---
+  // --- Cấu hình API và CSRF Token ---
+  // Lấy CSRF token từ thẻ meta hoặc input trong form của Django
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  // --- Xử lý sự kiện chuyển trang và thanh điều hướng ---
   const navItems = document.querySelectorAll('.nav-item');
   const pages = document.querySelectorAll('.page');
   
@@ -16,132 +20,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- ホームページのスライドショー機能 ---
+  // --- Xử lý slideshow trên trang chủ ---
   const slideshowImages = [
-    "https://placehold.co/1200x800/d1d1d1/212121?text=ベトナム",
-    "https://placehold.co/1200x800/e0e0e0/333333?text=日本",
-    "https://placehold.co/1200x800/c0c0c0/111111?text=アメリカ",
-    "https://placehold.co/1200x800/b0b0b0/000000?text=フランス"
+    "https://abvietnamtravel.com/img/logo/75B82SV64B_408255330_739691568182256_1104935954509976190_n.jpg",
+    "https://iweb.tatthanh.com.vn/pic/3231/imagegallery/Album-Nhat-Ban.jpg",
+    "https://tranbathoaimdphd.wordpress.com/wp-content/uploads/2018/12/1-new-york_1.jpg",
+    "https://datviettour.com.vn/uploads/images/chau-au/phap/d"
   ];
-  let currentImageIndex = 0;
-  const slideshowImageElement = document.querySelector('.slideshow-image');
+  let currentSlide = 0;
+  const slideshowElements = document.querySelectorAll('.slideshow-image');
 
-  function startSlideshow() {
-    slideshowImageElement.src = slideshowImages[currentImageIndex];
-  }
-  
-  startSlideshow();
-
-  // --- タグ、記事、ディスカッションのレンダリング ---
-  const allTags = ['食べ物', '言語', '気候', '手続き', 'ビザ', '仕事', '学習', '文化', '交通'];
-
-  const issuesData = [
-    { id: 'i1', title: '日本での就労ビザ申請の課題', description: '日本の就労ビザは多くの複雑な書類と手続きが必要です...', image: 'https://placehold.co/250x150', tags: ['手続き', 'ビザ', '仕事'], country: 'japan', content: '日本の就労ビザ申請に関する詳細内容...' },
-    { id: 'i2', title: 'アメリカでの食文化の違い', description: 'ファーストフードが一般的で、好みの違いや伝統的な食べ物を見つけるのが難しい...', image: 'https://placehold.co/250x150', tags: ['食べ物', '文化'], country: 'usa', content: 'アメリカの食文化に関する詳細内容...' },
-    { id: 'i3', title: 'フランス語学習の挑戦', description: 'フランス語は文法だけでなく、発音も難しい...', image: 'https://placehold.co/250x150', tags: ['言語', '学習'], country: 'france', content: 'フランス語学習に関する詳細内容...' },
-    { id: 'i4', title: 'ベトナムの熱帯気候への適応', description: '暑く湿度が高い天気と不規則な天候の変化は大きな課題です...', image: 'https://placehold.co/250x150', tags: ['気候'], country: 'vietnam', content: 'ベトナムの気候への適応に関する詳細内容...' },
-  ];
-  
-  let discussionsData = [
-    { id: 'd1', title: '東京の地下鉄での移動経験', description: '東京の地下鉄システムは非常に複雑ですが、いくつかの小さなコツで便利になります...', image: 'https://placehold.co/250x150', video: '', tags: ['交通', '文化'], country: 'japan', likes: 15, dislikes: 2, comments: [{ author: 'User1', text: 'とても役立つ投稿です！' }], content: '東京での交通に関するディスカッションの詳細内容...' },
-    { id: 'd2', title: 'アメリカの留学生向けアルバイト探しのアドバイス', description: 'アメリカの留学生でアルバイトを探しています。何か経験のある方はいませんか？', image: 'https://placehold.co/250x150', video: '', tags: ['仕事', '学習'], country: 'usa', likes: 25, dislikes: 1, comments: [{ author: 'User2', text: '学校近くのエリアで探してみるといいかもしれません。' }], content: 'アメリカでの仕事探しに関するディスカッションの詳細内容...' },
-  ];
-
-  function renderTags(containerId, tags) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    tags.forEach(tag => {
-      const tagSpan = document.createElement('span');
-      tagSpan.className = 'tag';
-      tagSpan.textContent = tag;
-      tagSpan.dataset.tag = tag;
-      container.appendChild(tagSpan);
-    });
+  function showSlide() {
+    slideshowElements.forEach(el => el.classList.remove('active'));
+    slideshowElements[currentSlide].style.backgroundImage = `url('${slideshowImages[currentSlide]}')`;
+    slideshowElements[currentSlide].classList.add('active');
+    currentSlide = (currentSlide + 1) % slideshowImages.length;
   }
 
-  function renderCards(containerId, data) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    data.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.dataset.id = item.id;
-      card.dataset.type = containerId === 'issues-list' ? 'issue' : 'discussion';
+  showSlide();
+  setInterval(showSlide, 3000);
 
-      const cardHtml = `
-        <img src="${item.image}" alt="${item.title}" class="card-image">
-        <div class="card-body">
-          <h3>${item.title}</h3>
-          <p>${item.description}</p>
-          ${containerId === 'discussions-list' ? `<div class="card-meta">
-            <div class="post-actions">
-              <span><i class="fa-solid fa-thumbs-up"></i> <span class="like-count">${item.likes}</span></span>
-              <span><i class="fa-solid fa-thumbs-down"></i> <span class="dislike-count">${item.dislikes}</span></span>
-              <span><i class="fa-solid fa-comment"></i> ${item.comments.length}</span>
-            </div>
-            <span>タグ: ${item.tags.join(', ')}</span>
-          </div>` : ''}
-        </div>
-      `;
-      card.innerHTML = cardHtml;
-      container.appendChild(card);
-    });
-  }
-
-  function filterAndRender() {
-    const activePage = document.querySelector('.page.active');
-    const pageId = activePage.id;
-    
-    const dataToRender = pageId === 'issues-page' ? issuesData : discussionsData;
-    const containerId = pageId === 'issues-page' ? 'issues-list' : 'discussions-list';
-    renderCards(containerId, dataToRender);
-  }
-  
-  renderTags('issue-tags', allTags);
-  renderTags('discussion-tags', allTags);
-
-  filterAndRender();
-
-  // --- 記事詳細（モーダル）表示と「いいね/悪いね」機能 ---
+  // --- Xử lý Modal chi tiết bài viết ---
   const postModal = document.getElementById('post-modal');
-  const modalBody = document.getElementById('modal-body');
-  const closeButton = postModal.querySelector('.close-button');
+  const closeButton = document.getElementById('close-button');
+  const postDetailContent = document.getElementById('post-detail-content');
 
-  document.querySelectorAll('.card-list').forEach(list => {
-    list.addEventListener('click', (e) => {
-      const card = e.target.closest('.card');
-      if (card) {
-        const id = card.dataset.id;
-        const type = card.dataset.type;
-        const data = type === 'issue' ? issuesData.find(d => d.id === id) : discussionsData.find(d => d.id === id);
+  // Lắng nghe sự kiện click trên các thẻ bài viết
+  document.addEventListener('click', async (e) => {
+    const postCard = e.target.closest('.post-card');
+    if (postCard) {
+      const postId = postCard.dataset.id;
+      // Hiển thị modal và loading
+      postModal.style.display = 'block';
+      postDetailContent.innerHTML = '<div class="loader">Loading...</div>';
+
+      try {
+        // Gửi yêu cầu GET đến API backend để lấy chi tiết bài viết
+        // Giả sử API endpoint là /api/posts/<id>/
+        const response = await fetch(`/api/posts/${postId}/`);
+        if (!response.ok) {
+          throw new Error('Không thể tải chi tiết bài viết.');
+        }
+        const data = await response.json();
         
-        modalBody.innerHTML = `
-          <div class="full-post">
-            <h2>${data.title}</h2>
-            ${data.image ? `<img src="${data.image}" alt="${data.title}">` : ''}
-            ${data.video ? `<video controls><source src="${data.video}"></video>` : ''}
-            <p>${data.content}</p>
-            ${type === 'discussion' ? `
-              <div class="card-meta">
-                <div class="post-actions">
-                  <span class="vote-button like-button" data-id="${data.id}" data-action="like"><i class="fa-solid fa-thumbs-up"></i> <span class="like-count">${data.likes}</span></span>
-                  <span class="vote-button dislike-button" data-id="${data.id}" data-action="dislike"><i class="fa-solid fa-thumbs-down"></i> <span class="dislike-count">${data.dislikes}</span></span>
-                  <span><i class="fa-solid fa-comment"></i> ${data.comments.length}</span>
-                </div>
-                <span>タグ: ${data.tags.join(', ')}</span>
+        // Cập nhật nội dung modal với dữ liệu từ backend
+        postDetailContent.innerHTML = `
+          <div class="post-detail-header">
+            <h3>${data.title}</h3>
+            <div class="post-meta">
+                <span class="post-country">${data.country}</span>
+                <span class="post-author">${data.author.username}</span>
+            </div>
+          </div>
+          <div class="post-detail-body">
+            ${data.picture_url ? `<img src="${data.picture_url}" alt="${data.title}">` : ''}
+            <p>${data.body}</p>
+          </div>
+          <div class="post-detail-footer">
+            <div class="post-stats">
+              <span><i class="fa-solid fa-thumbs-up"></i> ${data.likes_count}</span>
+              <span><i class="fa-solid fa-thumbs-down"></i> ${data.dislikes_count}</span>
+              <span><i class="fa-solid fa-comment"></i> ${data.comments_count}</span>
+            </div>
+            <div class="comments-section">
+              <h3>コメント</h3>
+              <div id="comments-list">
+                ${data.comments.map(c => `<div class="comment"><strong>${c.author}:</strong> ${c.text}</div>`).join('')}
               </div>
-              <div class="comments-section">
-                <h3>コメント</h3>
-                <div id="comments-list">
-                  ${data.comments.map(c => `<div class="comment"><strong>${c.author}:</strong> ${c.text}</div>`).join('')}
-                </div>
-              </div>
-            ` : ''}
+            </div>
           </div>
         `;
-        postModal.style.display = 'block';
+
+      } catch (error) {
+        console.error('Lỗi khi tải chi tiết bài viết:', error);
+        postDetailContent.innerHTML = '<p>Không thể tải nội dung bài viết. Vui lòng thử lại sau.</p>';
       }
-    });
+    }
   });
   
   closeButton.addEventListener('click', () => {
@@ -154,16 +108,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- 新規ディスカッション投稿機能 ---
+  // --- Xử lý Modal đăng bài mới ---
   const newPostModal = document.getElementById('new-post-modal');
   const postButton = document.getElementById('post-button');
   const closeNewPostModal = document.getElementById('close-new-post-modal');
+  const newPostForm = document.getElementById('new-post-form');
 
   postButton.addEventListener('click', () => {
     newPostModal.style.display = 'block';
   });
-
+  
   closeNewPostModal.addEventListener('click', () => {
     newPostModal.style.display = 'none';
   });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === newPostModal) {
+      newPostModal.style.display = 'none';
+    }
+  });
+
+  // --- Xử lý form đăng bài mới và gửi đến backend ---
+  newPostForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(newPostForm);
+
+    try {
+      // Gửi request POST đến API backend của Django
+      // Giả sử API endpoint là /api/posts/create/
+      const response = await fetch('/api/posts/create/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrftoken,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const newPost = await response.json();
+        alert('Bài viết đã được đăng thành công!'); // Thay bằng modal tùy chỉnh
+        newPostModal.style.display = 'none';
+        newPostForm.reset();
+        // Có thể làm mới trang để hiển thị bài viết mới
+        window.location.reload(); 
+      } else {
+        const errorData = await response.json();
+        console.error('Lỗi khi đăng bài:', errorData);
+        alert('Có lỗi xảy ra khi đăng bài: ' + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error('Lỗi mạng:', error);
+      alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.');
+    }
+  });
+
 });
