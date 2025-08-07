@@ -278,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       
       if (response.ok) {
-        alert('Bài viết đã được đăng thành công!');
         newPostModal.style.display = 'none';
         newPostForm.reset();
       } else {
