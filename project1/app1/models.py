@@ -26,3 +26,11 @@ class Article_tag(models.Model):
 
     def __str__(self):
         return self.tag
+    
+class Comment(models.Model):
+    article_id=models.ForeignKey(Article,verbose_name="ArticleID",on_delete=models.CASCADE)
+    body=models.TextField(verbose_name="comment")
+    created=models.DateTimeField(auto_now_add=True,verbose_name="created_date_time")
+
+    def __str__(self):
+        return self.body

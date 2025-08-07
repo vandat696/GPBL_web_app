@@ -1,5 +1,5 @@
 from django import forms
-from .models import Article
+from .models import Article,Comment
 from django.forms import ModelForm
 
 
@@ -27,3 +27,8 @@ class ArticleModelForm(ModelForm):
     class Meta:
         model=Article
         fields=["title","country","tag","body","picture"]
+
+class CommentForm(ModelForm):
+    class Meta:
+        model=Comment
+        fields=["body"]
