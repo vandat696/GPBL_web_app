@@ -5,16 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>海外移住の課題</title>
 
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'app1/css/style.css' %}">
-        <script src="{% static 'app1/js/script.js' %}"></script>
-
+    <!-- Google Fonts và Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <!-- Tệp CSS tùy chỉnh -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app1/css/style.css' %}">
+    
+    <!-- CSS để xử lý slideshow và các yếu tố khác -->
+    <style>
+        .slideshow-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
+        .slideshow-image.active {
+            opacity: 1;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            padding-top: 33.33%; /* Tỷ lệ 3:1 để slideshow không bị co lại khi chuyển ảnh */
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-
+    
+    <!-- Header & Thanh điều hướng -->
     <header class="navbar">
         <div class="navbar-brand">移住の課題</div>
         <nav class="navbar-menu">
@@ -24,136 +55,178 @@
         </nav>
         <div class="navbar-actions">
             <select id="country-select" class="country-select">
-                <option value="all">国を選択</option>
-                <option value="vietnam">ベトナム</option>
-                <option value="japan">日本</option>
-                <option value="usa">アメリカ</option>
-                <option value="france">フランス</option>
+                <option value="all">全ての国</option>
+                <option value="Vietnam">ベトナム</option>
+                <option value="Japan">日本</option>
+                <option value="America">アメリカ</option>
+                <option value="France">フランス</option>
             </select>
         </div>
     </header>
 
+    <!-- Nội dung chính -->
     <main class="container">
-        
         <!-- Trang chủ -->
-        <section id="home-page" class="page active">
+        <div id="home-page" class="page active">
             <div class="slideshow-container">
-                <img class="slideshow-image" src="https://abvietnamtravel.com/img/logo/75B82SV64B_408255330_739691568182256_1104935954509976190_n.jpg" alt="slideshow">
-                <div class="slideshow-overlay">
-                    <div class="slideshow-text">
-                        <h1>発見とつながり</h1>
-                        <p>海外生活の経験を共有し、課題を乗り越えましょう。</p>
+                <img class="slideshow-image active" src="https://abvietnamtravel.com/img/logo/75B82SV64B_408255330_739691568182256_1104935954509976190_n.jpg" alt="Slideshow 1">
+                <img class="slideshow-image" src="https://iweb.tatthanh.com.vn/pic/3231/imagegallery/Album-Nhat-Ban.jpg" alt="Slideshow 2">
+                <img class="slideshow-image" src="https://tranbathoaimdphd.wordpress.com/wp-content/uploads/2018/12/1-new-york_1.jpg" alt="Slideshow 3">
+                <img class="slideshow-image" src="https://datviettour.com.vn/uploads/images/chau-au/phap/d.jpg" alt="Slideshow 4">
+            </div>
+            <div class="welcome-message">
+                <h2>海外移住に関する課題を共有しよう</h2>
+                <p>このコミュニティでは、海外での生活や仕事、文化の違いに関する様々な疑問や経験を共有できます。</p>
+                <a href="#" class="cta-button" data-page="discussions">ディスカッションに参加する</a>
+            </div>
+        </div>
+
+        <!-- Trang các câu hỏi thường gặp (Frequently Asked Questions) -->
+        <div id="issues-page" class="page" style="display:none;">
+            <div class="page-content-wrapper">
+                <div class="sidebar">
+                    <h3>タグ</h3>
+                    <div id="issue-tags" class="tag-list">
+                        <!-- Các tag sẽ được tạo tự động bởi JS -->
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3>キーワード検索</h3>
+                        <input type="text" id="issues-search" placeholder="キーワードで検索" class="form-input">
+                    </div>
+                </div>
+                <div class="main-content">
+                    <h2>よくある質問</h2>
+                    <div id="issues-list" class="card-list">
+                        <!-- Các bài viết sẽ được tạo bởi JS -->
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Trang Các vấn đề thường gặp -->
-        <section id="issues-page" class="page">
-            <aside class="sidebar">
-                <h3>トピック</h3>
-                <div id="issue-tags" class="tag-list">
-                    <!-- Các thẻ (tag) sẽ được thêm bằng JS -->
+        <!-- Trang thảo luận -->
+        <div id="discussions-page" class="page" style="display:none;">
+            <div class="page-content-wrapper">
+                <div class="sidebar">
+                    <h3>タグ</h3>
+                    <div id="discussion-tags" class="tag-list">
+                        <!-- Các tag sẽ được tạo bởi JS -->
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3>キーワード検索</h3>
+                        <input type="text" id="discussions-search" placeholder="キーワードで検索" class="form-input">
+                    </div>
                 </div>
-            </aside>
-            <div class="content-area">
-                <h2 class="content-title">よくある質問</h2>
-                <input type="text" id="issues-search" class="search-input" placeholder="記事を検索...">
-                <div id="issues-list" class="card-list">
-                    {% for issue in issues %}
-                    <div class="card" data-id="{{ issue.id }}" data-type="issue">
-                        <img src="{{ issue.image }}" alt="{{ issue.title }}" class="card-image">
-                        <div class="card-body">
-                            <h3>{{ issue.title }}</h3>
-                            <p>{{ issue.description }}</p>
+                <div class="main-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>ディスカッション</h2>
+                        <button id="post-button" class="post-button">新規投稿</button>
+                    </div>
+                    <div class="discussion-list">
+                <!-- Bài viết mẫu 1 -->
+                <div class="post-card">
+                    <img src="https://placehold.co/150x150/EEEEEE/333333?text=Japan" alt="post image" class="post-image">
+                    <div class="post-content">
+                        <h3><a href="#post-1" style="text-decoration: none; color: #333; font-weight: bold;">日本の生活費について</a></h3>
+                        <p class="post-summary">日本での生活費、特に家賃や食費について知りたいです。経験談を教えてください。</p>
+                        <div class="post-meta">
+                            <span><i class="fa-solid fa-calendar"></i> 2023年10月27日</span>
+                            <span><i class="fa-solid fa-location-dot"></i> 日本</span>
+                            <span><i class="fa-solid fa-heart"></i> 15</span>
+                            <span><i class="fa-solid fa-comment"></i> 5</span>
                         </div>
                     </div>
-                    {% endfor %}
+                </div>
+
+                <!-- Chi tiết bài viết 1 -->
+                <div id="post-1" class="post-detail">
+                    <h2>日本の生活費について</h2>
+                    <p class="post-meta">投稿者: 山田 | 2023年10月27日 | 国: 日本</p>
+                    <img src="https://placehold.co/600x400/EEEEEE/333333?text=Japan%20Life" alt="post image" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem;">
+                    <p style="line-height: 1.8; margin-top: 1rem;">
+                        日本への移住を考えていますが、生活費がどれくらいかかるか不安です。特に東京や大阪のような大都市での家賃相場、
+                        スーパーマーケットでの食費、交通費など、具体的な金額の目安を教えていただけると助かります。
+                        また、節約のコツなどもあればぜひ教えてください。
+                    </p>
+                    
+                    <div class="comments-section">
+                        <h3>コメント (5)</h3>
+                        <div class="comment"><strong>田中:</strong> 東京に住んでいますが、家賃は場所によりますが、1Kで月8万円〜15万円くらいです。食費は自炊すれば月3万円くらいに抑えられますよ。</div>
+                        <div class="comment"><strong>Nguyen:</strong> 大阪は東京より家賃が少し安いです。月6万円〜10万円くらいで探せます。</div>
+                        <div class="comment"><strong>Carlos:</strong> I live in Tokyo. Rent is very high. I recommend looking at places further from the city center.</div>
+                    </div>
+                </div>
+
+                <!-- Bài viết mẫu 2 -->
+                <div class="post-card" style="margin-top: 2rem;">
+                    <img src="https://placehold.co/150x150/EEEEEE/333333?text=Vietnam" alt="post image" class="post-image">
+                    <div class="post-content">
+                        <h3><a href="#post-2" style="text-decoration: none; color: #333; font-weight: bold;">ベトナムでの起業について</a></h3>
+                        <p class="post-summary">ベトナムでビジネスを始めたいのですが、現地の法律や手続きについてアドバイスをください。</p>
+                        <div class="post-meta">
+                            <span><i class="fa-solid fa-calendar"></i> 2023年10月26日</span>
+                            <span><i class="fa-solid fa-location-dot"></i> ベトナム</span>
+                            <span><i class="fa-solid fa-heart"></i> 25</span>
+                            <span><i class="fa-solid fa-comment"></i> 12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chi tiết bài viết 2 -->
+                <div id="post-2" class="post-detail">
+                    <h2>ベトナムでの起業について</h2>
+                    <p class="post-meta">投稿者: 佐藤 | 2023年10月26日 | 国: ベトナム</p>
+                    <img src="https://placehold.co/600x400/EEEEEE/333333?text=Vietnam%20Business" alt="post image" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem;">
+                    <p style="line-height: 1.8; margin-top: 1rem;">
+                        ホーチミン市で小さなカフェを開業しようと考えています。外国人がベトナムで起業する際の注意点、
+                        必要な許認可、現地の文化や習慣に合わせた経営のコツなど、具体的な情報を探しています。
+                        現地の専門家や経験者の方からのアドバイスをお待ちしております。
+                    </p>
+                    
+                    <div class="comments-section">
+                        <h3>コメント (12)</h3>
+                        <div class="comment"><strong>Tran:</strong> Giấy phép kinh doanh rất quan trọng. Bạn nên tìm một luật sư có kinh nghiệm để được tư vấn.</div>
+                        <div class="comment"><strong>花子:</strong> ベトナムはカフェ文化が盛んなので、個性的なコンセプトが成功の鍵だと思います。</div>
+                        <div class="comment"><strong>David:</strong> I recommend finding a reliable local partner. It makes a big difference.</div>
+                    </div>
+                </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Trang Thảo luận -->
-        <section id="discussions-page" class="page">
-            <aside class="sidebar">
-                <h3>タグ</h3>
-                <div id="discussion-tags" class="tag-list">
-                    <!-- Các thẻ (tag) sẽ được thêm bằng JS -->
-                </div>
-            </aside>
-            <div class="content-area">
-                <h2 class="content-title">ディスカッション</h2>
-                <input type="text" id="discussions-search" class="search-input" placeholder="投稿を検索...">
-                <button id="post-button" class="post-button" style="margin-right: 60px;">投稿する</button>
-                <div id="discussions-list" class="card-list">
-                    <!-- Các bài thảo luận sẽ được thêm bằng JS -->
-                </div>
-            </div>
-        </section>
-
+        </div>
     </main>
 
-    <!-- Cửa sổ modal hiển thị chi tiết bài viết/thảo luận -->
-    <div id="post-modal" class="modal">
+    <!-- Modal chi tiết bài viết -->
+    <div id="post-modal" class="modal-backdrop" style="display: none;">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <div id="modal-body">
-                <!-- Nội dung chi tiết của bài viết/thảo luận sẽ hiển thị ở đây -->
+            <span class="close-button" id="close-post-modal">&times;</span>
+            <div id="modal-body" class="p-6">
+                <!-- Nội dung chi tiết bài viết sẽ được chèn vào đây -->
             </div>
         </div>
     </div>
     
-    <!-- Cửa sổ modal để đăng bài thảo luận mới -->
-    <div id="new-post-modal" class="modal">
+    <!-- Modal đăng bài mới -->
+    <div id="new-post-modal" class="modal-backdrop" style="display: none;">
         <div class="modal-content">
             <span class="close-button" id="close-new-post-modal">&times;</span>
-            <div class="modal-body">
-                <h2>新規ディスカッションを投稿</h2>
-                <form id="new-post-form" method="POST" enctype="multipart/form-data">
-<<<<<<< HEAD
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">投稿する</button>
-=======
-                    <!-- <input type="text" id="post-title" placeholder="投稿のタイトル" required>
-                    <textarea id="post-content" placeholder="投稿内容" required></textarea>
-                    <input type="text" id="post-tags" placeholder="タグ（コンマ区切り）">
-                    <input type="text" id="post-image" placeholder="画像のURL">
-                    <input type="text" id="post-video" placeholder="動画のURL（オプション）"> -->
-
-                    {% csrf_token %}
-
-                        <input type="text" name="title" required id="id_title" placeholder="投稿のタイトル">
-
-                        <select class="form-control" name="country" id="id_country" style="height: 50px;">
-                            <option value="default">国を選択</option>
-                            <option value="Vietnam">ベトナム</option>
-                            <option value="Japan">日本</option>
-                            <option value="America">アメリカ</option>
-                            <option value="France">フランス</option>
-                        </select>
-                        <select class="form-control" name="tag" id="id_tag" style="height: 50px;">
-                            <option value="default">タグを選択</option>
-                            <option value="食べ物">食べ物</option>
-                            <option value="住居">住居</option>
-                            <option value="天候">天候</option>
-                            <option value="言語">言語</option>
-                            <option value="仕事">仕事</option>
-                            <option value="文化">文化</option>
-                            <option value="トラブル">トラブル</option>
-                            <option value="旅行">旅行</option>
-
-                        </select>
-                        <textarea type="text" name="body" id="id_body" placeholder="投稿内容" style="height: 100px;"></textarea>
-                        <input class="form-control" type="file" name="picture" accept="image/*" id="id_picture">
-
-                    <button type="submit" class="btn btn-outline-primary">投稿</button>
->>>>>>> 849ffb65d7a59336129ed7c5a2a58238dcee2061
-                </form>
-            </div>
+            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">新規投稿</h2>
+            <form id="new-post-form" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <input type="text" name="title" required placeholder="投稿のタイトル" class="form-input">
+                <select name="country" required class="form-input">
+                    <option value="default">国を選択</option>
+                    <option value="Vietnam">ベトナム</option>
+                    <option value="Japan">日本</option>
+                    <option value="America">アメリカ</option>
+                    <option value="France">フランス</option>
+                </select>
+                <textarea name="body" required placeholder="投稿内容" class="form-textarea"></textarea>
+                <input type="text" name="tag" placeholder="タグ（コンマ phân cách）" class="form-input">
+                <input type="file" name="picture" accept="image/*" class="form-file">
+                <button type="submit" class="post-button" style="margin-top: 1rem;">投稿する</button>
+            </form>
         </div>
     </div>
-
-    <script src="script.js"></script>
+    
+    <script src="{% static 'app1/js/script.js' %}"></script>
 </body>
 </html>
