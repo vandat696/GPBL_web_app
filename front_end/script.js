@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Chức năng Slideshow trang chủ ---
     const slideshowImages = [
-        "https://placehold.co/1200x800/d1d1d1/212121?text=ベトナム",
+        "app1/img/vietnam1.jpg",
         "https://placehold.co/1200x800/e0e0e0/333333?text=日本",
         "https://placehold.co/1200x800/c0c0c0/111111?text=アメリカ",
         "https://placehold.co/1200x800/b0b0b0/000000?text=フランス"

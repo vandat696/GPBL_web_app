@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>海外移住の課題</title>
-    <link rel="stylesheet" href="style.css">
+
+    <!-- Tải CSS và JS tĩnh của Django -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app1/css/style.css' %}">
+    
+    <!-- Thư viện ngoài -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
+    <!-- Header & Thanh điều hướng -->
     <header class="navbar">
         <div class="navbar-brand">移住の課題</div>
         <nav class="navbar-menu">
@@ -17,96 +23,120 @@
             <a href="#" class="nav-item" data-page="discussions">ディスカッション</a>
         </nav>
         <div class="navbar-actions">
-            <select id="country-select" class="country-select">
-                <option value="all">国を選択</option>
-                <option value="vietnam">ベトナム</option>
-                <option value="japan">日本</option>
-                <option value="usa">アメリカ</option>
-                <option value="france">フランス</option>
+            <select class="country-select">
+                <option value="">全ての国</option>
+                <option value="Vietnam">ベトナム</option>
+                <option value="Japan">日本</option>
+                <option value="America">アメリカ</option>
+                <option value="France">フランス</option>
             </select>
-            <button id="post-button" class="post-button">投稿する</button>
+            <button id="post-button" class="post-button">新規投稿</button>
         </div>
     </header>
 
+    <!-- Nội dung chính -->
     <main class="container">
-        
         <!-- Trang chủ -->
-        <section id="home-page" class="page active">
+        <div id="home-page" class="page active">
             <div class="slideshow-container">
-                <img src="https://placehold.co/1200x800/d1d1d1/212121?text=Quoc+gia+1" alt="国の画像" class="slideshow-image">
-                <div class="slideshow-overlay">
-                    <div class="slideshow-text">
-                        <h1>発見とつながり</h1>
-                        <p>海外生活の経験を共有し、課題を乗り越えましょう。</p>
+                <div class="slideshow-image"></div>
+                <div class="slideshow-image"></div>
+                <div class="slideshow-image"></div>
+                <div class="slideshow-image"></div>
+            </div>
+            <div class="welcome-message">
+                <h2>海外移住に関する課題を共有しよう</h2>
+                <p>このコミュニティでは、海外での生活や仕事、文化の違いに関する様々な疑問や経験を共有できます。</p>
+                <a href="#" class="cta-button" data-page="discussions">ディスカッションに参加する</a>
+            </div>
+        </div>
+
+        <!-- Trang các câu hỏi thường gặp -->
+        <div id="issues-page" class="page">
+            <h2>よくある質問</h2>
+            <div id="issues-list" class="posts-grid">
+                <!-- Backend Django sẽ lặp và hiển thị các bài viết tại đây -->
+                <!-- Ví dụ: {% for issue in issues_list %} ... {% endfor %} -->
+                <p>よくある質問はありません。</p>
+            </div>
+        </div>
+
+        <!-- Trang thảo luận -->
+        <div id="discussions-page" class="page">
+            <h2>ディスカッション</h2>
+            <div id="discussions-list" class="posts-grid">
+                <!-- Backend Django sẽ lặp và hiển thị các bài viết tại đây -->
+                <!-- Các thẻ bài viết sẽ được tự động tạo bởi Django. Cấu trúc HTML cho một thẻ sẽ như thế này: -->
+                {% for post in discussions %}
+                <div class="post-card" data-id="{{ post.id }}">
+                    <div class="post-image" style="background-image: url('{{ post.picture.url|default:"https://placehold.co/400x300" }}')"></div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-country">{{ post.country }}</span>
+                            <span class="post-author">{{ post.author.username }}</span>
+                        </div>
+                        <h3 class="post-title">{{ post.title }}</h3>
+                        <p class="post-body">{{ post.body|truncatechars:100 }}</p>
+                        <div class="post-stats">
+                            <span class="post-likes"><i class="fa-solid fa-thumbs-up"></i> {{ post.likes.count }}</span>
+                            <span class="post-dislikes"><i class="fa-solid fa-thumbs-down"></i> {{ post.dislikes.count }}</span>
+                            <span class="post-comments"><i class="fa-solid fa-comment"></i> {{ post.comments.count }}</span>
+                        </div>
+                        <div class="post-tags">
+                            {% for tag in post.tags.all %}
+                            <span>#{{ tag }}</span>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
+                {% empty %}
+                <p>投稿されたディスカッションはありません。</p>
+                {% endfor %}
             </div>
-        </section>
-
-        <!-- Trang Các vấn đề thường gặp -->
-        <section id="issues-page" class="page">
-            <aside class="sidebar">
-                <h3>トピック</h3>
-                <div id="issue-tags" class="tag-list">
-                    <!-- Các thẻ (tag) sẽ được thêm bằng JS -->
-                </div>
-            </aside>
-            <div class="content-area">
-                <h2 class="content-title">よくある質問</h2>
-                <input type="text" id="issues-search" class="search-input" placeholder="記事を検索...">
-                <div id="issues-list" class="card-list">
-                    <!-- Các bài viết sẽ được thêm bằng JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Trang Thảo luận -->
-        <section id="discussions-page" class="page">
-            <aside class="sidebar">
-                <h3>タグ</h3>
-                <div id="discussion-tags" class="tag-list">
-                    <!-- Các thẻ (tag) sẽ được thêm bằng JS -->
-                </div>
-            </aside>
-            <div class="content-area">
-                <h2 class="content-title">ディスカッション</h2>
-                <input type="text" id="discussions-search" class="search-input" placeholder="投稿を検索...">
-                <div id="discussions-list" class="card-list">
-                    <!-- Các bài thảo luận sẽ được thêm bằng JS -->
-                </div>
-            </div>
-        </section>
-
+        </div>
     </main>
 
-    <!-- Cửa sổ modal hiển thị chi tiết bài viết/thảo luận -->
+    <!-- Modal xem chi tiết bài viết -->
     <div id="post-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <div id="modal-body">
-                <!-- Nội dung chi tiết của bài viết/thảo luận sẽ hiển thị ở đây -->
+            <span class="close-button" id="close-button">&times;</span>
+            <div id="post-detail-content">
+                <!-- Nội dung chi tiết của bài viết sẽ được nhúng vào đây bằng JavaScript sau khi người dùng bấm vào -->
+                <div class="loader"></div>
             </div>
         </div>
     </div>
-    
-    <!-- Cửa sổ modal để đăng bài thảo luận mới -->
+
+    <!-- Modal đăng bài mới -->
     <div id="new-post-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-new-post-modal">&times;</span>
+            <div class="modal-header">
+                <h2>新規投稿</h2>
+            </div>
             <div class="modal-body">
-                <h2>新規ディスカッションを投稿</h2>
                 <form id="new-post-form">
-                    <input type="text" id="post-title" placeholder="投稿のタイトル" required>
-                    <textarea id="post-content" placeholder="投稿内容" required></textarea>
-                    <input type="text" id="post-tags" placeholder="タグ（コンマ区切り）">
-                    <input type="text" id="post-image" placeholder="画像のURL">
-                    <input type="text" id="post-video" placeholder="動画のURL（オプション）">
+                    <!-- Sử dụng thẻ template của Django cho CSRF token -->
+                    {% csrf_token %}
+                    
+                    <input type="text" name="title" required placeholder="投稿のタイトル">
+                    <select name="country" required>
+                        <option value="default">国を選択</option>
+                        <option value="Vietnam">ベトナム</option>
+                        <option value="Japan">日本</option>
+                        <option value="America">アメリカ</option>
+                        <option value="France">フランス</option>
+                    </select>
+                    <textarea name="body" required placeholder="投稿内容"></textarea>
+                    <input type="text" name="tags" placeholder="タグ（コンマ区切り）">
+                    <input type="file" name="picture" accept="image/*">
+                    
                     <button type="submit">投稿する</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
+    
+    <script src="{% static 'app1/js/script.js' %}"></script>
 </body>
 </html>
