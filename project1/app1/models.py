@@ -28,6 +28,7 @@ class Article_tag(models.Model):
         return self.tag
     
 class Comment(models.Model):
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     article_id=models.ForeignKey(Article,verbose_name="ArticleID",on_delete=models.CASCADE)
     body=models.TextField(verbose_name="comment")
     created=models.DateTimeField(auto_now_add=True,verbose_name="created_date_time")

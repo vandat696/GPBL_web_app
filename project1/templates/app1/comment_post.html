@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>記事</h3>
+    {{ article.body }}
+    <h3>コメント</h3>
+    <form id="new-post-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <textarea name="body" required id="id_body" style="width: 300px; height: 50px;"></textarea>
+    <br>
+    <button type="submit" class="btn btn-outline-primary">投稿</button>
+    </form>
+</body>
+</html>

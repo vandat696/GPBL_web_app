@@ -208,6 +208,7 @@
     <div id="new-post-modal" class="modal-backdrop" style="display: none;">
         <div class="modal-content">
             <span class="close-button" id="close-new-post-modal">&times;</span>
+<<<<<<< HEAD
             <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">新規投稿</h2>
             <form id="new-post-form" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
@@ -224,6 +225,49 @@
                 <input type="file" name="picture" accept="image/*" class="form-file">
                 <button type="submit" class="post-button" style="margin-top: 1rem;">投稿する</button>
             </form>
+=======
+            <div class="modal-body">
+                <h2>新規ディスカッションを投稿</h2>
+                <form id="new-post-form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">投稿する</button>
+                    <!-- <input type="text" id="post-title" placeholder="投稿のタイトル" required>
+                    <textarea id="post-content" placeholder="投稿内容" required></textarea>
+                    <input type="text" id="post-tags" placeholder="タグ（コンマ区切り）">
+                    <input type="text" id="post-image" placeholder="画像のURL">
+                    <input type="text" id="post-video" placeholder="動画のURL（オプション）"> -->
+
+                    {% csrf_token %}
+
+                        <input type="text" name="title" required id="id_title" placeholder="投稿のタイトル">
+
+                        <select class="form-control" name="country" id="id_country" style="height: 50px;">
+                            <option value="default">国を選択</option>
+                            <option value="ベトナム">ベトナム</option>
+                            <option value="日本">日本</option>
+                            <option value="アメリカ">アメリカ</option>
+                            <option value="フランス">フランス</option>
+                        </select>
+                        <select class="form-control" name="tag" id="id_tag" style="height: 50px;">
+                            <option value="default">タグを選択</option>
+                            <option value="食べ物">食べ物</option>
+                            <option value="住居">住居</option>
+                            <option value="天候">天候</option>
+                            <option value="言語">言語</option>
+                            <option value="仕事">仕事</option>
+                            <option value="文化">文化</option>
+                            <option value="トラブル">トラブル</option>
+                            <option value="旅行">旅行</option>
+
+                        </select>
+                        <textarea type="text" name="body" id="id_body" placeholder="投稿内容" style="height: 100px;"></textarea>
+                        <input class="form-control" type="file" name="picture" accept="image/*" id="id_picture">
+
+                    <button type="submit" class="btn btn-outline-primary">投稿</button>
+                </form>
+            </div>
+>>>>>>> 8bacbec08febdf66aa5c829b1e9de76fdd67f172
         </div>
     </div>
     
