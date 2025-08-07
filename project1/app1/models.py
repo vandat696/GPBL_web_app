@@ -20,13 +20,7 @@ class  Article(models.Model):
         return self.title
 
 
-class Article_tag(models.Model):
-    article_id=models.ForeignKey(Article,verbose_name="ArticleID",on_delete=models.CASCADE)
-    tag=models.CharField(max_length=100,verbose_name="tag")
 
-    def __str__(self):
-        return self.tag
-    
 class Comment(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     article_id=models.ForeignKey(Article,verbose_name="ArticleID",on_delete=models.CASCADE)
