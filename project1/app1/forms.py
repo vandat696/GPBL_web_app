@@ -23,7 +23,7 @@ class ArticleForm(forms.Form):
 
 
 
-class ArticleModelForm:
+class ArticleModelForm(ModelForm):
     class Meta:
         model=Article
-        fields=["title","country","body","picture"]
+        fields=["title","country","tag","body","picture"]
