@@ -63,53 +63,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Dữ liệu giả lập cho trang FAQ ---
   const issuesData = [
-    {
+        {
       id: 1,
-      title: "Thủ tục xin visa lao động ở Nhật Bản có phức tạp không?",
-      body: "Thủ tục xin visa lao động tại Nhật Bản yêu cầu nhiều giấy tờ như hợp đồng lao động, bằng cấp và hồ sơ cá nhân. Quá trình này có thể mất vài tháng, nhưng nếu bạn chuẩn bị đầy đủ, mọi việc sẽ diễn ra suôn sẻ.",
-      tags: ["thủ tục", "công việc"],
+      title: "日本の労働ビザの申請手続きは複雑ですか？",
+      body: "日本の労働ビザを申請するには、労働契約書、卒業証書、個人情報など、多くの書類が必要です。 このプロセスには数か月かかる場合がありますが、十分に準備すれば、すべてがスムーズに進みます。",
+      tags: ["手続き", "仕事"],
       country: "Japan",
-      image: "https://placehold.co/600x400/94A3B8/ffffff?text=Thủ+tục+visa",
+      image: "https://jfbfe.or.jp/column/wp-content/uploads/2025/07/A082_%E6%97%A5%E6%9C%AC-%E5%B0%B1%E5%8A%B4%E3%83%93%E3%82%B6-%E9%9B%A3%E3%81%97%E3%81%84.png",
     },
     {
       id: 2,
-      title: "Làm thế nào để tìm được nhà trọ ở Mỹ?",
-      body: "Việc tìm nhà ở Mỹ khá dễ dàng thông qua các trang web như Zillow, Apartments.com hoặc Craigslist. Bạn nên tìm kiếm trước khi đến và chuẩn bị các giấy tờ cần thiết như chứng minh thu nhập.",
-      tags: ["thủ tục"],
+      title: "アメリカでアパートを見つけるには？",
+      body: "アメリカで家を探すのは、Zillow、Apartments.com、Craigslistなどのウェブサイトを通じて非常に簡単です。 来る前に検索し、収入証明書などの必要な書類を準備する必要があります。",
+      tags: ["手続き"],
       country: "America",
-      image: "https://placehold.co/600x400/FDBA74/ffffff?text=Nhà+trọ+ở+Mỹ",
+      image: "https://assets.st-note.com/production/uploads/images/144583974/rectangle_large_type_2_9ea5ec280fa5bd10941603a59bc4df5b.png?width=1200",
     },
     {
       id: 3,
-      title: "Văn hóa ẩm thực Việt Nam có gì đặc biệt?",
-      body: "Ẩm thực Việt Nam nổi tiếng với sự đa dạng và hương vị tinh tế. Phở, bún chả và bánh mì là những món ăn mà bạn nhất định phải thử. Mỗi vùng miền lại có những đặc sản riêng biệt.",
-      tags: ["đồ ăn"],
+      title: "ベトナムの食文化の特徴は何ですか？",
+      body: "ベトナム料理は、その多様性と絶妙な味で有名です。 フォー、ブンチャー、バインミーはぜひお試しください。 各地域には独自の名物料理があります。",
+      tags: ["食べ物"],
       country: "Vietnam",
-      image: "https://placehold.co/600x400/BEF264/ffffff?text=Ẩm+thực+Việt",
+      image: "https://blog.onecoinenglish.com/sys/wp-content/uploads/2025/04/3-1-1024x576.jpg",
     },
     {
       id: 4,
-      title: "Thời tiết ở Pháp thay đổi như thế nào?",
-      body: "Pháp có khí hậu ôn đới, với 4 mùa rõ rệt. Mùa hè nóng và khô, trong khi mùa đông lạnh và ẩm ướt. Bạn nên chuẩn bị quần áo phù hợp cho từng mùa.",
-      tags: ["khí hậu"],
+      title: "フランスの天気はどのように変化しますか？",
+      body: "フランスは温暖な気候で、四季がはっきりしています。 夏は暑くて乾燥しており、冬は寒くて湿っています。 季節に合った服を用意する必要があります。",
+      tags: ["気候"],
       country: "France",
-      image: "https://placehold.co/600x400/FCA5A5/ffffff?text=Thời+tiết+Pháp",
+      image: "https://www.arukikata.co.jp/wp-content/uploads/20230531150744e924a1f21920.jpg",
     },
     {
       id: 5,
-      title: "Học tiếng Nhật có khó không?",
-      body: "Tiếng Nhật có 3 bảng chữ cái là Hiragana, Katakana và Kanji, điều này có thể gây khó khăn cho người mới bắt đầu. Tuy nhiên, ngữ pháp của tiếng Nhật lại khá đơn giản và dễ học hơn so với một số ngôn ngữ khác.",
-      tags: ["ngôn ngữ"],
+      title: "日本語を学ぶのは難しいですか？",
+      body: "日本語には、ひらがな、カタカナ、漢字の3つのアルファベットがあり、これは初心者にとって難しい場合があります。 ただし、日本語の文法は比較的簡単で、他の言語よりも学びやすいです。",
+      tags: ["言語"],
       country: "Japan",
-      image: "https://placehold.co/600x400/A5B4FC/ffffff?text=Học+tiếng+Nhật",
+      image: "https://alote.inmybook.jp/wp-content/uploads/2022/03/study_nihongo.png",
     },
     {
       id: 6,
-      title: "Bí quyết phỏng vấn thành công ở Mỹ",
-      body: "Phỏng vấn ở Mỹ thường chú trọng vào kỹ năng mềm và kinh nghiệm làm việc thực tế. Bạn nên chuẩn bị kỹ lưỡng các câu trả lời và thể hiện sự tự tin.",
-      tags: ["công việc"],
+      title: "アメリカで面接に成功するためのヒント",
+      body: "アメリカでの面接は、ソフトスキルと実際の職務経験を重視することがよくあります。 回答を注意深く準備し、自信を示す必要があります。",
+      tags: ["仕事"],
       country: "America",
-      image: "https://placehold.co/600x400/E9D5FF/ffffff?text=Phỏng+vấn+Mỹ",
+      image: "https://sekai-ju.com/wp-content/uploads/2018/03/%E3%82%A2%E3%83%A1%E3%83%AA%E3%82%AB%E3%81%AE%E9%9D%A2%E6%8E%A5%EF%BC%91%EF%BC%90%E3%81%AE%E3%82%B3%E3%83%84.jpg",
     },
   ];
 
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const issuesSearchInput = document.getElementById('issues-search');
   
   // Danh sách các tag có sẵn
-  const availableTags = ["thủ tục", "công việc", "ngôn ngữ", "đồ ăn", "khí hậu"];
+  const availableTags = ["手続き", "仕事", "言語", "食べ物", "気候", "文化"];
 
   // Tạo và hiển thị các tag
   function renderTags() {
