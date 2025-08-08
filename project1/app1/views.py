@@ -7,10 +7,13 @@ class IndexView(View):
     def get(self,request):
         form=ArticleModelForm()
         tag_id=request.GET.get('tag')
-        tags=Tags.object.all()
-        articles=Article.objects.all()
+        if tag_id:
+            articles=Article.objects.filter(tag__id=tag_id)
+        else:
+            articles=Article.objects.all()
         comments=Comment.objects.all()
-        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments})
+        tags=Tags.objects.all()
+        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
     def post(self,request):
         form=ArticleModelForm(request.POST,request.FILES)
         if form.is_valid():
@@ -61,8 +64,10 @@ class CommentView(View):
 class SearchView(View):
     def get(self,request):
         tag_id=request.GET.get('tag')
-        all_article=Article.object.all()
-        return render(request,"app1/index.html",{"select_article":all_article})
+        if tag_id:
+            return redirect(f"/?tag={tag_id}")
+        else:
+            return redirect("")
 
 
 class LikeView(View):
