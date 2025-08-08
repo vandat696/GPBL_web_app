@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="full-post">
             <h2 class="text-2xl font-bold mb-2">${postData.title}</h2>
             <div class="post-meta">
-              <span>Quốc gia: ${postData.country}</span>
+              <span>国: ${postData.country}</span>
             </div>
             <img src="${postData.image}" alt="${postData.title}">
             <div class="prose max-w-none">
