@@ -2,7 +2,6 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .forms import ArticleModelForm,CommentForm
 from .models import Article,Comment
-# Create your views here.
 
 class IndexView(View):
     def get(self,request):
@@ -21,24 +20,41 @@ class IndexView(View):
 
 class CommentView(View):
     def get(self,request,id):
-        article=get_object_or_404(Article,id=id)
-        form=CommentForm()
-        return render(request,"app1/comment_post.html",{"form":form,"article":article})
+        article = get_object_or_404(Article, id=id)
+        form = CommentForm()
+        # Load post's comment
+        comments = Comment.objects.filter(article_id=article).order_by('-id')
+        return render(request, "app1/comment_post.html", {
+            "form": form,
+            "article": article,
+            "comments": comments,
+        })
     def post(self,request,id):
         form = CommentForm(request.POST)
-        article=get_object_or_404(Article,id=id)
+        article = get_object_or_404(Article, id=id)
         if form.is_valid():
             form_body = form.cleaned_data.get('body')
-            comment=Comment()
-            comment.article_id=article
-            comment.body=str(form_body)
+            comment = Comment()
+            comment.article_id = article
+            comment.body = str(form_body)
             comment.save()
 
-            article=get_object_or_404(Article,id=id)
-            article.comments=article.comments+1
+            article.comments = article.comments + 1
             article.save()
-            return redirect("app1:index")
-        return render(request,"app1/index.html",{"form":form})
+            # After add comment, reload post's comment
+            comments = Comment.objects.filter(article_id=article).order_by('-id')
+            form = CommentForm()
+            return render(request, "app1/comment_post.html", {
+                "form": form,
+                "article": article,
+                "comments": comments,
+            })
+        comments = Comment.objects.filter(article_id=article).order_by('-id')
+        return render(request, "app1/comment_post.html", {
+            "form": form,
+            "article": article,
+            "comments": comments,
+        })
 
 class SearchView(View):
     def get(self,request):
