@@ -1,11 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .forms import ArticleModelForm,CommentForm
-from .models import Article,Comment
+from .models import Article,Comment,Tags
 
 class IndexView(View):
     def get(self,request):
         form=ArticleModelForm()
+        tag_id=request.GET.get('tag')
+        tags=Tags.object.all()
         articles=Article.objects.all()
         comments=Comment.objects.all()
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments})
@@ -58,6 +60,7 @@ class CommentView(View):
 
 class SearchView(View):
     def get(self,request):
+        tag_id=request.GET.get('tag')
         all_article=Article.object.all()
         return render(request,"app1/index.html",{"select_article":all_article})
 
