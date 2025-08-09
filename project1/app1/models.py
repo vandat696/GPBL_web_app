@@ -8,6 +8,7 @@ class  Article(models.Model):
     #user_name=models.TextField(default="なし",null=True,verbose_name="user_name")
     title=models.TextField(verbose_name="title")
     country=models.TextField(verbose_name="country")
+    user_name=models.TextField(default="ゲスト",verbose_name="user_name")
     body=models.TextField(verbose_name="content")
     tag=models.ManyToManyField('Tags',verbose_name="tag",blank=True)
     picture=models.ImageField(upload_to="app1/picture/",null=True,blank=True,verbose_name="picture")
@@ -36,10 +37,9 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
 
-# class UserName(models.Model):
-#     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-#     user_name=models.TextField(verbose_name="UserID")
-#     score=models.IntegerField(default=0,verbose_name="score")
-
-#     def __str__(self):
-#         return self.user_name
+class UserName(models.Model):
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    user_name=models.TextField(verbose_name="UserID")
+    score=models.IntegerField(default=0,verbose_name="score")
+    def __str__(self):
+        return self.user_name

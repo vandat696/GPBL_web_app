@@ -136,9 +136,9 @@
                     <p style="line-height: 1.8; margin-top: 1rem;">
                         {{article.body}}
                     </p>
-                    <button onclick="location.href='/like/add/{{article.id}}'" class="btn btn-secondary  btn-sm">高評価({{article.likes}})</button>
-                    <button onclick="location.href='/dislike/add/{{article.id}}'" class="btn btn-secondary  btn-sm">低評価({{article.dislikes}})</button>
-                    <button onclick="location.href='/comment/post/{{article.id}}'" class="btn btn-secondary  btn-sm">コメント({{article.comments}})</button>
+                    <button onclick="location.href='/app1/like/add/{{article.id}}'" class="btn btn-secondary  btn-sm">高評価({{article.likes}})</button>
+                    <button onclick="location.href='/app1/dislike/add/{{article.id}}'" class="btn btn-secondary  btn-sm">低評価({{article.dislikes}})</button>
+                    <button onclick="location.href='/app1/comment/post/{{article.id}}'" class="btn btn-secondary  btn-sm">コメント({{article.comments}})</button>
                     <div class="comments-section" style="padding-top: 20px;">
                         <h5>コメント</h5>
                         <ul>
@@ -261,7 +261,11 @@
             </div>
         </div>
     </div>
-    
+<button onclick="location.href='/login'">ログイン</button>
+<form action="{% url 'accounts:logout' %}" method="post"> 
+    {% csrf_token %}
+    <button type="submit">ログアウト</button>
+</form>
     <script src="{% static 'app1/js/script.js' %}"></script>
 </body>
 </html>

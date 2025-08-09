@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .forms import ArticleModelForm,CommentForm
 from .models import Article,Comment,Tags
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 class IndexView(View):
     def get(self,request):
         form=ArticleModelForm()
@@ -13,6 +13,8 @@ class IndexView(View):
             articles=Article.objects.all()
         comments=Comment.objects.all()
         tags=Tags.objects.all()
+        user = request.user
+        print("ユーザーは"+str(user))
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
     def post(self,request):
         form=ArticleModelForm(request.POST,request.FILES)
