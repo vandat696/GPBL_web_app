@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h2>新規登録</h2>
+    <form method="post">
+    {% csrf_token %}
+        <p>
+        <label for="user_name">ユーザー名:</label>
+        <input type="text" name="new_username"  maxlength="150" required>
+        </p><p>
+        <label for="new_password">パスワード:</label>
+        <input type="password" name="password"  maxlength="150" required>
+        </p>
+    <button type="submit">登録</button>
+</form>
+<br>
+<a href="/login">ログイン</a>
+<br>
+<a href="/">ゲストとして続行</a>

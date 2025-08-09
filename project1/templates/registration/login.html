@@ -6,10 +6,21 @@
     <title>Document</title>
 </head>
 <body>
-<form method="post">
+<h2>ログイン</h2>
+    <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+    <p>
+        <input type="checkbox" id="scales" name="scales" />
+        <label for="scales">私はベトナム在住の日本人です</label>
+    </p>
+    <!-- チェックを付けないと押せないように修正する -->
     <button type="submit">ログイン</button>
 </form>
+<br>
+<a href="/user_resistration">新規登録</a>
+<br>
+<a href="/">ゲストとして続行</a>
+
 </body>
 </html>

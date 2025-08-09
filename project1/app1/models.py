@@ -5,7 +5,6 @@ import uuid
 
 class  Article(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    #user_name=models.TextField(default="なし",null=True,verbose_name="user_name")
     title=models.TextField(verbose_name="title")
     country=models.TextField(verbose_name="country")
     user_name=models.TextField(default="ゲスト",verbose_name="user_name")
@@ -39,7 +38,8 @@ class Comment(models.Model):
 
 class UserName(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    user_name=models.TextField(verbose_name="UserID")
-    score=models.IntegerField(default=0,verbose_name="score")
+    user_name=models.TextField(verbose_name="ユーザ名")
+    password=models.TextField(null=True,verbose_name="パスワード")
+    score=models.IntegerField(default=0,verbose_name="スコア")
     def __str__(self):
         return self.user_name
