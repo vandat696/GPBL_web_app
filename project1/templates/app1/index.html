@@ -54,6 +54,17 @@
             <a href="#" class="nav-item" data-page="issues" style="text-decoration: none;">よくある質問</a>
             <a href="#" class="nav-item" data-page="discussions" style="text-decoration: none;">ディスカッション</a>
         </nav>
+    
+        {% if request.user.is_authenticated %}
+        <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0 0 0 auto; margin-right: 10px;"> 
+            {% csrf_token %}
+            <button type="submit" id="country-select" class="country-select" style="background-color: white;">{{request.user}}からログアウト</button>
+        </form>
+    
+        {% else %}
+        <button onclick="location.href='/login'" id="country-select" class="country-select" style="margin: 0 0 0 auto; margin-right: 10px; background-color: white;" >ログイン/新規登録</button>
+        {% endif %}
+        
         <div class="navbar-actions">
             <select id="country-select" class="country-select">
                 <option value="all">全ての国</option>
@@ -129,7 +140,7 @@
                 {% for article in articles %}
                 <div class="post-detail">
                     <h2>{{article.title}}</h2>
-                    <p class="post-meta">{{article.created}} | 国: {{article.country}} | タグ:{{article.tag}} </p>
+                    <p class="post-meta">{{article.created}} | 国: {{article.country}} | 投稿者:{{article.user_name}} </p>
                     {% if article.picture %}
                     <img src={{article.picture.url}} style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem;">
                     {% endif %}
@@ -140,11 +151,13 @@
                     <button onclick="location.href='/dislike/add/{{article.id}}'" class="btn btn-secondary  btn-sm">低評価({{article.dislikes}})</button>
                     <button onclick="location.href='/comment/post/{{article.id}}'" class="btn btn-secondary  btn-sm">コメント({{article.comments}})</button>
                     <div class="comments-section" style="padding-top: 20px;">
+                        {% if article.comments != 0 %}
                         <h5>コメント</h5>
+                        {% endif %}
                         <ul>
                         {% for comment in comments %}
                         {% if comment.article_id == article %}
-                        <li>{{comment.body}}</li>
+                        <li style="list-style:none">{{comment.user_name}} > {{comment.body}}</li>
                         {% endif %}
                         {% endfor %}
                     </ul>
@@ -218,50 +231,26 @@
                 </select>
                 <textarea name="body" required placeholder="投稿内容" class="form-textarea"></textarea>
                         <select class="form-input" name="tag" id="id_tag" style="height: 50px;">
-                            <option value="指定なし">タグを選択</option>
-                            <option value="食べ物">食べ物</option>
-                            <option value="住居">住居</option>
-                            <option value="天候">天候</option>
-                            <option value="言語">言語</option>
-                            <option value="仕事">仕事</option>
-                            <option value="文化">文化</option>
-                            <option value="トラブル">トラブル</option>
-                            <option value="旅行">旅行</option>
-
+                            <option value="1">タグを選択</option>
+                            <option value="2">食べ物</option>
+                            <option value="3">住居</option>
+                            <option value="4">天候</option>
+                            <option value="5">言語</option>
+                            <option value="6">仕事</option>
+                            <option value="7">文化</option>
+                            <option value="8">トラブル</option>
+                            <option value="9">旅行</option>
+                            <option value="10">その他</option>
                         </select>                
                         <input type="file" name="picture" accept="image/*" class="form-file">
                 <button type="submit" class="post-button" style="margin-top: 1rem;">投稿する</button>
             </form>
             <div class="modal-body">
-                        <!-- <input type="text" name="title" required id="id_title" placeholder="投稿のタイトル">
-
-                        <select class="form-control" name="country" id="id_country" style="height: 50px;">
-                            <option value="default">国を選択</option>
-                            <option value="ベトナム">ベトナム</option>
-                            <option value="日本">日本</option>
-                            <option value="アメリカ">アメリカ</option>
-                            <option value="フランス">フランス</option>
-                        </select>
-                        <select class="form-control" name="tag" id="id_tag" style="height: 50px;">
-                            <option value="default">タグを選択</option>
-                            <option value="食べ物">食べ物</option>
-                            <option value="住居">住居</option>
-                            <option value="天候">天候</option>
-                            <option value="言語">言語</option>
-                            <option value="仕事">仕事</option>
-                            <option value="文化">文化</option>
-                            <option value="トラブル">トラブル</option>
-                            <option value="旅行">旅行</option>
-
-                        </select>
-                        <textarea type="text" name="body" id="id_body" placeholder="投稿内容" style="height: 100px;"></textarea>
-                        <input class="form-control" type="file" name="picture" accept="image/*" id="id_picture"> -->
-
                 </form>
             </div>
         </div>
     </div>
-    
+
     <script src="{% static 'app1/js/script.js' %}"></script>
 </body>
 </html>

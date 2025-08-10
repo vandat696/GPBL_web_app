@@ -5,9 +5,9 @@ import uuid
 
 class  Article(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    #user_name=models.TextField(default="なし",null=True,verbose_name="user_name")
     title=models.TextField(verbose_name="title")
     country=models.TextField(verbose_name="country")
+    user_name=models.TextField(default="ゲスト",verbose_name="user_name")
     body=models.TextField(verbose_name="content")
     tag=models.ManyToManyField('Tags',verbose_name="tag",blank=True)
     picture=models.ImageField(upload_to="app1/picture/",null=True,blank=True,verbose_name="picture")
@@ -30,16 +30,17 @@ class Tags(models.Model):
 class Comment(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     article_id=models.ForeignKey(Article,verbose_name="ArticleID",on_delete=models.CASCADE)
+    user_name=models.TextField(default="ゲスト",verbose_name="user_name")
     body=models.TextField(verbose_name="comment")
     created=models.DateTimeField(auto_now_add=True,verbose_name="created_date_time")
 
     def __str__(self):
         return self.body
 
-# class UserName(models.Model):
-#     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-#     user_name=models.TextField(verbose_name="UserID")
-#     score=models.IntegerField(default=0,verbose_name="score")
-
-#     def __str__(self):
-#         return self.user_name
+class UserName(models.Model):
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    user_name=models.CharField(max_length=50,verbose_name="ユーザ名")
+    password=models.CharField(max_length=50,null=True,blank=True,verbose_name="パスワード")
+    score=models.IntegerField(default=0,verbose_name="スコア")
+    def __str__(self):
+        return self.user_name

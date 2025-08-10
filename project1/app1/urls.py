@@ -8,5 +8,5 @@ urlpatterns=[
   path("search",views.search , name="search"),
   path("like/add/<uuid:id>",views.like_add , name="like_add"),
   path("dislike/add/<uuid:id>",views.dislike_add , name="dislike_add"),
-
+  path("user_resistration/",views.user_resistration , name="user_resistration"),
 ] 

@@ -287,8 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
     } catch (error) {
-      console.error('Lỗi mạng:', error);
-      alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.');
+      // console.error('Lỗi mạng:', error);
+      // alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.');
+      ;
     }
   });
 });

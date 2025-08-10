@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h2>新規登録</h2>
+    <form method="post">
+    {% csrf_token %}
+    <p>
+    <label for="id_user_name">ユーザ名:</label>
+    <input type="text" name="user_name" maxlength="50" required="" id="id_user_name">
+    </p><p>
+    <label for="id_password">パスワード:</label>
+    <input type="password" name="password" maxlength="50" id="id_password">
+    </p>
+    <!-- チェックを付けないと押せないように修正する -->
+        <p>
+            <input type="checkbox" id="scales" name="scales" />
+            <label for="scales">私はベトナム在住の日本人です</label>
+        </p>
+    <button type="submit">登録</button>
+</form>
+<br>
+<a href="/login">ログイン</a>
+<br>
+<a href="/">ゲストとして続行</a>

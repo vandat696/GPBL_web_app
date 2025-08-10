@@ -1,5 +1,5 @@
 from django import forms
-from .models import Article,Comment
+from .models import Article,Comment,UserName
 from django.forms import ModelForm
 
 
@@ -35,3 +35,8 @@ class CommentForm(ModelForm):
     class Meta:
         model=Comment
         fields=["body"]
+
+class UserRegistrationForm(ModelForm):
+    class Meta:
+        model=UserName
+        fields=["user_name","password"]

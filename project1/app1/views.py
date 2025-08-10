@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .forms import ArticleModelForm,CommentForm
-from .models import Article,Comment,Tags
+from .forms import ArticleModelForm,CommentForm,UserRegistrationForm
+from .models import Article,Comment,Tags,UserName
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 
 class IndexView(View):
     def get(self,request):
@@ -13,14 +15,32 @@ class IndexView(View):
             articles=Article.objects.all()
         comments=Comment.objects.all()
         tags=Tags.objects.all()
+        user = request.user
+        print("ユーザーは"+str(user))
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
     def post(self,request):
         form=ArticleModelForm(request.POST,request.FILES)
         if form.is_valid():
+            form_body = form.cleaned_data.get('body')
             form.save()
-            return redirect("app1:index")
+            print("投稿を保存しました")
+            article=get_object_or_404(Article,body=form_body)
+            print("article.title="+article.title)
+            user = request.user
+            article.user_name=str(user)
+            article.save()
+    
+        else:
+            print("投稿を保存できませんでした")
         form=ArticleModelForm()
-        return render(request,"app1/index.html",{"form":form})
+        tag_id=request.GET.get('tag')
+        if tag_id:
+            articles=Article.objects.filter(tag__id=tag_id)
+        else:
+            articles=Article.objects.all()
+        comments=Comment.objects.all()
+        tags=Tags.objects.all()
+        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
 
 
 class CommentView(View):
@@ -28,7 +48,7 @@ class CommentView(View):
         article = get_object_or_404(Article, id=id)
         form = CommentForm()
         # Load post's comment
-        comments = Comment.objects.filter(article_id=article).order_by('-id')
+        comments = Comment.objects.filter(article_id=article).order_by('created')
         return render(request, "app1/comment_post.html", {
             "form": form,
             "article": article,
@@ -42,19 +62,20 @@ class CommentView(View):
             comment = Comment()
             comment.article_id = article
             comment.body = str(form_body)
+            comment.user_name=request.user
             comment.save()
 
             article.comments = article.comments + 1
             article.save()
             # After add comment, reload post's comment
-            comments = Comment.objects.filter(article_id=article).order_by('-id')
+            comments = Comment.objects.filter(article_id=article).order_by('created')
             form = CommentForm()
             return render(request, "app1/comment_post.html", {
                 "form": form,
                 "article": article,
                 "comments": comments,
             })
-        comments = Comment.objects.filter(article_id=article).order_by('-id')
+        comments = Comment.objects.filter(article_id=article).order_by('created')
         return render(request, "app1/comment_post.html", {
             "form": form,
             "article": article,
@@ -85,10 +106,25 @@ class DislikeView(View):
         article.save()
         return redirect("app1:index")
 
-
+class UserRegistrationView(View):
+    def get(self,request):
+        form = UserRegistrationForm()
+        return render(request,"app1/user_registration.html",{"form":form})
+    def post(self,request):
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form_user_name = form.cleaned_data.get('user_name')
+            form_password=form.cleaned_data.get('password')
+            form.save()
+            user = User.objects.create_user(form_user_name,"", form_password)
+            user=get_object_or_404(UserName,user_name=form_user_name)
+            user.password=""
+            #print("ユーザ名："+form_user_name+"パスワード："+form_password)
+        return redirect("app1:index")
 
 index=IndexView.as_view()
 comment_post=CommentView.as_view()
 search=SearchView.as_view()
 like_add=LikeView.as_view()
 dislike_add=DislikeView.as_view()
+user_resistration=UserRegistrationView.as_view()
