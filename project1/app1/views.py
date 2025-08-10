@@ -96,6 +96,10 @@ class LikeView(View):
         article=get_object_or_404(Article,id=id)
         article.likes=article.likes+1
         article.save()
+        if article.user_name != "ゲスト":
+            user=get_object_or_404(UserName,user_name=article.user_name)
+            user.score=user.score+1
+            user.save()
         return redirect("app1:index")
 
 
@@ -104,6 +108,10 @@ class DislikeView(View):
         article=get_object_or_404(Article,id=id)
         article.dislikes=article.dislikes+1
         article.save()
+        if article.user_name != "ゲスト":
+            user=get_object_or_404(UserName,user_name=article.user_name)
+            user.score=user.score-2
+            user.save()
         return redirect("app1:index")
 
 class UserRegistrationView(View):
@@ -122,9 +130,17 @@ class UserRegistrationView(View):
             #print("ユーザ名："+form_user_name+"パスワード："+form_password)
         return redirect("app1:index")
 
+class RankingView(View):
+    def get(self,request):     
+        users = UserName.objects.all().order_by('-score')
+        return render(request,"app1/ranking.html",{"users":users})
+
+
+
 index=IndexView.as_view()
 comment_post=CommentView.as_view()
 search=SearchView.as_view()
 like_add=LikeView.as_view()
 dislike_add=DislikeView.as_view()
 user_resistration=UserRegistrationView.as_view()
+ranking=RankingView.as_view()

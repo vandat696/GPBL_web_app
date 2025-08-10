@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>ユーザーランキング</h2>
+    <p>スコア：獲得した高評価数×1-獲得した低評価数×2</p>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">順位</th>
+        <th scope="col">ユーザ名</th>
+        <th scope="col">スコア</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{user.user_name}}</td>
+    <td>{{user.score}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<button onclick="location.href='/'">戻る</button>
+
+とりあえずあいつらの部屋に行ってみる
+</body>
+</html>
