@@ -4,15 +4,18 @@ from .forms import ArticleModelForm,CommentForm,UserRegistrationForm
 from .models import Article,Comment,Tags,UserName
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 class IndexView(View):
     def get(self,request):
         form=ArticleModelForm()
         tag_id=request.GET.get('tag')
+        keyword=request.GET.get('q')
+        articles=Article.objects.all()
         if tag_id:
             articles=Article.objects.filter(tag__id=tag_id)
-        else:
-            articles=Article.objects.all()
+        if keyword:
+            articles=Article.objects.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         comments=Comment.objects.all()
         tags=Tags.objects.all()
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
@@ -90,8 +93,11 @@ class CommentView(View):
 class SearchView(View):
     def get(self,request):
         tag_id=request.GET.get('tag')
+        keyword=request.GET.get('q')
         if tag_id:
             return redirect(f"/?tag={tag_id}")
+        elif keyword:
+            return redirect(f"/?q={keyword}")
         else:
             return redirect("app1:index")
 
