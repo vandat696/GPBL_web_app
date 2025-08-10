@@ -15,8 +15,6 @@ class IndexView(View):
             articles=Article.objects.all()
         comments=Comment.objects.all()
         tags=Tags.objects.all()
-        user = request.user
-        print("ユーザーは"+str(user))
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
     def post(self,request):
         form=ArticleModelForm(request.POST,request.FILES)
@@ -25,9 +23,12 @@ class IndexView(View):
             form.save()
             print("投稿を保存しました")
             article=get_object_or_404(Article,body=form_body)
-            print("article.title="+article.title)
-            user = request.user
-            article.user_name=str(user)
+            user = str(request.user)
+            print("user:"+user)
+            if user=="AnonymousUser":
+                article.user_name="ゲスト"
+            else:
+                article.user_name=str(user)
             article.save()
     
         else:
@@ -62,7 +63,11 @@ class CommentView(View):
             comment = Comment()
             comment.article_id = article
             comment.body = str(form_body)
-            comment.user_name=request.user
+            user = str(request.user)
+            if user=="AnonymousUser":
+                comment.user_name="ゲスト"
+            else:
+                comment.user_name=str(user)
             comment.save()
 
             article.comments = article.comments + 1
@@ -88,7 +93,7 @@ class SearchView(View):
         if tag_id:
             return redirect(f"/?tag={tag_id}")
         else:
-            return redirect("")
+            return redirect("app1:index")
 
 
 class LikeView(View):

@@ -122,6 +122,10 @@
                     <h3>タグ</h3>
                     <div id="discussion-tags" class="tag-list">
                         <!-- Các tag sẽ được tạo bởi JS -->
+                        {% for tag in tags %}
+                        <button onclick="location.href='/?tag={{tag.id}}'" class="btn btn-outline-primary btn-sm">{{tag.name}}</button>
+                        {% endfor %}
+
                     </div>
                     <div style="margin-top: 2rem;">
                         <h3>キーワード検索</h3>
@@ -219,20 +223,13 @@
     <div id="new-post-modal" class="modal-backdrop" style="display: none;;">
         <div class="modal-content">
             <span class="close-button" id="close-new-post-modal">&times;</span>
-            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">新規投稿</h2>
+            <!-- <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">新規投稿</h2> -->
             <form id="new-post-form" enctype="multipart/form-data" method="post" >
                 {% csrf_token %}
                 <input type="text" name="title" required placeholder="投稿のタイトル" class="form-input">
-                <select name="country" required class="form-input">
-                    <option value="ベトナム">ベトナム</option>
-                    <option value="日本">日本</option>
-                    <option value="アメリカ">アメリカ</option>
-                    <option value="フランス">フランス</option>
-                    <option value="その他">その他</option>
-                </select>
-                <textarea name="body" required placeholder="投稿内容" class="form-textarea"></textarea>
-                        <select class="form-input" name="tag" id="id_tag" style="height: 50px;">
-                            <option value="1">タグを選択</option>
+                <textarea name="body" required placeholder="投稿内容" class="form-textarea" style="height: 90px;"></textarea>
+                <p style="margin: 0 0 0 0;">タグを選択(ctrl+クリックで複数選択可能)</p>
+                <select multiple class="form-input" name="tag" id="id_tag" style="height: 230px;">
                             <option value="2">食べ物</option>
                             <option value="3">住居</option>
                             <option value="4">天候</option>
@@ -245,6 +242,13 @@
                         </select>                
                         <input type="file" name="picture" accept="image/*" class="form-file">
                 <button type="submit" class="post-button" style="margin-top: 1rem;">投稿する</button>
+                <select name="country" required class="form-input" style="visibility: hidden; width: 0;">
+                    <option value="ベトナム">ベトナム</option>
+                    <option value="日本">日本</option>
+                    <option value="アメリカ">アメリカ</option>
+                    <option value="フランス">フランス</option>
+                    <option value="その他">その他</option>
+                </select>
             </form>
             <div class="modal-body">
                 </form>

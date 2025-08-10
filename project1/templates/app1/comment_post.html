@@ -85,7 +85,7 @@
                             {% for comment in comments %}
                                 <div class="comment-item">
                                     <div class="comment-content">
-                                        <div class="comment-author">匿名ユーザー</div>
+                                        <div class="comment-author">{{comment.user_name}}</div>
                                         <div class="comment-text">{{comment.body}}</div>
                                     </div>
                                 </div>
