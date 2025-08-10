@@ -9,12 +9,17 @@
 <h2>新規登録</h2>
     <form method="post">
     {% csrf_token %}
+    <p>
+    <label for="id_user_name">ユーザ名:</label>
+    <input type="text" name="user_name" maxlength="50" required="" id="id_user_name">
+    </p><p>
+    <label for="id_password">パスワード:</label>
+    <input type="password" name="password" maxlength="50" id="id_password">
+    </p>
+    <!-- チェックを付けないと押せないように修正する -->
         <p>
-        <label for="user_name">ユーザー名:</label>
-        <input type="text" name="new_username"  maxlength="150" required>
-        </p><p>
-        <label for="new_password">パスワード:</label>
-        <input type="password" name="password"  maxlength="150" required>
+            <input type="checkbox" id="scales" name="scales" />
+            <label for="scales">私はベトナム在住の日本人です</label>
         </p>
     <button type="submit">登録</button>
 </form>

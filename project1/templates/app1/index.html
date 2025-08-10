@@ -58,7 +58,7 @@
         {% if request.user.is_authenticated %}
         <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0 0 0 auto; margin-right: 10px;"> 
             {% csrf_token %}
-            <button type="submit" id="country-select" class="country-select" style="background-color: white;">ログアウト</button>
+            <button type="submit" id="country-select" class="country-select" style="background-color: white;">{{request.user}}からログアウト</button>
         </form>
     
         {% else %}
@@ -140,7 +140,7 @@
                 {% for article in articles %}
                 <div class="post-detail">
                     <h2>{{article.title}}</h2>
-                    <p class="post-meta">{{article.created}} | 国: {{article.country}} | タグ:{{article.tag}} </p>
+                    <p class="post-meta">{{article.created}} | 国: {{article.country}} | 投稿者:{{article.user_name}} </p>
                     {% if article.picture %}
                     <img src={{article.picture.url}} style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem;">
                     {% endif %}
@@ -157,7 +157,7 @@
                         <ul>
                         {% for comment in comments %}
                         {% if comment.article_id == article %}
-                        <li>{{comment.body}}</li>
+                        <li style="list-style:none">{{comment.user_name}} > {{comment.body}}</li>
                         {% endif %}
                         {% endfor %}
                     </ul>

@@ -10,11 +10,6 @@
     <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <p>
-        <input type="checkbox" id="scales" name="scales" />
-        <label for="scales">私はベトナム在住の日本人です</label>
-    </p>
-    <!-- チェックを付けないと押せないように修正する -->
     <button type="submit">ログイン</button>
 </form>
 <br>
