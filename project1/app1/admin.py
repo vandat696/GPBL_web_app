@@ -7,4 +7,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 admin.site.register(Comment)
 admin.site.register(UserName)
-admin.site.register(Tags)
+
+@admin.register(Tags)
+class TagsAdmin(admin.ModelAdmin):
+    readonly_fields=["id"]
