@@ -123,7 +123,11 @@
                     <div id="discussion-tags" class="tag-list">
                         <!-- Các tag sẽ được tạo bởi JS -->
                         {% for tag in tags %}
-                        <button onclick="location.href='/?tag={{tag.id}}'" class="btn btn-outline-primary btn-sm">{{tag.name}}</button>
+                            {% if tag.id == 1 %}
+                                <a href="/" class="btn btn-outline-primary btn-sm">{{ tag.name }}</a>
+                            {% else %}
+                                <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="btn btn-outline-primary btn-sm">{{tag.name}}</a>
+                            {% endif %}
                         {% endfor %}
 
                     </div>

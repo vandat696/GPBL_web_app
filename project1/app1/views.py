@@ -9,16 +9,18 @@ from django.db.models import Q
 class IndexView(View):
     def get(self,request):
         form=ArticleModelForm()
-        tag_id=request.GET.get('tag')
+        tag_id=request.GET.getlist('tag')
         keyword=request.GET.get('q')
         articles=Article.objects.all()
         if tag_id:
-            articles=Article.objects.filter(tag__id=tag_id)
+            for tid in tag_id:
+                articles = articles.filter(tag__id=tid)
+            articles=articles.distinct
         if keyword:
             articles=Article.objects.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         comments=Comment.objects.all()
         tags=Tags.objects.all()
-        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
+        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags,"selected_tags":tag_id,"keyword":keyword})
     def post(self,request):
         form=ArticleModelForm(request.POST,request.FILES)
         if form.is_valid():
@@ -94,12 +96,15 @@ class SearchView(View):
     def get(self,request):
         tag_id=request.GET.get('tag')
         keyword=request.GET.get('q')
-        if tag_id:
-            return redirect(f"/?tag={tag_id}")
-        elif keyword:
-            return redirect(f"/?q={keyword}")
-        else:
+        if tag_id=='1':
             return redirect("app1:index")
+        params=request.GET.copy()
+        if tag_id:
+            if not tag_id in request.GET.getlist('tag'):
+                params.appendlist('tag',tag_id)
+        if keyword:
+            params['q']=keyword
+        return redirect(f"/?{params.urlencode()}")
 
 
 class LikeView(View):
