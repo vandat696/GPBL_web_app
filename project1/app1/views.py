@@ -152,16 +152,42 @@ class RankingView(View):
         return render(request,"app1/ranking.html",{"users":users})
 
 class CreateGuideBookView(View):
-    def get(self,request):
-        None
+    def get(self,request,id):
         #反応が上位10件の投稿を抽出する
-        articles = Article.objects.all().order_by('-score')
+        articles = Article.objects.filter(tag__id=id).order_by('-score')
         max=10
         if max>len(articles):
             max=len(articles)
 
         #プロンプトを決める
-        
+        prompt=""""
+        以下の投稿とコメントを制約条件に基づいて要約してください。\n
+        制約条件\n
+        ・「分かりました」などの返事はせず、要約の文章のみを答えてください。\n
+        ・要約はガイドブックの文章風に作成して、一つの文章にまとめてください。\n
+        ・明らかに不要な投稿や、嘘の投稿は無視してください。\n
+        ・「質問に対する返答または情報の補足」以外のコメントは無視してください\n
+        ・太文字や改行は使わずに、文字のみを使ってください。\n
+        ・文章の途中に注釈を入れ、どの投稿を参考にしたかを示してください。コメントを参考にした場合は対応する投稿のみを示してください。\n
+        例)日本語教師の求人は「VietnamWorks」に多く掲載されています[投稿2]。\n"
+        """
+        #count=1
+        #for article in articles:
+            #prompt=prompt+"投稿"+str(count)+"\n"
+            #prompt=prompt+str(article.body)
+            #comments = Comment.objects.filter(article_id=article).order_by('created')
+            #for comment in co
+            
+
+        #邪魔すぎ
+        #部屋の菓子食いたい
+        #食えば金は払ってくれるだろう
+        #洗濯とかといっしょに払うんじゃね
+        #スーパーオレオ何ドンスーパーとどっちが安いか
+        #紙に書いてなかったっけ
+        #157行目 Article.objects.filter(tag__id=id) そのidのタグが付いた記事取ってこれる？  ←yes or no?　y OK
+        #idは数としてあるものとして　
+        #その前に腹痛いから便所
 
 
 
