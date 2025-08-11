@@ -161,6 +161,7 @@ class CreateGuideBookView(View):
             max=len(articles)
 
         #プロンプトを決める
+        
 
 
 
