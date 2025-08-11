@@ -382,6 +382,7 @@
             <h2><i class="fas fa-edit"></i> 新規投稿</h2>
             <form id="new-post-form" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
+<<<<<<< HEAD
                 <div class="form-group">
                     <label class="form-label" for="title">投稿のタイトル</label>
                     <input type="text" name="title" id="title" required placeholder="タイトルを入力してください" class="form-input">
@@ -429,6 +430,30 @@
                 </div>
 
                 <select name="country" required class="form-input" style="display: none;">
+=======
+                <input type="text" name="title" required placeholder="投稿のタイトル" class="form-input">
+                <textarea name="body" required placeholder="投稿内容" class="form-textarea" style="height: 90px;"></textarea>
+                <p style="margin: 0 0 0 0;">タグを選択(ctrl+クリックで複数選択可能)</p>
+                <select multiple class="form-input" name="tag" id="id_tag" style="height: 230px;">
+                            <option value="2">食べ物</option>
+                            <option value="3">住居</option>
+                            <option value="4">天候</option>
+                            <option value="5">言語</option>
+                            <option value="6">仕事</option>
+                            <option value="7">文化</option>
+                            <option value="8">トラブル</option>
+                            <option value="9">旅行</option>
+                            <option value="10">その他</option>
+                        </select>                
+                        <input type="file" name="picture" accept="image/*" class="form-file">
+    <!-- チェックを付けないと押せないように修正する -->
+                <p style="margin: 15px 0 0 0;">
+                    <input type="checkbox" id="scales" name="scales" />
+                    <label for="scales"><a href="/">利用規約</a>に同意する</label>
+                </p>
+                <button type="submit" class="post-button" style="margin-top: 1px;">投稿する</button>
+                <select name="country" required class="form-input" style="visibility: hidden; width: 0;">
+>>>>>>> 87dccdc701d1c6f5a7f66542418a0f09e17acee2
                     <option value="ベトナム">ベトナム</option>
                     <option value="日本">日本</option>
                     <option value="アメリカ">アメリカ</option>
