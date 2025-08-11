@@ -15,7 +15,7 @@ class IndexView(View):
         if tag_id:
             for tid in tag_id:
                 articles = articles.filter(tag__id=tid)
-            articles=articles.distinct
+            articles=articles.distinct()
         if keyword:
             articles=articles.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         comments=Comment.objects.all()
