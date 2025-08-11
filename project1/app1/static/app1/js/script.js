@@ -286,6 +286,15 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Có lỗi xảy ra khi đăng bài: ' + JSON.stringify(errorData));
       }
 
+      // Sau khi định nghĩa navItems và pages
+const hash = window.location.hash.replace('#', '');
+if (hash) {
+  const targetItem = document.querySelector(`.nav-item[data-page="${hash}"]`);
+  if (targetItem) {
+    targetItem.click();
+  }
+}
+
     } catch (error) {
       // console.error('Lỗi mạng:', error);
       // alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.');

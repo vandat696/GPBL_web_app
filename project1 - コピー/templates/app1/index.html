@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海外移住の課題</title>
+
+    <!-- Google Fonts cải tiến cho tiếng Nhật -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tệp CSS tùy chỉnh -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app1/css/style.css' %}">
+</head>
+<body>
+    
+    <!-- Header & Thanh điều hướng -->
+    <header class="navbar">
+        <div class="navbar-brand">移住の課題</div>
+        <nav class="navbar-menu">
+            <a href="#" class="nav-item active" data-page="home" style="text-decoration: none;">ホーム</a>
+            <a href="#" class="nav-item" data-page="issues" style="text-decoration: none;">よくある質問</a>
+            <a href="#" class="nav-item" data-page="discussions" style="text-decoration: none;">ディスカッション</a>
+        </nav>
+    
+        {% if request.user.is_authenticated %}
+        <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0 0 0 auto; margin-right: 10px;"> 
+            {% csrf_token %}
+            <button type="submit" id="country-select" class="country-select" style="background-color: white;">{{request.user}}からログアウト</button>
+        </form>
+    
+        {% else %}
+        <button onclick="location.href='/login'" id="country-select" class="country-select" style="margin: 0 0 0 auto; margin-right: 10px; background-color: white;" >ログイン/新規登録</button>
+        {% endif %}
+        
+        <div class="navbar-actions">
+            <select id="country-select" class="country-select">
+                <option value="ベトナム">ベトナム</option>
+                <option value="all">全ての国</option>
+                <option value="日本">日本</option>
+                <option value="アメリカ">アメリカ</option>
+                <option value="フランス">フランス</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Nội dung chính -->
+    <main class="container">
+        <!-- Trang chủ -->
+        <div id="home-page" class="page active">
+            <div class="slideshow-container">
+                <img class="slideshow-image active" src="https://abvietnamtravel.com/img/logo/75B82SV64B_408255330_739691568182256_1104935954509976190_n.jpg" alt="ベトナムの美しい風景">
+                <img class="slideshow-image" src="https://iweb.tatthanh.com.vn/pic/3231/imagegallery/Album-Nhat-Ban.jpg" alt="日本の桜と文化">
+                <img class="slideshow-image" src="https://tranbathoaimdphd.wordpress.com/wp-content/uploads/2018/12/1-new-york_1.jpg" alt="ニューヨークの街並み">
+                <img class="slideshow-image" src="https://datviettour.com.vn/uploads/images/chau-au/phap/d.jpg" alt="フランスの美しい景色">
+            </div>
+            <div class="welcome-message">
+                <h2>海外移住に関する課題を共有しよう</h2>
+                <p>このコミュニティでは、海外での生活や仕事、文化の違いに関する様々な疑問や経験を共有できます。<br>
+                みんなで支え合い、より良い海外生活を実現しましょう。</p>
+                <a href="#" class="cta-button" data-page="discussions">ディスカッションに参加する</a>
+            </div>
+        </div>
+
+        <!-- Trang các câu hỏi thường gặp (Frequently Asked Questions) -->
+        <div id="issues-page" class="page" style="display:none;">
+            <div class="page-content-wrapper">
+                <div class="sidebar">
+                    <h3>タグ</h3>
+                    <div id="issue-tags" class="tag-list">
+                        <!-- Các tag sẽ được tạo tự động bởi JS -->
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3>キーワード検索</h3>
+                        <input type="text" id="issues-search" placeholder="キーワードで検索" class="form-input">
+                    </div>
+                </div>
+                <div class="main-content">
+                    <h2>よくある質問</h2>
+                    <div id="issues-list" class="card-list">
+                        <!-- Các bài viết sẽ được tạo bởi JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trang thảo luận -->
+        <div id="discussions-page" class="page" style="display:none;">
+            <div class="page-content-wrapper">
+                <div class="sidebar">
+                    <h3>タグ</h3>
+                    <div id="discussion-tags" class="tag-list">
+                        {% for tag in tags %}
+                            {% if tag.id == 1 %}
+                                <a href="/" class="tag">{{ tag.name }}</a>
+                            {% else %}
+                                <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3>キーワード検索</h3>
+                        <input type="text" id="discussions-search" placeholder="キーワードで検索" class="form-input">
+                    </div>
+                </div>
+                
+                <div class="main-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                        <h2 style="margin: 0;">ディスカッション</h2>
+                        <button id="post-button" class="post-button">
+                            <i class="fas fa-plus"></i> 新規投稿
+                        </button>
+                    </div>
+                    
+                    <div class="discussion-list">
+                        <!-- ランキングリンク -->
+                        <a href="ranking" class="ranking-link">
+                            <i class="fas fa-trophy"></i>
+                            ランキングを見る
+                        </a>
+
+                        <!-- 投稿一覧 -->
+                        {% for article in articles %}
+                        <article class="post-detail">
+                            <header>
+                                <h2>{{article.title}}</h2>
+                                <div class="post-meta">
+                                    <span><i class="far fa-clock"></i> {{article.created}}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> 国: {{article.country}}</span>
+                                    <span><i class="far fa-user"></i> 投稿者: {{article.user_name}}</span>
+                                </div>
+                            </header>
+
+                            <div class="post-content">
+                                {% if article.picture %}
+                                <div class="post-image">
+                                    <img src="{{article.picture.url}}" alt="投稿画像" loading="lazy">
+                                </div>
+                                {% endif %}
+                                
+                                <div class="post-text">
+                                    <p>{{article.body}}</p>
+                                </div>
+                            </div>
+
+                            <footer class="post-actions">
+                                <button onclick="location.href='/like/add/{{article.id}}'" class="btn btn-secondary">
+                                    <i class="far fa-thumbs-up"></i> 高評価 ({{article.likes}})
+                                </button>
+                                <button onclick="location.href='/dislike/add/{{article.id}}'" class="btn btn-secondary">
+                                    <i class="far fa-thumbs-down"></i> 低評価 ({{article.dislikes}})
+                                </button>
+                                <button onclick="location.href='/comment/post/{{article.id}}'" class="btn btn-secondary">
+                                    <i class="far fa-comment"></i> コメント ({{article.comments}})
+                                </button>
+                            </footer>
+
+                            {% if article.comments != 0 %}
+                            <div class="comments-section">
+                                <h5><i class="fas fa-comments"></i> コメント</h5>
+                                <ul>
+                                    {% for comment in comments %}
+                                    {% if comment.article_id == article %}
+                                    <li>
+                                        <strong>{{comment.user_name}}</strong> > {{comment.body}}
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </article>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal chi tiết bài viết -->
+    <div id="post-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" id="close-post-modal">&times;</span>
+            <div id="modal-body" class="p-6">
+                <!-- Nội dung chi tiết bài viết sẽ được chèn vào đây -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal đăng bài mới -->
+    <div id="new-post-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" id="close-new-post-modal">&times;</span>
+            <h2><i class="fas fa-edit"></i> 新規投稿</h2>
+            <form id="new-post-form" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label" for="title">投稿のタイトル</label>
+                    <input type="text" name="title" id="title" required placeholder="タイトルを入力してください" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="body">投稿内容</label>
+                    <textarea name="body" id="body" required placeholder="内容を詳しく入力してください" class="form-textarea" rows="6"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="id_tag">タグを選択 (Ctrl+クリックで複数選択可能)</label>
+                    <select multiple class="form-select" name="tag" id="id_tag" style="height: 150px;">
+                        <option value="2">食べ物</option>
+                        <option value="3">住居</option>
+                        <option value="4">天候</option>
+                        <option value="5">言語</option>
+                        <option value="6">仕事</option>
+                        <option value="7">文化</option>
+                        <option value="8">トラブル</option>
+                        <option value="9">旅行</option>
+                        <option value="10">その他</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="picture">
+                        <span class="file-label">
+                            <i class="fas fa-image"></i>
+                            画像をアップロード（任意）
+                        </span>
+                    </label>
+                    <div class="form-file-wrapper">
+                        <input type="file" 
+                               name="picture" 
+                               id="picture" 
+                               accept="image/*" 
+                               class="form-file"
+                               aria-label="画像を選択">
+                        <small style="display: block; margin-top: 0.5rem; color: #7f8c8d;">
+                            <i class="fas fa-info-circle"></i>
+                            対応フォーマット：JPG、PNG、GIF（最大5MB）
+                        </small>
+                    </div>
+                </div>
+
+                <select name="country" required class="form-input" style="display: none;">
+                    <option value="ベトナム">ベトナム</option>
+                    <option value="日本">日本</option>
+                    <option value="アメリカ">アメリカ</option>
+                    <option value="フランス">フランス</option>
+                    <option value="その他">その他</option>
+                </select>
+
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms-agree" required>
+                    <label for="terms-agree">
+                        <span style="font-weight: 600; color: #2c3e50;">利用規約に同意します。</span><br>
+                        投稿内容は公開され、他のユーザーに共有されることを理解しています。
+                    </label>
+                </div>
+
+                <button type="submit" id="submit-post" class="post-button" disabled>
+                    <i class="fas fa-paper-plane"></i> 投稿する
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'app1/js/script.js' %}"></script>
+    <!-- Thêm script để xử lý checkbox -->
+    <script>
+    document.getElementById('terms-agree').addEventListener('change', function() {
+        document.getElementById('submit-post').disabled = !this.checked;
+    });
+    </script>
+</body>
+</html>

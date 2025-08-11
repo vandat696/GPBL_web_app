@@ -55,9 +55,10 @@
         <div id="home-page" class="page active">
             <div class="slideshow-container">
                 <img class="slideshow-image active" src="https://abvietnamtravel.com/img/logo/75B82SV64B_408255330_739691568182256_1104935954509976190_n.jpg" alt="ベトナムの美しい風景">
-                <img class="slideshow-image" src="https://iweb.tatthanh.com.vn/pic/3231/imagegallery/Album-Nhat-Ban.jpg" alt="日本の桜と文化">
+                <img class="slideshow-image" src="https://wallpapercat.com/w/full/7/b/f/717538-1920x1080-desktop-1080p-tokyo-japan-background-photo.jpg" alt="日本の桜と文化">
                 <img class="slideshow-image" src="https://tranbathoaimdphd.wordpress.com/wp-content/uploads/2018/12/1-new-york_1.jpg" alt="ニューヨークの街並み">
-                <img class="slideshow-image" src="https://datviettour.com.vn/uploads/images/chau-au/phap/d.jpg" alt="フランスの美しい景色">
+                <img class="slideshow-image" src="https://images.unsplash.com/photo-1471623432079-b009d30b6729?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="フランスの美しい景色">
+                <img class="slideshow-image" src="https://images.unsplash.com/photo-1486299267070-83823f5448dd?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="england">
             </div>
             <div class="welcome-message">
                 <h2>海外移住に関する課題を共有しよう</h2>
@@ -93,21 +94,21 @@
         <div id="discussions-page" class="page" style="display:none;">
             <div class="page-content-wrapper">
                 <div class="sidebar">
-                    <h3>タグ</h3>
-                    <div id="discussion-tags" class="tag-list">
-                        {% for tag in tags %}
+    <h3>タグ</h3>
+    <div id="discussion-tags" class="tag-list">
+        {% for tag in tags %}
                             {% if tag.id == 1 %}
                                 <a href="/" class="tag">{{ tag.name }}</a>
-                            {% else %}
+            {% else %}
                                 <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+            {% endif %}
+        {% endfor %}
+    </div>
                     <div style="margin-top: 2rem;">
                         <h3>キーワード検索</h3>
                         <input type="text" id="discussions-search" placeholder="キーワードで検索" class="form-input">
                     </div>
-                </div>
+    </div>
                 
                 <div class="main-content">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
