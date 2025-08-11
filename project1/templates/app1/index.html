@@ -245,7 +245,12 @@
                             <option value="10">その他</option>
                         </select>                
                         <input type="file" name="picture" accept="image/*" class="form-file">
-                <button type="submit" class="post-button" style="margin-top: 1rem;">投稿する</button>
+    <!-- チェックを付けないと押せないように修正する -->
+                <p style="margin: 15px 0 0 0;">
+                    <input type="checkbox" id="scales" name="scales" />
+                    <label for="scales"><a href="/">利用規約</a>に同意する</label>
+                </p>
+                <button type="submit" class="post-button" style="margin-top: 1px;">投稿する</button>
                 <select name="country" required class="form-input" style="visibility: hidden; width: 0;">
                     <option value="ベトナム">ベトナム</option>
                     <option value="日本">日本</option>
