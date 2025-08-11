@@ -22,7 +22,7 @@ class  Article(models.Model):
         return self.title
     
 class Tags(models.Model):
-    name=models.CharField(max_length=40,unique=True)
+    name=models.CharField(max_length=50,unique=True)
     
     def __str__(self):
         return self.name
