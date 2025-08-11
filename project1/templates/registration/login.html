@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app1/css/register_style.css' %}">
     <title>Document</title>
 </head>
-<body>
+<body class="registration-container">
 <h2>ログイン</h2>
     <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">ログイン</button>
+    <div class = form-group>
+    <label for="id_username" class = "form-label">ユーザ名:</label>
+    <input type="text" name="username" maxlength="50" required="" id="id_username" class="form-input" placeholder="ユーザ名">
+    </div>
+    <div class = form-group>
+    <label for="id_password" class="form-label">パスワード:</label>
+    <input type="password" name="password" maxlength="50" id="id_password" class = "form-input" placeholder="パスワード">
+    </div>
+    <button type="submit" class="submit-btn">ログイン</button>
 </form>
 <br>
-<a href="/user_resistration">新規登録</a>
+<a href="/user_resistration" class="login-link">新規登録</a>
 <br>
-<a href="/">ゲストとして続行</a>
+<a href="/" class="registration-link">ゲストとして続行</a>
 
 </body>
 </html>
