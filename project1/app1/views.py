@@ -17,7 +17,7 @@ class IndexView(View):
                 articles = articles.filter(tag__id=tid)
             articles=articles.distinct
         if keyword:
-            articles=articles.objects.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
+            articles=articles.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         comments=Comment.objects.all()
         tags=Tags.objects.all()
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags,"selected_tags":tag_id,"keyword":keyword})
