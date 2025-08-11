@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         commentItem.className = 'comment-item';
         commentItem.innerHTML = `
             <div class="comment-content">
-                <div class="comment-author">匿名ユーザー</div>
+                <div class="comment-author">あなた</div>
                 <div class="comment-text">${commentText}</div>
             </div>
         `;
