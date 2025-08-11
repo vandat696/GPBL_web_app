@@ -1,10 +1,53 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .forms import ArticleModelForm,CommentForm,UserRegistrationForm
-from .models import Article,Comment,Tags,UserName
+from .models import Article,Comment,Tags,UserName,GuideBook
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
+from google import genai
+
+cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
+#apiキーはこのアプリ以外で使用しないでください
+
+def create_summary(id):
+    #反応が上位10件の投稿を抽出する
+    articles = Article.objects.filter(tag__id=id).order_by('-score')
+    max=10
+    if max>len(articles):
+        max=len(articles)
+    #プロンプトを決める
+    prompt=""""
+    以下の投稿とコメントを制約条件に基づいて要約してください。
+    制約条件
+    ・「分かりました」などの返事はせず、要約の文章のみを答えてください。
+    ・要約はガイドブックの文章風に作成して、一つの文章にまとめてください。
+    ・文章には何かの問題を解決する方法を必ず入れてください。
+    ・明らかに不要な投稿や、嘘の投稿は無視してください。
+    ・「質問に対する返答または情報の補足」以外のコメントは無視してください
+    ・太文字や改行は使わずに、文字のみを使ってください。
+    """
+    article_count=1
+    for article in articles:
+        prompt=prompt+"\n投稿"+str(article_count)+"\n"
+        prompt=prompt+str(article.body)+"\n"
+        comments = Comment.objects.filter(article_id=article).order_by('created')
+        if len(comments)!=0:
+            prompt=prompt+"投稿"+str(article_count)+"に対するコメント\n"
+            for comment in comments:
+                prompt=prompt+"・"+str(comment.body)+"\n"
+        article_count=article_count+1
+    #print(prompt)
+    response=cliant.models.generate_content(model="gemini-2.0-flash-lite",contents=prompt)
+    response=str(response.text)
+    #print(response)
+
+    guideBook = GuideBook.filter()
+
+    return response
+
+
+
 
 class IndexView(View):
     def get(self,request):
@@ -153,43 +196,9 @@ class RankingView(View):
 
 class CreateGuideBookView(View):
     def get(self,request,id):
-        #反応が上位10件の投稿を抽出する
-        articles = Article.objects.filter(tag__id=id).order_by('-score')
-        max=10
-        if max>len(articles):
-            max=len(articles)
-
-        #プロンプトを決める
-        prompt=""""
-        以下の投稿とコメントを制約条件に基づいて要約してください。\n
-        制約条件\n
-        ・「分かりました」などの返事はせず、要約の文章のみを答えてください。\n
-        ・要約はガイドブックの文章風に作成して、一つの文章にまとめてください。\n
-        ・明らかに不要な投稿や、嘘の投稿は無視してください。\n
-        ・「質問に対する返答または情報の補足」以外のコメントは無視してください\n
-        ・太文字や改行は使わずに、文字のみを使ってください。\n
-        ・文章の途中に注釈を入れ、どの投稿を参考にしたかを示してください。コメントを参考にした場合は対応する投稿のみを示してください。\n
-        例)日本語教師の求人は「VietnamWorks」に多く掲載されています[投稿2]。\n"
-        """
-        #count=1
-        #for article in articles:
-            #prompt=prompt+"投稿"+str(count)+"\n"
-            #prompt=prompt+str(article.body)
-            #comments = Comment.objects.filter(article_id=article).order_by('created')
-            #for comment in co
+        create_summary(id)
+        return redirect("app1:index")
             
-
-        #邪魔すぎ
-        #部屋の菓子食いたい
-        #食えば金は払ってくれるだろう
-        #洗濯とかといっしょに払うんじゃね
-        #スーパーオレオ何ドンスーパーとどっちが安いか
-        #紙に書いてなかったっけ
-        #157行目 Article.objects.filter(tag__id=id) そのidのタグが付いた記事取ってこれる？  ←yes or no?　y OK
-        #idは数としてあるものとして　
-        #その前に腹痛いから便所
-
-
 
 class CalculateScoreView(View):
     def get(self,request):
@@ -208,3 +217,4 @@ dislike_add=DislikeView.as_view()
 user_resistration=UserRegistrationView.as_view()
 ranking=RankingView.as_view()
 caluculate_score=CalculateScoreView.as_view()
+create_guide_book=CreateGuideBookView.as_view()

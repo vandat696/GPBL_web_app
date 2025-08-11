@@ -11,4 +11,5 @@ urlpatterns=[
   path("user_resistration/",views.user_resistration , name="user_resistration"),
   path("ranking/",views.ranking , name="ranking"),
   path("calculate/score",views.caluculate_score , name="caluculate_score"),
+  path("create_guide_book/<int:id>",views.create_guide_book, name="create_guide_book"),
 ]
