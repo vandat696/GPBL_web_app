@@ -106,7 +106,12 @@
     </div>
                     <div style="margin-top: 2rem;">
                         <h3>キーワード検索</h3>
-                        <input type="text" id="discussions-search" placeholder="キーワードで検索" class="form-input">
+                        <form method="get" action="{% url 'app1:search' %}">
+                            <input type="text" name="q" id="discussions-search" placeholder="キーワードで検索" class="form-input" value="{{keyword|default_if_none:""}}">
+                            {% for t in selected_tags %}
+                                <input type="hidden" name="tag" value="{{ t }}">
+                            {% endfor %}
+                        </form>
                     </div>
     </div>
                 
