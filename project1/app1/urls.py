@@ -10,5 +10,5 @@ urlpatterns=[
   path("dislike/add/<uuid:id>",views.dislike_add , name="dislike_add"),
   path("user_resistration/",views.user_resistration , name="user_resistration"),
   path("ranking/",views.ranking , name="ranking"),
-
-] 
+  path("calculate/score",views.caluculate_score , name="caluculate_score"),
+]
