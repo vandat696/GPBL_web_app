@@ -3,29 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ユーザーランキング - 海外移住の課題</title>
+
+    <!-- Google Fonts cải tiến cho tiếng Nhật -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Tệp CSS tùy chỉnh -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app1/css/ranking_style.css' %}">
 </head>
 <body>
-    <h2>ユーザーランキング</h2>
-    <p>スコア：獲得した高評価数×1-獲得した低評価数×2</p>
-<table>
-    <thead>
-    <tr>
-        <th scope="col">順位</th>
-        <th scope="col">ユーザ名</th>
-        <th scope="col">スコア</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for user in users %}
-    <tr>
-    <td>{{forloop.counter}}</td>
-    <td>{{user.user_name}}</td>
-    <td>{{user.score}}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<button onclick="location.href='/'">戻る</button>
+    <!-- Header & Thanh điều hướng -->
+    <header class="navbar">
+        <div class="navbar-brand">移住の課題</div>
+        <nav class="navbar-menu">
+            <a href="/" class="nav-item" style="text-decoration: none;">ホーム</a>
+            <a href="#" class="nav-item" style="text-decoration: none;">よくある質問</a>
+            <a href="#" class="nav-item" style="text-decoration: none;">ディスカッション</a>
+        </nav>
+
+        {% if request.user.is_authenticated %}
+        <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0 0 0 auto; margin-right: 10px;"> 
+            {% csrf_token %}
+            <button type="submit" id="country-select" class="country-select" style="background-color: white;">{{request.user}}からログアウト</button>
+        </form>
+        {% else %}
+        <button onclick="location.href='/login'" id="country-select" class="country-select" style="margin: 0 0 0 auto; margin-right: 10px; background-color: white;">ログイン/新規登録</button>
+        {% endif %}
+        
+        <div class="navbar-actions">
+            <select id="country-select" class="country-select">
+                <option value="ベトナム">ベトナム</option>
+                <option value="all">全ての国</option>
+                <option value="日本">日本</option>
+                <option value="アメリカ">アメリカ</option>
+                <option value="フランス">フランス</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Nội dung chính -->
+    <main class="container">
+        <!-- Header của trang ranking -->
+        <div class="ranking-header">
+            <h1>
+                <i class="fas fa-trophy"></i>
+                ユーザーランキング
+            </h1>
+            <div class="ranking-description">
+                <i class="fas fa-info-circle"></i>
+                スコア計算式：獲得した高評価数 × 1 - 獲得した低評価数 × 2
+            </div>
+        </div>
+
+        <!-- Bảng ranking -->
+        <div class="ranking-table-container">
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th scope="col"><i class="fas fa-medal"></i> 順位</th>
+                        <th scope="col"><i class="fas fa-user"></i> ユーザー名</th>
+                        <th scope="col"><i class="fas fa-chart-bar"></i> スコア</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td class="rank-position {% if forloop.counter == 1 %}first{% elif forloop.counter == 2 %}second{% elif forloop.counter == 3 %}third{% endif %}">{{forloop.counter}}</td>
+                        <td class="user-name">{{user.user_name}}</td>
+                        <td class="user-score {% if user.score > 0 %}positive-score{% elif user.score < 0 %}negative-score{% else %}zero-score{% endif %}">{{user.score}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Nút quay lại -->
+        <div class="back-button-container">
+            <button onclick="location.href='/'" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                戻る
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Hover effects for table rows
+        document.querySelectorAll('.ranking-table tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.background = 'linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%)';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.background = '';
+            });
+        });
+    </script>
 </body>
 </html>

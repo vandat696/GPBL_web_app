@@ -16,6 +16,7 @@ class  Article(models.Model):
     likes=models.IntegerField(default=0,verbose_name="likes_count")
     dislikes=models.IntegerField(default=0,verbose_name="dislikes_count")
     comments=models.IntegerField(default=0,verbose_name="comments_count")
+    score=models.IntegerField(default=0,verbose_name="score")
     
     def __str__(self):
         return self.title
@@ -44,3 +45,13 @@ class UserName(models.Model):
     score=models.IntegerField(default=0,verbose_name="スコア")
     def __str__(self):
         return self.user_name
+
+class GuideBook(models.Model):
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    title=models.TextField(verbose_name="タイトル")
+    body=models.TextField(verbose_name="本文")
+    tag=models.TextField(default="タグ指定なし",verbose_name="タグ")
+    created=models.DateTimeField(auto_now_add=True,verbose_name="作成時間")
+    articles=models.IntegerField(default=0,verbose_name="参照した投稿の数")
+    def __str__(self):
+        return self.title

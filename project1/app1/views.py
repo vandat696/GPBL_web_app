@@ -17,7 +17,7 @@ class IndexView(View):
                 articles = articles.filter(tag__id=tid)
             articles=articles.distinct
         if keyword:
-            articles=Article.objects.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
+            articles=articles.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         comments=Comment.objects.all()
         tags=Tags.objects.all()
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags,"selected_tags":tag_id,"keyword":keyword})
@@ -151,6 +151,26 @@ class RankingView(View):
         users = UserName.objects.all().order_by('-score')
         return render(request,"app1/ranking.html",{"users":users})
 
+class CreateGuideBookView(View):
+    def get(self,request):
+        None
+        #反応が上位10件の投稿を抽出する
+        articles = Article.objects.all().order_by('-score')
+        max=10
+        if max>len(articles):
+            max=len(articles)
+
+        #プロンプトを決める
+
+
+
+class CalculateScoreView(View):
+    def get(self,request):
+        articles = Article.objects.all()
+        for article in articles:
+            article.score=article.likes-article.dislikes*2
+            article.save()
+        return redirect("app1:index")
 
 
 index=IndexView.as_view()
@@ -160,3 +180,4 @@ like_add=LikeView.as_view()
 dislike_add=DislikeView.as_view()
 user_resistration=UserRegistrationView.as_view()
 ranking=RankingView.as_view()
+caluculate_score=CalculateScoreView.as_view()
