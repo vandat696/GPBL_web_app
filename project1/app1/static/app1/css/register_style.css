@@ -1,0 +1,138 @@
+/* Tệp: register_style.css */
+
+/* Khung chứa toàn bộ form */
+.registration-container {
+    max-width: 500px;
+    margin: 80px auto 20px auto; /* Thêm khoảng trống ở trên để tránh bị thanh navbar che */
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề của form */
+.registration-container h2 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Các trường input và label */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: #17a2b8;
+    outline: none;
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
+}
+
+/* Kiểu cho checkbox */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Nút submit */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50; /* Màu xanh lá từ dự án của bạn */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Style cho các link dưới form */
+.form-links {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.form-links a {
+    color: #17a2b8;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+}
+
+.login-link {
+    color: #17a2b8;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 2px 2px;
+    display: inline-block;
+    
+}
+
+.login-link:hover {
+    background-color: #45a049;
+    color:#ffffff;
+    transform: translateY(-5px);
+}
+.login-link:active {
+    transform: translateY(5);
+}
+.registration-link {
+    color: #17a2b8;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 2px 2px;
+    display: inline-block;
+}
+.registration-link:hover {
+    background-color: #45a049;
+    color:#ffffff;
+    transform: translateY(-2px);
+}
+.registration-link:active {
+    transform: translateY(0);
+}

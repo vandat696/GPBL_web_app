@@ -3,22 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app1/css/register_style.css' %}">
     <title>Document</title>
 </head>
-<body>
+<body class="bg-gray-100">
+    <div class="registration-container">
+        <div>
+            <h1>ユーザ登録</h1>
+        </div>
+        <div>
+            <div>
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
 <h2>新規登録</h2>
     <form method="post">
     {% csrf_token %}
-    <p>
-    <label for="id_user_name">ユーザ名:</label>
-    <input type="text" name="user_name" maxlength="50" required="" id="id_user_name">
-    </p><p>
-    <label for="id_password">パスワード:</label>
-    <input type="password" name="password" maxlength="50" id="id_password">
-    </p>
-    <button type="submit">登録</button>
-</form>
-<br>
-<a href="/login">ログイン</a>
-<br>
-<a href="/">ゲストとして続行</a>
+    <div class = form-group>
+    <label for="id_user_name" class = "form-label">ユーザ名:</label>
+    <input type="text" name="user_name" maxlength="50" required="" id="id_user_name" class="form-input" placeholder="ユーザ名">
+    </div>
+    <div class = form-group>
+    <label for="id_password" class="form-label">パスワード:</label>
+    <input type="password" name="password" maxlength="50" id="id_password" class = "form-input" placeholder="パスワード">
+    </div>
+    <!-- チェックを付けないと押せないように修正する -->
+        
+    <!-- {{ form.as_p }} -->
+    <button type="submit" class="submit-btn">登録</button>
+    </form>
+        <div class="form-link"></div>
+            <br>
+                <a href="/login" class = "login-link">ログイン</a>
+            <br>
+                <a href="/" class = "registration-link">ゲストとして続行</a>
+        </div>
+    </div>
+</body>
