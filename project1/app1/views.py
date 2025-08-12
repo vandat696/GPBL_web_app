@@ -64,32 +64,6 @@ class IndexView(View):
         comments=Comment.objects.all()
         tags=Tags.objects.all()
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags,"selected_tags":tag_id,"keyword":keyword})
-    def post(self,request):
-        form=ArticleModelForm(request.POST,request.FILES)
-        if form.is_valid():
-            form_body = form.cleaned_data.get('body')
-            form.save()
-            print("投稿を保存しました")
-            article=get_object_or_404(Article,body=form_body)
-            user = str(request.user)
-            print("user:"+user)
-            if user=="AnonymousUser":
-                article.user_name="ゲスト"
-            else:
-                article.user_name=str(user)
-            article.save()
-    
-        else:
-            print("投稿を保存できませんでした")
-        form=ArticleModelForm()
-        tag_id=request.GET.get('tag')
-        if tag_id:
-            articles=Article.objects.filter(tag__id=tag_id)
-        else:
-            articles=Article.objects.all()
-        comments=Comment.objects.all()
-        tags=Tags.objects.all()
-        return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
     
 class GeneralView(View):
     def get(self, request):
@@ -148,7 +122,12 @@ class DiscussionsView(View):
             form_body = form.cleaned_data.get('body')
             form.save()
             print("投稿を保存しました")
-            article = get_object_or_404(Article, body=form_body)
+            article = Article.objects.get(body=form_body)
+            #print("タグ一覧："+str(article.tag.all()))
+            if article.tag.all():
+                for tag in article.tag.all():
+                    #print("タグ："+str(tag.id))
+                    create_summary(int(tag.id))
             user = str(request.user)
             print("user:" + user)
             if user == "AnonymousUser":
@@ -295,7 +274,8 @@ class CalculateScoreView(View):
 
 class GuideBookDetailView(View):
     def get(self,request,tag):
-        guidebook=GuideBook.objects.get(tag=tag)
+        tag="旅行"
+        guidebook=GuideBook.objects.get(tag__name=tag)
         articles = Article.objects.all().order_by('-score')
         tid=Tags.objects.get(name=tag).id
         articles = articles.filter(tag__id=tid).order_by('-score')

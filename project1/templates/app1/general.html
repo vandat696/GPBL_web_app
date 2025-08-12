@@ -82,8 +82,11 @@
                 <h1>ガイドブック</h1>
                 <div class="card-list">
                     {% for guidebook in guidebooks %}
-                    <a href="/general/detail/{{guidebook.tag}}" style="text-decoration: none;">
-                    <div class="card">
+
+                    {% for tag in guidebook.tag.all %}
+                     <a href="/general/detail/{{tag.name}}" style="text-decoration: none;">
+                    {% endfor %}
+                                    <div class="card">
                         {% if guidebook.picture %}
                         <img src="{{guidebook.picture.url}}" alt="画像" class="card-image" style="background-color: #c1ffe0;">
                         {% else %}
