@@ -8,6 +8,7 @@ from django.db.models import Q
 from google import genai
 cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
 #apiキーはこのアプリ以外で使用しないでください
+#comment
 
 def create_summary(id):
     #反応が上位10件の投稿を抽出する
