@@ -50,23 +50,56 @@
         </div>
     </header>
 
+        
+
     <main class="container">
-        <!-- よくある質問 page -->
+        <!-- discussion page -->
         <div class="page-content-wrapper">
             <div class="sidebar">
                 <h3>タグ</h3>
                 <div id="issue-tags" class="tag-list">
-                    <!-- tags will be created by JS -->
+                    {% for tag in tags %}
+                    {% if tag.id == 1 %}
+                    <a href="/" class="tag">{{ tag.name }}</a>
+                    {% else %}
+                    <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
+                    {% endif %}
+                    {% endfor %}
                 </div>
                 <div style="margin-top: 2rem;">
                     <h3>キーワード検索</h3>
-                    <input type="text" id="issues-search" placeholder="キーワードで検索" class="form-input">
+                    <div class="search-box-container">
+                        <input type="text" id="general-search" placeholder="キーワードで検索" class="form-input">
+                        <button type="button" id="general-search-button" class="btn btn-primary search-button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="main-content">
-                <h2>よくある質問</h2>
-                <div id="issues-list" class="card-list">
-                    <!-- post will be created by JS -->
+                
+            <div class="content">
+                <h1>よくある質問</h1>
+                <div class="card-list">
+                    <div class="card">
+                        <img src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/tai-hinh-nen-dep-mien-phi.jpg" alt="海外移住のメリット" class="card-image">
+                        <div class="card-content">
+                            <h3 class="card-title">海外移住のメリットは何ですか？</h3>
+                            <div class="card-description">
+                                海外移住のメリットには、異文化体験、キャリアの機会、生活の質の向上などがあります。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <img src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/tai-hinh-nen-dep-mien-phi.jpg" alt="海外移住のメリット" class="card-image">
+                        <div class="card-content">
+                            <h3 class="card-title">海外移住のメリットは何ですか？</h3>
+                            <div class="card-description">
+                                海外移住のメリットには、異文化体験、キャリアの機会、生活の質の向上などがあります。
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
