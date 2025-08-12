@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setInterval(updateSlideshow, 5000);
   }
-
   // --- Xử lý Modal đăng bài mới ---
   const newPostModal = document.getElementById('new-post-modal');
   const postButton = document.getElementById('post-button');
