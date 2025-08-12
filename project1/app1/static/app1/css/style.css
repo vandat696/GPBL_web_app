@@ -941,3 +941,137 @@ body {
             background: linear-gradient(90deg, transparent 0%, #27ae60 50%, transparent 100%);
             margin: 2rem 0;
         }
+
+/* CSS cho cấu trúc HTML hiện tại */
+.search-box-container {
+    display: flex;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #e8f5e8;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafa 100%);
+}
+
+.search-box-container:hover {
+    border-color: #27ae60;
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.15);
+}
+
+.search-box-container:focus-within {
+    border-color: #27ae60;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1), 0 6px 20px rgba(39, 174, 96, 0.15);
+}
+
+#general-search.form-input {
+    flex: 1;
+    padding: 1rem 1.2rem;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #2c3e50;
+    background: transparent;
+    letter-spacing: 0.02em;
+    border-radius: 0;
+}
+
+#general-search.form-input::placeholder {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.search-button,
+#general-search-button {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border: none;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+.search-button::before,
+#general-search-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    transform: translate(-50%, -50%);
+}
+
+.search-button:hover::before,
+#general-search-button:hover::before {
+    width: 100px;
+    height: 100px;
+}
+
+.search-button:hover,
+#general-search-button:hover {
+    background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+    transform: translateX(2px);
+}
+
+.search-button:active,
+#general-search-button:active {
+    transform: translateX(1px) scale(0.98);
+}
+
+.search-button i,
+#general-search-button i {
+    color: #ffffff;
+    font-size: 1.1rem;
+    z-index: 1;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.search-button:hover i,
+#general-search-button:hover i {
+    transform: scale(1.1);
+}
+
+/* Override Bootstrap styles nếu có */
+.btn-primary.search-button,
+#general-search-button.btn-primary {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+    border: none !important;
+}
+
+.btn-primary.search-button:hover,
+#general-search-button.btn-primary:hover {
+    background: linear-gradient(135deg, #229954 0%, #27ae60 100%) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-box-container {
+        border-radius: 10px;
+    }
+    
+    #general-search.form-input {
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+    }
+    
+    .search-button,
+    #general-search-button {
+        padding: 0.9rem 1.2rem;
+    }
+    
+    .search-button i,
+    #general-search-button i {
+        font-size: 1rem;
+    }
+}
