@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>海外移住の課題 - よくある質問</title>
+    <title>海外移住の課題 - ガイドブック</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
         <div class="navbar-brand">移住の課題</div>
         <nav class="navbar-menu">
             <a href="{% url 'app1:index' %}" class="nav-item" style="text-decoration: none;">ホーム</a>
-            <a href="{% url 'app1:general' %}" class="nav-item active" style="text-decoration: none;">よくある質問</a>
+            <a href="{% url 'app1:general' %}" class="nav-item active" style="text-decoration: none;">ガイドブック</a>
             <a href="{% url 'app1:discussions' %}" class="nav-item" style="text-decoration: none;">ディスカッション</a>
         </nav>
     
@@ -60,7 +60,7 @@
                 <div id="issue-tags" class="tag-list">
                     {% for tag in tags %}
                     {% if tag.id == 1 %}
-                    <a href="/" class="tag">{{ tag.name }}</a>
+                    <a href="/general" class="tag">{{ tag.name }}</a>
                     {% else %}
                     <a href="{% url 'app1:search_guide' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
                     {% endif %}
@@ -78,12 +78,16 @@
             </div>
                 
             <div class="content">
-                <h1>よくある質問</h1>
+                <h1>ガイドブック</h1>
                 <div class="card-list">
                     {% for guidebook in guidebooks %}
                     <a href="/general/detail/{{guidebook.tag}}" style="text-decoration: none;">
                     <div class="card">
-                        <img src="https://www.colordic.org/image/c1ffe0.png" alt="海外移住のメリット" class="card-image" style="background-color: #c1ffe0;">
+                        {% if guidebook.picture %}
+                        <img src="{{guidebook.picture.url}}" alt="画像" class="card-image" style="background-color: #c1ffe0;">
+                        {% else %}
+                        <img src="" alt="画像" class="card-image" style="background-color: #c1ffe0;">
+                        {% endif %}
                         <div class="card-content">
                             <h3 class="card-title">{{guidebook.title}}</h3>
                             <div class="card-description">

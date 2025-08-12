@@ -95,7 +95,17 @@ class GeneralView(View):
     def get(self, request):
         # Logic for FAQ page
         tags = Tags.objects.all()
+        tag_id = request.GET.getlist('tag')
+        keyword = request.GET.get('q')
         guidebooks = GuideBook.objects.all()
+        
+        if tag_id:
+            for tid in tag_id:
+                guidebooks = guidebooks.filter(tag__id=tid)
+            guidebooks = guidebooks.distinct()
+        
+        if keyword:
+            guidebooks = guidebooks.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         context = {
             'tags': tags,
             'guidebooks' :guidebooks
