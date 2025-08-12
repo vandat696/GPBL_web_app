@@ -106,6 +106,43 @@ body {
     line-height: 1.4;
 }
 
+/* Định dạng cho hình ảnh trong bài viết */
+.post-image {
+    width: 100%;
+    max-height: 400px; /* Giới hạn chiều cao tối đa của ảnh */
+    overflow: hidden; /* Cắt bớt phần ảnh thừa nếu vượt quá giới hạn */
+    border-radius: 8px; /* Bo tròn các góc ảnh */
+    margin-bottom: 0.5rem; /* Khoảng cách dưới ảnh */
+    display: flex;
+}
+
+.post-image img {
+    width: 20%; /* Đảm bảo ảnh luôn đầy chiều rộng của khung chứa */
+    height: 20%; /* Đảm bảo ảnh lấp đầy chiều cao của khung chứa */
+    object-fit: cover; /* Cắt và căn giữa ảnh để vừa khung mà không bị méo */
+    display: block;
+}
+
+/* Định dạng cho hình ảnh trong bài viết */
+.post-content img {
+    /* Hình ảnh sẽ không bao giờ lớn hơn kích thước gốc của nó */
+    max-width: 100%; 
+    /* Chiều cao tự động điều chỉnh theo tỷ lệ */
+    height: auto; 
+    /* Bo tròn các góc */
+    border-radius: 8px;
+    display: block; /* Đảm bảo hình ảnh là một block để dễ căn chỉnh */
+}
+
+.post-text p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Giới hạn chỉ hiển thị 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm dấu ba chấm (...) vào cuối */
+    margin: 0;
+}
+
 .welcome-message p {
     font-size: 1.2rem;
     color: #5a6c7d;
@@ -1074,4 +1111,6 @@ body {
     #general-search-button i {
         font-size: 1rem;
     }
+    
+    
 }

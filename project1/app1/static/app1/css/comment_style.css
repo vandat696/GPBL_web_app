@@ -150,16 +150,16 @@ body {
 }
 
 .post-image-container {
-    margin: 1rem 0;
+    margin: 20px 0;
+    text-align: center;
 }
 
-.post-image {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Đảm bảo hình ảnh hiển thị đầy đủ, giữ nguyên tỉ lệ và không bị giới hạn chiều cao */
+.post-image-container img.post-image {
+    max-width: 100%; /* Giới hạn chiều rộng tối đa là 100% của container */
+    height: auto; /* Chiều cao tự động điều chỉnh để giữ đúng tỉ lệ */
+    border-radius: 8px; /* Bo tròn các góc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .post-body {
