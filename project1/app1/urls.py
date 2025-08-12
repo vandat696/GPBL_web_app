@@ -11,7 +11,7 @@ urlpatterns=[
   path("like/add/<uuid:id>",views.like_add , name="like_add"),
   path("dislike/add/<uuid:id>",views.dislike_add , name="dislike_add"),
   path("user_resistration/",views.user_resistration , name="user_resistration"),
-  path("ranking/",views.ranking , name="ranking"),
+  path("discussions/ranking",views.ranking , name="discussions_ranking"),
   path("calculate/score",views.caluculate_score , name="caluculate_score"),
   path("create_guide_book/<int:id>",views.create_guide_book, name="create_guide_book"),
 ]
