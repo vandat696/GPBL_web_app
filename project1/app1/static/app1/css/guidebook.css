@@ -1,0 +1,59 @@
+/* Thiết lập chung */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    line-height: 1.8;
+    color: #444;
+    background-color: #f0fdf4; /* Xanh lá cây nhạt làm nền */
+    margin: 0;
+    padding: 20px;
+}
+
+/* Container chính */
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 50px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    border-top: 5px solid #6ee7b7; /* Đường viền xanh lá cây phía trên */
+}
+
+/* Tiêu đề */
+h3 {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #10b981; /* Xanh lá cây đậm */
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: none; /* Bỏ đường viền cũ */
+    padding-bottom: 10px;
+    position: relative;
+}
+
+h3::after {
+    content: '';
+    width: 80px;
+    height: 4px;
+    background-color: #a7f3d0; /* Xanh lá cây nhạt hơn cho đường viền */
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Nội dung bài viết */
+p {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 25px;
+    text-align: left; /* Căn lề trái thay vì căn đều */
+}
+
+/* Các class hỗ trợ */
+.text-center {
+    text-align: center;
+}
+.margin-top-large {
+    margin-top: 40px;
+}
