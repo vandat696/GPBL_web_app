@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           const errorData = await response.text();
           console.error('Lỗi khi đăng bài:', errorData);
-          alert('Có lỗi xảy ra khi đăng bài.');
+          alert('投稿中にエラーが発生しました。');
         }
 
       } catch (error) {
