@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海外移住の課題 - ガイドブック詳細</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href ="{% static 'app1/css/guidebook.css' %} ">
     <title>Document</title>
 </head>
 <body>
-<h3>{{guidebook.title}}</h3>
-<p>{{guidebook.body}}</p>
+    <div class="container">
+        <h3 class="text-center">{{guidebook.title}}</h3>
+        <p>{{guidebook.body}}</p>
+    </div>
 </body>
 </html>
