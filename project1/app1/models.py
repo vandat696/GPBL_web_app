@@ -53,5 +53,8 @@ class GuideBook(models.Model):
     tag=models.TextField(default="タグ指定なし",verbose_name="タグ")
     created=models.DateTimeField(null=True,auto_now_add=True,verbose_name="作成時間")
     articles=models.IntegerField(null=True,verbose_name="参照した投稿の数")
+    picture=models.ImageField(upload_to="app1/picture/",null=True,blank=True,verbose_name="picture")
+    summary=models.TextField(null=True,verbose_name="要約")
+
     def __str__(self):
         return self.title
