@@ -17,49 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const csrftoken = getCookie('csrftoken');
 
-  // --- Xử lý chuyển trang và thanh điều hướng ---
-  const navItems = document.querySelectorAll('.nav-item');
-  const pages = document.querySelectorAll('.page');
-  const homePage = document.getElementById('home-page');
-  const issuesPage = document.getElementById('issues-page');
-  const discussionsPage = document.getElementById('discussions-page');
-
-  navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-      e.preventDefault();
-      navItems.forEach(nav => nav.classList.remove('active'));
-      item.classList.add('active');
-
-      const pageId = item.dataset.page;
-      pages.forEach(page => page.style.display = 'none');
-      document.getElementById(`${pageId}-page`).style.display = 'block';
-      
-      // Nếu là trang issues, render danh sách bài viết
-      if (pageId === 'issues') {
-        renderIssues(issuesData);
-      }
-    });
-  });
-  
-  // Hiển thị trang chủ mặc định và các bài viết issues nếu có
-  homePage.style.display = 'block';
-
   // --- Slideshow trên trang chủ (có hiệu ứng fade) ---
-  const slideshowImages = document.querySelectorAll('#home-page .slideshow-image');
+  const slideshowImages = document.querySelectorAll('.slideshow-image');
   let currentImageIndex = 0;
 
   if (slideshowImages.length > 0) {
     slideshowImages[currentImageIndex].classList.add('active');
+    
+    function updateSlideshow() {
+      slideshowImages[currentImageIndex].classList.remove('active');
+      currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
+      slideshowImages[currentImageIndex].classList.add('active');
+    }
+    
+    setInterval(updateSlideshow, 5000);
   }
-  
-  function updateSlideshow() {
-    slideshowImages[currentImageIndex].classList.remove('active');
-    currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
-    slideshowImages[currentImageIndex].classList.add('active');
-  }
-  
-  setInterval(updateSlideshow, 5000);
-
 
   // --- Dữ liệu giả lập cho trang FAQ ---
   const issuesData = [
@@ -120,8 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Danh sách các tag có sẵn
   const availableTags = ["手続き", "仕事", "言語", "食べ物", "気候", "文化"];
 
-  // Tạo và hiển thị các tag
+  // Tạo và hiển thị các tag (chỉ chạy nếu ở trang general)
   function renderTags() {
+    if (!issuesTagsContainer) return;
     issuesTagsContainer.innerHTML = '';
     availableTags.forEach(tagText => {
       const tagElement = document.createElement('span');
@@ -134,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Hàm để render danh sách bài viết
   function renderIssues(posts) {
+    if (!issuesList) return;
     issuesList.innerHTML = '';
     if (posts.length === 0) {
       issuesList.innerHTML = '<p style="text-align:center; color:#666;">Không tìm thấy bài viết nào.</p>';
@@ -159,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Hàm lọc bài viết
   function filterIssues() {
+    if (!issuesTagsContainer || !issuesSearchInput) return;
     const activeTags = Array.from(issuesTagsContainer.querySelectorAll('.tag.active')).map(tag => tag.dataset.tag);
     const searchTerm = issuesSearchInput.value.toLowerCase().trim();
 
@@ -182,156 +157,158 @@ document.addEventListener('DOMContentLoaded', () => {
     renderIssues(filteredIssues);
   }
 
-  // Khởi tạo hiển thị tag và bài viết khi vào trang issues
-  renderTags();
-  renderIssues(issuesData);
+  // Khởi tạo hiển thị tag và bài viết khi ở trang general
+  if (issuesTagsContainer && issuesList) {
+    renderTags();
+    renderIssues(issuesData);
 
-  // Xử lý sự kiện click trên tag
-  issuesTagsContainer.addEventListener('click', (e) => {
-    const tagElement = e.target.closest('.tag');
-    if (!tagElement) return;
-    
-    // Toggle class 'active' cho tag được click
-    tagElement.classList.toggle('active');
-    
-    // Thực hiện lọc lại bài viết
-    filterIssues();
-  });
+    // Xử lý sự kiện click trên tag
+    issuesTagsContainer.addEventListener('click', (e) => {
+      const tagElement = e.target.closest('.tag');
+      if (!tagElement) return;
+      
+      // Toggle class 'active' cho tag được click
+      tagElement.classList.toggle('active');
+      
+      // Thực hiện lọc lại bài viết
+      filterIssues();
+    });
 
-  // Xử lý sự kiện tìm kiếm
-  issuesSearchInput.addEventListener('input', filterIssues);
+    // Xử lý sự kiện tìm kiếm
+    issuesSearchInput.addEventListener('input', filterIssues);
+  }
 
   // --- Xử lý Modal chi tiết bài viết ---
   const postModal = document.getElementById('post-modal');
   const closePostModal = document.getElementById('close-post-modal');
 
-  document.addEventListener('click', (e) => {
-    const card = e.target.closest('.card');
-    if (card) {
-      const postId = parseInt(card.dataset.id);
-      const postData = issuesData.find(post => post.id === postId);
+  if (postModal && closePostModal) {
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (card) {
+        const postId = parseInt(card.dataset.id);
+        const postData = issuesData.find(post => post.id === postId);
 
-      if (postData) {
-        const modalBody = document.getElementById('modal-body');
-        modalBody.innerHTML = `
-          <div class="full-post">
-            <h2 class="text-2xl font-bold mb-2">${postData.title}</h2>
-            <div class="post-meta">
-              <span>国: ${postData.country}</span>
+        if (postData) {
+          const modalBody = document.getElementById('modal-body');
+          modalBody.innerHTML = `
+            <div class="full-post">
+              <h2 class="text-2xl font-bold mb-2">${postData.title}</h2>
+              <div class="post-meta">
+                <span>国: ${postData.country}</span>
+              </div>
+              <img src="${postData.image}" alt="${postData.title}">
+              <div class="prose max-w-none">
+                <p>${postData.body}</p>
+              </div>
+              <div class="card-tags mt-4">
+                ${postData.tags.map(tag => `<span class="tag-in-card">${tag.charAt(0).toUpperCase() + tag.slice(1)}</span>`).join('')}
+              </div>
             </div>
-            <img src="${postData.image}" alt="${postData.title}">
-            <div class="prose max-w-none">
-              <p>${postData.body}</p>
-            </div>
-            <div class="card-tags mt-4">
-              ${postData.tags.map(tag => `<span class="tag-in-card">${tag.charAt(0).toUpperCase() + tag.slice(1)}</span>`).join('')}
-            </div>
-          </div>
-        `;
-        postModal.style.display = 'flex';
+          `;
+          postModal.style.display = 'flex';
+        }
       }
-    }
-  });
+    });
 
-  closePostModal.addEventListener('click', () => {
-    postModal.style.display = 'none';
-  });
-
-  window.addEventListener('click', (e) => {
-    if (e.target === postModal) {
+    closePostModal.addEventListener('click', () => {
       postModal.style.display = 'none';
-    }
-  });
+    });
 
-  // --- Xử lý Modal đăng bài mới (Không thay đổi) ---
+    window.addEventListener('click', (e) => {
+      if (e.target === postModal) {
+        postModal.style.display = 'none';
+      }
+    });
+  }
+
+  // --- Xử lý Modal đăng bài mới ---
   const newPostModal = document.getElementById('new-post-modal');
   const postButton = document.getElementById('post-button');
   const closeNewPostModal = document.getElementById('close-new-post-modal');
   const newPostForm = document.getElementById('new-post-form');
 
-  postButton.addEventListener('click', () => {
-    newPostModal.style.display = 'flex';
-  });
-
-  closeNewPostModal.addEventListener('click', () => {
-    newPostModal.style.display = 'none';
-  });
-
-  window.addEventListener('click', (e) => {
-    if (e.target === newPostModal) {
-      newPostModal.style.display = 'none';
-    }
-  });
-
-  newPostForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(newPostForm);
-    
-    try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': csrftoken,
-        },
-        body: formData,
-      });
-      
-      if (response.ok) {
-        newPostModal.style.display = 'none';
-        newPostForm.reset();
-      } else {
-        const errorData = await response.json();
-        console.error('Lỗi khi đăng bài:', errorData);
-        alert('Có lỗi xảy ra khi đăng bài: ' + JSON.stringify(errorData));
-      }
-
-      // Sau khi định nghĩa navItems và pages
-const hash = window.location.hash.replace('#', '');
-if (hash) {
-  const targetItem = document.querySelector(`.nav-item[data-page="${hash}"]`);
-  if (targetItem) {
-    targetItem.click();
+  if (postButton && newPostModal) {
+    postButton.addEventListener('click', () => {
+      newPostModal.style.display = 'flex';
+    });
   }
-}
 
-    } catch (error) {
-      // console.error('Lỗi mạng:', error);
-      // alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.');
-      ;
-    }
-  });
+  if (closeNewPostModal && newPostModal) {
+    closeNewPostModal.addEventListener('click', () => {
+      newPostModal.style.display = 'none';
+    });
+  }
+
+  if (newPostModal) {
+    window.addEventListener('click', (e) => {
+      if (e.target === newPostModal) {
+        newPostModal.style.display = 'none';
+      }
+    });
+  }
+
+  if (newPostForm) {
+    newPostForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(newPostForm);
+      
+      try {
+        const response = await fetch(window.location.pathname, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrftoken,
+          },
+          body: formData,
+        });
+        
+        if (response.ok) {
+          newPostModal.style.display = 'none';
+          newPostForm.reset();
+          // Reload trang để hiển thị bài viết mới
+          window.location.reload();
+        } else {
+          const errorData = await response.text();
+          console.error('Lỗi khi đăng bài:', errorData);
+          alert('Có lỗi xảy ra khi đăng bài.');
+        }
+
+      } catch (error) {
+        console.error('Lỗi mạng:', error);
+        // Có thể vẫn thành công, reload để kiểm tra
+        window.location.reload();
+      }
+    });
+  }
   
   // --- Xử lý tìm kiếm trên trang Discussions ---
-const discussionsSearchInput = document.getElementById('discussions-search');
-const discussionsSearchButton = document.getElementById('search-button');
+  const discussionsSearchInput = document.getElementById('discussions-search');
+  const discussionsSearchButton = document.getElementById('search-button');
 
-// Hàm thực hiện tìm kiếm và chuyển hướng
-function performDiscussionSearch() {
-    const keyword = discussionsSearchInput.value.trim();
-    if (keyword) {
-        // Chuyển hướng đến URL với từ khóa tìm kiếm
-        window.location.href = `/?q=${encodeURIComponent(keyword)}`;
-    } else {
-        // Nếu không có từ khóa, chuyển hướng về trang gốc
-        window.location.href = `/`;
-    }
-}
+  // Hàm thực hiện tìm kiếm và chuyển hướng
+  function performDiscussionSearch() {
+      const keyword = discussionsSearchInput.value.trim();
+      if (keyword) {
+          // Chuyển hướng đến URL với từ khóa tìm kiếm
+          window.location.href = `/discussions/?q=${encodeURIComponent(keyword)}`;
+      } else {
+          // Nếu không có từ khóa, chuyển hướng về trang discussions
+          window.location.href = `/discussions/`;
+      }
+  }
 
-// Gắn sự kiện click vào nút tìm kiếm
-if (discussionsSearchButton) {
-    discussionsSearchButton.addEventListener('click', performDiscussionSearch);
-}
+  // Gắn sự kiện click vào nút tìm kiếm
+  if (discussionsSearchButton) {
+      discussionsSearchButton.addEventListener('click', performDiscussionSearch);
+  }
 
-// Gắn sự kiện nhấn phím Enter vào ô input
-if (discussionsSearchInput) {
-    discussionsSearchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            performDiscussionSearch();
-        }
-    });
-}
+  // Gắn sự kiện nhấn phím Enter vào ô input
+  if (discussionsSearchInput) {
+      discussionsSearchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+              performDiscussionSearch();
+          }
+      });
+  }
 });
-
-
-
