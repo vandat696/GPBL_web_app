@@ -4,6 +4,8 @@ app_name="app1"
 
 urlpatterns=[
   path("",views.index , name="index"),
+  path('general/', views.general, name='general'),
+  path('discussions/', views.discussions, name='discussions'),
   path("comment/post/<uuid:id>",views.comment_post , name="comment_post"),
   path("search",views.search , name="search"),
   path("like/add/<uuid:id>",views.like_add , name="like_add"),

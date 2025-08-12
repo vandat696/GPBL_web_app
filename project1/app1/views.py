@@ -91,7 +91,64 @@ class IndexView(View):
         comments=Comment.objects.all()
         tags=Tags.objects.all()
         return render(request,"app1/index.html",{"form":form,"articles":articles,"comments":comments,"tags":tags})
+    
+class GeneralView(View):
+    def get(self, request):
+        # Logic for FAQ page
+        tags = Tags.objects.all()
+        context = {
+            'tags': tags,
+        }
+        return render(request, 'app1/general.html', context)
 
+class DiscussionsView(View):
+    def get(self, request):
+        # Logic for discussions
+        form = ArticleModelForm()
+        tag_id = request.GET.getlist('tag')
+        keyword = request.GET.get('q')
+        articles = Article.objects.all().order_by('-created')  # Order by time added
+        
+        if tag_id:
+            for tid in tag_id:
+                articles = articles.filter(tag__id=tid)
+            articles = articles.distinct()
+        
+        if keyword:
+            articles = articles.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
+        
+        comments = Comment.objects.all()
+        tags = Tags.objects.all()
+        
+        context = {
+            'form': form,
+            'articles': articles,
+            'comments': comments,
+            'tags': tags,
+            'selected_tags': tag_id,
+            'keyword': keyword
+        }
+        return render(request, 'app1/discussions.html', context)
+    
+    def post(self, request):
+        # Logic post same as IndexView
+        form = ArticleModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form_body = form.cleaned_data.get('body')
+            form.save()
+            print("投稿を保存しました")
+            article = get_object_or_404(Article, body=form_body)
+            user = str(request.user)
+            print("user:" + user)
+            if user == "AnonymousUser":
+                article.user_name = "ゲスト"
+            else:
+                article.user_name = str(user)
+            article.save()
+        else:
+            print("投稿を保存できませんでした")
+        
+        return redirect('app1:discussions')
 
 class CommentView(View):
     def get(self,request,id):
@@ -211,6 +268,8 @@ class CalculateScoreView(View):
 
 
 index=IndexView.as_view()
+general = GeneralView.as_view()
+discussions = DiscussionsView.as_view()
 comment_post=CommentView.as_view()
 search=SearchView.as_view()
 like_add=LikeView.as_view()

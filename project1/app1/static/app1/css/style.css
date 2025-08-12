@@ -85,14 +85,6 @@ body {
     box-shadow: 0 2px 8px rgba(39, 174, 96, 0.2);
 }
 
-/* Cấu trúc trang */
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-}
 
 /* Trang chủ cải tiến */
 .welcome-message {
