@@ -101,16 +101,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const generalSearchButton = document.getElementById('general-search-button');
 
   // Hàm thực hiện tìm kiếm và chuyển hướng
+  
   function performDiscussionSearch() {
-      const keyword = discussionsSearchInput.value.trim();
-      if (keyword) {
-          // Chuyển hướng đến URL với từ khóa tìm kiếm
-          window.location.href = `/discussions/?q=${encodeURIComponent(keyword)}`;
-      } else {
-          // Nếu không có từ khóa, chuyển hướng về trang discussions
-          window.location.href = `/discussions/`;
-      }
+    const keyword = discussionsSearchInput.value.trim();
+    const params = new URLSearchParams(window.location.search);
+
+    if (keyword) {
+      params.set('q', keyword);
+    } else {
+      params.delete('q');
+    }
+
+    window.location.href = `/discussions/?${params.toString()}`;
   }
+
+      
 
   // Hàm thực hiện tìm kiếm và chuyển hướng
   function performGeneralSearch() {
