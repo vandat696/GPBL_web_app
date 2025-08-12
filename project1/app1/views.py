@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from google import genai
-
 cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
 #apiキーはこのアプリ以外で使用しないでください
 
