@@ -15,6 +15,7 @@ def create_summary(id):
     max=10
     if max>len(articles):
         max=len(articles)
+    tag_name=str(Tags.objects.get(id=id))
     #プロンプトを決める
     prompt="""
     以下の投稿とコメントを制約条件に基づいて要約してください。
@@ -22,7 +23,7 @@ def create_summary(id):
     ・「分かりました」などの返事はせず、要約の文章のみを答えてください。
     ・要約はガイドブックの文章風に作成して、一つの文章にまとめてください。
     ・文章には何かの問題を解決する方法を必ず入れてください。
-    ・明らかに不要な投稿や、嘘の投稿は無視してください。
+    ・全体が"""+tag_name+"""に一切関係ない投稿や、明らかに嘘の投稿は無視してください。
     ・「質問に対する返答または情報の補足」以外のコメントは無視してください
     ・太文字や改行は使わずに、文字のみを使ってください。
     """
@@ -40,8 +41,6 @@ def create_summary(id):
     response=cliant.models.generate_content(model="gemini-2.0-flash-lite",contents=prompt)
     response=str(response.text)
     #print(response)
-    tag_name=Tags.objects.get(id=id)
-    tag_name=str(tag_name.name)
     guidebook = GuideBook.objects.get(tag=tag_name)
     guidebook.body=response
     guidebook.save()
@@ -287,7 +286,13 @@ class CalculateScoreView(View):
 class GuideBookDetailView(View):
     def get(self,request,tag):
         guidebook=GuideBook.objects.get(tag=tag)
-        return render(request,"app1/guidebookdetail.html",{"guidebook":guidebook})
+        articles = Article.objects.all().order_by('-score')
+        tid=Tags.objects.get(name=tag).id
+        articles = articles.filter(tag__id=tid).order_by('-score')
+        articles = articles.distinct()
+        comments = Comment.objects.all()
+        tags = Tags.objects.all()
+        return render(request,"app1/guidebookdetail.html",{"guidebook":guidebook,"articles":articles,"comments":comments})
 
 
 
