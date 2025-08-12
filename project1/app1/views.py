@@ -16,7 +16,7 @@ def create_summary(id):
     if max>len(articles):
         max=len(articles)
     #プロンプトを決める
-    prompt=""""
+    prompt="""
     以下の投稿とコメントを制約条件に基づいて要約してください。
     制約条件
     ・「分かりました」などの返事はせず、要約の文章のみを答えてください。
@@ -40,9 +40,11 @@ def create_summary(id):
     response=cliant.models.generate_content(model="gemini-2.0-flash-lite",contents=prompt)
     response=str(response.text)
     #print(response)
-
-    guideBook = GuideBook.filter()
-
+    tag_name=Tags.objects.get(id=id)
+    tag_name=str(tag_name.name)
+    guidebook = GuideBook.objects.get(tag=tag_name)
+    guidebook.body=response
+    guidebook.save()
     return response
 
 
