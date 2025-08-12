@@ -107,7 +107,7 @@ class DiscussionsView(View):
         form = ArticleModelForm()
         tag_id = request.GET.getlist('tag')
         keyword = request.GET.get('q')
-        articles = Article.objects.all().order_by('-created')  # Order by time added
+        articles = Article.objects.all()
         
         if tag_id:
             for tid in tag_id:
