@@ -24,7 +24,7 @@ def create_summary(id):
     ・要約はガイドブックの文章風に作成して、一つの文章にまとめてください。
     ・文章には何かの問題を解決する方法を必ず入れてください。
     ・全体が"""+tag_name+"""に一切関係ない投稿や、明らかに嘘の投稿は無視してください。
-    ・「質問に対する返答または情報の補足」以外のコメントは無視してください
+    ・「質問に対する返答または情報の補足」以外のコメントは無視してください。
     ・太文字や改行は使わずに、文字のみを使ってください。
     """
     article_count=1
@@ -108,7 +108,7 @@ class DiscussionsView(View):
         form = ArticleModelForm()
         tag_id = request.GET.getlist('tag')
         keyword = request.GET.get('q')
-        articles = Article.objects.all()
+        articles = Article.objects.all().order_by("-created")
         
         if tag_id:
             for tid in tag_id:
