@@ -286,10 +286,52 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Có lỗi xảy ra khi đăng bài: ' + JSON.stringify(errorData));
       }
 
+      // Sau khi định nghĩa navItems và pages
+const hash = window.location.hash.replace('#', '');
+if (hash) {
+  const targetItem = document.querySelector(`.nav-item[data-page="${hash}"]`);
+  if (targetItem) {
+    targetItem.click();
+  }
+}
+
     } catch (error) {
       // console.error('Lỗi mạng:', error);
       // alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.');
       ;
     }
   });
+  
+  // --- Xử lý tìm kiếm trên trang Discussions ---
+const discussionsSearchInput = document.getElementById('discussions-search');
+const discussionsSearchButton = document.getElementById('search-button');
+
+// Hàm thực hiện tìm kiếm và chuyển hướng
+function performDiscussionSearch() {
+    const keyword = discussionsSearchInput.value.trim();
+    if (keyword) {
+        // Chuyển hướng đến URL với từ khóa tìm kiếm
+        window.location.href = `/?q=${encodeURIComponent(keyword)}`;
+    } else {
+        // Nếu không có từ khóa, chuyển hướng về trang gốc
+        window.location.href = `/`;
+    }
+}
+
+// Gắn sự kiện click vào nút tìm kiếm
+if (discussionsSearchButton) {
+    discussionsSearchButton.addEventListener('click', performDiscussionSearch);
+}
+
+// Gắn sự kiện nhấn phím Enter vào ô input
+if (discussionsSearchInput) {
+    discussionsSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performDiscussionSearch();
+        }
+    });
+}
 });
+
+
+
