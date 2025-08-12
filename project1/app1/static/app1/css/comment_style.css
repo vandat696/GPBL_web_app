@@ -363,7 +363,7 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     .comment-modal-backdrop {
         padding: 0.5rem;
     }
@@ -468,4 +468,31 @@ body {
 
 .comments-list::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
+}
+
+/* Style cho tên người đăng */
+.post-author {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.post-author .author-name {
+    color: #3498db;
+    font-weight: 700;
+}
+
+.post-author i {
+    color: #7f8c8d;
+    margin-right: 4px;
+}
+
+/* Thêm spacing cho post-meta items */
+.post-meta span {
+    margin-right: 15px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.post-meta span:last-child {
+    margin-right: 0;
 }
