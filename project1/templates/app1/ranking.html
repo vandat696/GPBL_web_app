@@ -17,22 +17,23 @@
     <link rel="stylesheet" href="{% static 'app1/css/ranking_style.css' %}">
 </head>
 <body>
-    <!-- Header & navbar -->
+   <!-- Header & navbar -->
     <header class="navbar">
         <div class="navbar-brand">移住の課題</div>
         <nav class="navbar-menu">
-            <a href="/" class="nav-item" style="text-decoration: none;">ホーム</a>
-            <a href="#" class="nav-item" style="text-decoration: none;">よくある質問</a>
-            <a href="#" class="nav-item" style="text-decoration: none;">ディスカッション</a>
+            <a href="{% url 'app1:index' %}" class="nav-item active" style="text-decoration: none;">ホーム</a>
+            <a href="{% url 'app1:general' %}" class="nav-item" style="text-decoration: none;">よくある質問</a>
+            <a href="{% url 'app1:discussions' %}" class="nav-item" style="text-decoration: none;">ディスカッション</a>
         </nav>
-
+    
         {% if request.user.is_authenticated %}
         <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0 0 0 auto; margin-right: 10px;"> 
             {% csrf_token %}
             <button type="submit" id="country-select" class="country-select" style="background-color: white;">{{request.user}}からログアウト</button>
         </form>
+    
         {% else %}
-        <button onclick="location.href='/login'" id="country-select" class="country-select" style="margin: 0 0 0 auto; margin-right: 10px; background-color: white;">ログイン/新規登録</button>
+        <button onclick="location.href='/login'" id="country-select" class="country-select" style="margin: 0 0 0 auto; margin-right: 10px; background-color: white;" >ログイン/新規登録</button>
         {% endif %}
         
         <div class="navbar-actions">
@@ -83,7 +84,7 @@
 
         <!-- kaeru button-->
         <div class="back-button-container">
-            <button onclick="location.href='/'" class="back-button">
+            <button onclick="location.href='/discussions'" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 戻る
             </button>
@@ -102,6 +103,5 @@
             });
         });
     </script>
-        <script src="{% static 'app1/js/ranking_script.js' %}"></script>
 </body>
 </html>
