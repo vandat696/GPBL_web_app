@@ -14,4 +14,6 @@ urlpatterns=[
   path("discussions/ranking/",views.ranking , name="ranking"),
   path("calculate/score",views.caluculate_score , name="caluculate_score"),
   path("create_guide_book/<int:id>",views.create_guide_book, name="create_guide_book"),
+  path("search/guide",views.search_guide , name="search_guide"),
+  path("general/detail/<str:tag>",views.guidebookdetail,name="guidebookdetail"),
 ]

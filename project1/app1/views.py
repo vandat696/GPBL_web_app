@@ -96,8 +96,10 @@ class GeneralView(View):
     def get(self, request):
         # Logic for FAQ page
         tags = Tags.objects.all()
+        guidebooks = GuideBook.objects.all()
         context = {
             'tags': tags,
+            'guidebooks' :guidebooks
         }
         return render(request, 'app1/general.html', context)
 
@@ -206,6 +208,20 @@ class SearchView(View):
         if keyword:
             params['q']=keyword
         return redirect(f"/discussions/?{params.urlencode()}")
+    
+class SearchGuidebookView(View):
+    def get(self,request):
+        tag_id=request.GET.get('tag')
+        keyword=request.GET.get('q')
+        if tag_id=='1':
+            return redirect("app1:discussions")
+        params=request.GET.copy()
+        if tag_id:
+            if not tag_id in request.GET.getlist('tag'):
+                params.appendlist('tag',tag_id)
+        if keyword:
+            params['q']=keyword
+        return redirect(f"/general/?{params.urlencode()}")
 
 
 class LikeView(View):
@@ -268,6 +284,12 @@ class CalculateScoreView(View):
             article.save()
         return redirect("app1:index")
 
+class GuideBookDetailView(View):
+    def get(self,request,tag):
+        guidebook=GuideBook.objects.get(tag=tag)
+        return render(request,"app1/guidebookdetail.html",{"guidebook":guidebook})
+
+
 
 index=IndexView.as_view()
 general = GeneralView.as_view()
@@ -280,3 +302,5 @@ user_resistration=UserRegistrationView.as_view()
 ranking=RankingView.as_view()
 caluculate_score=CalculateScoreView.as_view()
 create_guide_book=CreateGuideBookView.as_view()
+search_guide=SearchGuidebookView.as_view()
+guidebookdetail=GuideBookDetailView.as_view()
