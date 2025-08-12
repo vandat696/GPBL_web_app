@@ -319,6 +319,7 @@ body {
 
 .comment-content {
     flex: 1;
+    min-width: 0; /* Quan trọng: cho phép flex item co lại để text có thể xuống dòng */
 }
 
 .comment-author {
@@ -333,6 +334,10 @@ body {
     line-height: 1.6; /* Tăng từ 1.5 */
     font-size: 0.95rem; /* Tăng từ 0.9rem */
     word-wrap: break-word;
+    word-break: break-word; /* Thêm để đảm bảo các từ dài bị cắt */
+    overflow-wrap: break-word; /* Hỗ trợ thêm cho các trình duyệt mới */
+    white-space: pre-wrap; /* Giữ nguyên xuống dòng và khoảng trắng */
+    max-width: 100%; /* Đảm bảo không vượt quá chiều rộng container */
 }
 
 /* Thông báo không có comment */
@@ -444,22 +449,22 @@ body {
     animation: modalFadeIn 0.3s ease-out;
 }
 
-/* Scrollbar tùy chỉnh */
-.comments-list::-webkit-scrollbar {
+/* Scrollbar tùy chỉnh cho modal scroll area */
+.modal-scroll-area::-webkit-scrollbar {
     width: 6px;
 }
 
-.comments-list::-webkit-scrollbar-track {
+.modal-scroll-area::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 3px;
 }
 
-.comments-list::-webkit-scrollbar-thumb {
+.modal-scroll-area::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 3px;
 }
 
-.comments-list::-webkit-scrollbar-thumb:hover {
+.modal-scroll-area::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
 
