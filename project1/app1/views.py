@@ -198,38 +198,40 @@ class SearchView(View):
         tag_id=request.GET.get('tag')
         keyword=request.GET.get('q')
         if tag_id=='1':
-            return redirect("app1:index")
+            return redirect("app1:discussions")
         params=request.GET.copy()
         if tag_id:
             if not tag_id in request.GET.getlist('tag'):
                 params.appendlist('tag',tag_id)
         if keyword:
             params['q']=keyword
-        return redirect(f"/?{params.urlencode()}")
+        return redirect(f"/discussions/?{params.urlencode()}")
 
 
 class LikeView(View):
     def get(self,request,id):
         article=get_object_or_404(Article,id=id)
         article.likes=article.likes+1
+        article.score=article.likes-article.dislikes*2
         article.save()
         if article.user_name != "ゲスト":
             user=get_object_or_404(UserName,user_name=article.user_name)
             user.score=user.score+1
             user.save()
-        return redirect("app1:index")
+        return redirect("app1:discussions")
 
 
 class DislikeView(View):
     def get(self,request,id):
         article=get_object_or_404(Article,id=id)
         article.dislikes=article.dislikes+1
+        article.score=article.likes-article.dislikes*2
         article.save()
         if article.user_name != "ゲスト":
             user=get_object_or_404(UserName,user_name=article.user_name)
             user.score=user.score-2
             user.save()
-        return redirect("app1:index")
+        return redirect("app1:discussions")
 
 class UserRegistrationView(View):
     def get(self,request):

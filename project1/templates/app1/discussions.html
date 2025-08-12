@@ -58,7 +58,7 @@
                 <div id="discussion-tags" class="tag-list">
                     {% for tag in tags %}
                     {% if tag.id == 1 %}
-                    <a href="/" class="tag">{{ tag.name }}</a>
+                    <a href="/discussions" class="tag">{{ tag.name }}</a>
                     {% else %}
                     <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
                     {% endif %}
