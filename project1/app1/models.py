@@ -50,7 +50,7 @@ class GuideBook(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     title=models.TextField(verbose_name="タイトル")
     body=models.TextField(verbose_name="本文")
-    tag_id=models.IntegerField(default="1",verbose_name="タグID")
+    tag=models.TextField(default="タグ指定なし",verbose_name="タグ")
     created=models.DateTimeField(null=True,auto_now_add=True,verbose_name="作成時間")
     articles=models.IntegerField(null=True,verbose_name="参照した投稿の数")
     def __str__(self):
