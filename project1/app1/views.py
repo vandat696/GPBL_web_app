@@ -275,7 +275,6 @@ class CalculateScoreView(View):
 
 class GuideBookDetailView(View):
     def get(self,request,tag):
-        tag="旅行"
         guidebook=GuideBook.objects.get(tag__name=tag)
         articles = Article.objects.all().order_by('-score')
         tid=Tags.objects.get(name=tag).id
