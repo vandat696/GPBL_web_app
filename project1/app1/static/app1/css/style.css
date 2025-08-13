@@ -137,6 +137,7 @@ body {
 .post-text p {
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Giới hạn chỉ hiển thị 2 dòng */
+    line-clamp: 2; /* Giới hạn chỉ hiển thị 2 dòng */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis; /* Thêm dấu ba chấm (...) vào cuối */

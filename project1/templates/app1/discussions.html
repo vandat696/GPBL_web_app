@@ -60,14 +60,9 @@
                     {% if tag.id == 1 %}
                     <a href="/discussions" class="tag">{{ tag.name }}</a>
                     {% else %}
-                        {% if tag.id|stringformat:'s' in selected_tags %}
-                        <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" 
-                        class="tag active">{{tag.name}}</a>
-                        {% else %}
                         <a href="{% url 'app1:search' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" 
                         class="tag">{{tag.name}}</a>
                         {% endif %}
-                    {% endif %}
                     {% endfor %}
                 </div>
                 <div style="margin-top: 2rem;">
@@ -105,13 +100,7 @@
                             <div class="post-meta">
                                 <span><i class="far fa-clock"></i> {{article.created}}</span>
                                 <span><i class="fas fa-map-marker-alt"></i> 国: {{article.country}}</span>
-                                <span><i class="far fa-user"></i> 投稿者: {{article.user_name}}
-                                    {% if article.is_new_user %}
-                                    <img src="{% static 'app1/img/newcomer.png' %}" 
-                                    alt="New Comer" 
-                                    style="width:16px; height:16px; vertical-align:middle; margin-left:4px;">
-                                    {% endif %}
-                                </span>
+                                <span><i class="far fa-user"></i> 投稿者: {{article.user_name}}</span>
                             </div>
                             <!-- タグ表示を追加 -->
                             {% if article.tag.all %}

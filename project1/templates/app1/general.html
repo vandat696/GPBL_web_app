@@ -53,17 +53,16 @@
         
 
     <main class="container">
-        <!-- discussion page -->
         <div class="page-content-wrapper">
             <div class="sidebar">
                 <h3>タグ</h3>
                 <div id="issue-tags" class="tag-list">
                     {% for tag in tags %}
-                    {% if tag.id == 1 %}
-                    <a href="/general" class="tag">{{ tag.name }}</a>
-                    {% elif tag.id != 11 %}
-                    <a href="{% url 'app1:search_guide' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
-                    {% endif %}
+                        {% if tag.id == 1 %}
+                        <a href="/general" class="tag">{{ tag.name }}</a>
+                        {% elif tag.id != 11 %}
+                        <a href="{% url 'app1:search_guide' %}?tag={{ tag.id }}{% for t in selected_tags %}{% if t != tag.id|stringformat:'s' %}&tag={{ t }}{% endif %}{% endfor %}{% if keyword %}&q={{ keyword }}{% endif %}" class="tag">{{tag.name}}</a>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <!-- Cập nhật phần search trong sidebar -->
@@ -86,7 +85,7 @@
                     {% for tag in guidebook.tag.all %}
                      <a href="/general/detail/{{tag.name}}" style="text-decoration: none;">
                     {% endfor %}
-                                    <div class="card">
+                        <div class="card">
                         {% if guidebook.picture %}
                         <img src="{{guidebook.picture.url}}" alt="画像" class="card-image" style="background-color: #c1ffe0;">
                         {% else %}

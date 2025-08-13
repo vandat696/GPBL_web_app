@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const tags = document.querySelectorAll('.tag');
 
+    // Đọc các tag đã chọn từ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedTags = urlParams.getAll('tag');
+
+    // Gắn class active cho tag đã chọn khi load lại trang
+    tags.forEach(tag => {
+        const href = tag.getAttribute('href');
+        const tagIdMatch = href.match(/tag=(\d+)/);
+        if (tagIdMatch && selectedTags.includes(tagIdMatch[1])) {
+            tag.classList.add('active');
+        }
+    });
   // --- API và CSRF Token ---
   function getCookie(name) {
     let cookieValue = null;
@@ -32,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setInterval(updateSlideshow, 5000);
   }
+
+  
   // --- Xử lý Modal đăng bài mới ---
   const newPostModal = document.getElementById('new-post-modal');
   const postButton = document.getElementById('post-button');
