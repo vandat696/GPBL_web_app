@@ -9,7 +9,7 @@ class  Article(models.Model):
     country=models.TextField(verbose_name="country")
     user_name=models.TextField(default="ゲスト",verbose_name="user_name")
     body=models.TextField(verbose_name="content")
-    tag=models.ManyToManyField('Tags',verbose_name="tag",blank=True)
+    tag=models.ManyToManyField('Tags',verbose_name="tag",null=False,blank=False)
     picture=models.ImageField(upload_to="app1/picture/",null=True,blank=True,verbose_name="picture")
     created=models.DateTimeField(auto_now_add=True,verbose_name="created_date_time")
     edited=models.DateTimeField(auto_now_add=True,verbose_name="edited_date_time")
