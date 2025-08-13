@@ -64,10 +64,10 @@
 
                         <!-- Nút tương tác -->
                         <div class="post-actions">
-                            <button class="action-btn like-btn" data-article-id="{{article.id}}">
+                            <button onclick="event.stopPropagation(); location.href='/like/add/{{article.id}}?next={{request.path}}'" class="action-btn like-count">
                                 <i class="fas fa-thumbs-up"></i> 高評価 ({{article.likes}})
                             </button>
-                            <button class="action-btn dislike-btn" data-article-id="{{article.id}}">
+                            <button onclick="event.stopPropagation(); location.href='/dislike/add/{{article.id}}?next={{request.path}}'" class="action-btn dislike-count">
                                 <i class="fas fa-thumbs-down"></i> 低評価 ({{article.dislikes}})
                             </button>
                             <button class="action-btn comment-count">

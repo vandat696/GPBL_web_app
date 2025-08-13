@@ -252,10 +252,15 @@ class LikeView(View):
         article.likes=article.likes+1
         article.score=article.likes-article.dislikes*2
         article.save()
+
         if article.user_name != "ゲスト":
             user=get_object_or_404(UserName,user_name=article.user_name)
             user.score=user.score+1
             user.save()
+        
+        next_url = request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
         return redirect("app1:discussions")
 
 
@@ -265,10 +270,15 @@ class DislikeView(View):
         article.dislikes=article.dislikes+1
         article.score=article.likes-article.dislikes*2
         article.save()
+        
         if article.user_name != "ゲスト":
             user=get_object_or_404(UserName,user_name=article.user_name)
             user.score=user.score-2
             user.save()
+
+        next_url = request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
         return redirect("app1:discussions")
 
 
