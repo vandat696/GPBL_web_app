@@ -19,21 +19,21 @@
 <body>
     <!-- Header đơn giản -->
     <header class="comment-header">
-        <div class="comment-header-content">
-            <button class="back-button" onclick="history.back()">
-                <i class="fas fa-arrow-left"></i> 戻る
-            </button>
-            <div class="comment-header-title">コメント</div>
-        </div>
-    </header>
+    <div class="comment-header-content">
+        <a href="{% url 'app1:discussions' %}" class="back-button">
+            <i class="fas fa-arrow-left"></i> 戻る
+        </a>
+        <div class="comment-header-title">コメント</div>
+    </div>
+</header>
 
-    <!-- Modal overlay cho comment -->
-    <div id="comment-modal" class="comment-modal-backdrop">
-        <div class="comment-modal-content comment-modal-wide">
-            <!-- Nút đóng -->
-            <button class="comment-close-button" onclick="history.back()">
-                <i class="fas fa-times"></i>
-            </button>
+<!-- Modal overlay cho comment -->
+<div id="comment-modal" class="comment-modal-backdrop">
+    <div class="comment-modal-content comment-modal-wide">
+        <!-- Nút đóng -->
+        <a href="{% url 'app1:discussions' %}" class="comment-close-button">
+            <i class="fas fa-times"></i>
+        </a>
 
             <!-- Vùng cuộn: bài viết + comment -->
             <div class="modal-scroll-area">
