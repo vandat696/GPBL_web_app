@@ -94,7 +94,9 @@
 
                     <!-- 投稿一覧 -->
                     {% for article in articles %}
-                    <article class="post-detail">
+                    <article class="post-detail"
+                            onclick="location.href='/comment/post/{{article.id}}'"
+                            style="cursor: pointer;">
                         <header>
                             <h2>{{article.title}}</h2>
                             <div class="post-meta">
