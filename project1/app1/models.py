@@ -34,6 +34,8 @@ class Comment(models.Model):
     user_name=models.TextField(default="ゲスト",verbose_name="user_name")
     body=models.TextField(verbose_name="comment")
     created=models.DateTimeField(auto_now_add=True,verbose_name="created_date_time")
+    likes=models.IntegerField(default=0,verbose_name="likes_count")
+    dislikes=models.IntegerField(default=0,verbose_name="dislikes_count")
 
     def __str__(self):
         return self.body

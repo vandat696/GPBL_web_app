@@ -8,7 +8,7 @@ from django.db.models import Q
 from google import genai
 cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
 #apiキーはこのアプリ以外で使用しないでください
-#comment
+#commentcomment
 
 def create_summary(id):
     #反応が上位10件の投稿を抽出する
@@ -238,6 +238,31 @@ class DislikeView(View):
             user.save()
         return redirect("app1:discussions")
 
+
+class CommentLikeView(View):
+    def get(self,request,id):
+        comment=get_object_or_404(Comment,id=id)
+        comment.likes=comment.likes+1
+        comment.save()
+        if comment.user_name != "ゲスト":
+            user=get_object_or_404(UserName,user_name=comment.user_name)
+            user.score=user.score+1
+            user.save()
+        return redirect("app1:discussions")
+
+
+class CommentDislikeView(View):
+    def get(self,request,id):
+        comment=get_object_or_404(Comment,id=id)
+        comment.dislikes=comment.dislikes+1
+        comment.save()
+        if comment.user_name != "ゲスト":
+            user=get_object_or_404(UserName,user_name=comment.user_name)
+            user.score=user.score-2
+            user.save()
+        return redirect("app1:discussions")
+
+
 class UserRegistrationView(View):
     def get(self,request):
         form = UserRegistrationForm()
@@ -293,6 +318,8 @@ comment_post=CommentView.as_view()
 search=SearchView.as_view()
 like_add=LikeView.as_view()
 dislike_add=DislikeView.as_view()
+comment_like_add=CommentLikeView.as_view()
+comment_dislike_add=CommentDislikeView.as_view()
 user_resistration=UserRegistrationView.as_view()
 ranking=RankingView.as_view()
 caluculate_score=CalculateScoreView.as_view()
