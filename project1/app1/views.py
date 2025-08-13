@@ -43,7 +43,7 @@ def create_summary(id):
     response=cliant.models.generate_content(model="gemini-2.0-flash-lite",contents=prompt)
     response=str(response.text)
     #print(response)
-    guidebook = GuideBook.objects.get(tag=tag_name)
+    guidebook = GuideBook.objects.get(tag__name=tag_name)
     guidebook.body=response
     guidebook.save()
     return response
@@ -108,16 +108,29 @@ class DiscussionsView(View):
             try:
                 if article.user_name != "ゲスト":
                     user_obj = UserName.objects.get(user_name=article.user_name)
-                    if user_obj.score < 100:
-                        article.is_new_user = True
-                    elif user_obj.score >= 200 & user_obj.score < 500:
-                        article.bronze_user = True      
-                    elif user_obj.score >= 500 & user_obj.score < 1000:
-                        article.silver_user = True
-                    elif user_obj.score >= 1000:
-                        article.gold_user = True
+                    score = user_obj.score
+                    if score < 100:
+                        article.rank1_user = True
+                    elif 200 <= score < 300:
+                        article.rank2_user = True
+                    elif 300 <= score < 400:
+                        article.rank3_user = True
+                    elif 400 <= score < 500:
+                        article.rank4_user = True
+                    elif 500 <= score < 600:
+                        article.rank5_user = True
+                    elif 600 <= score < 700:
+                        article.rank6_user = True
+                    elif 700 <= score < 800:
+                        article.rank7_user = True
+                    elif 800 <= score < 900:
+                        article.rank8_user = True
+                    elif 900 <= score < 1000:
+                        article.rank9_user = True
+                    elif score >= 1000:
+                        article.rank10_user = True
                     else:
-                        article.is_new_user = False
+                        article.rank1_user = True
                 else:
                     article.is_new_user = False
             except UserName.DoesNotExist:

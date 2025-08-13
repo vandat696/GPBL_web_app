@@ -101,22 +101,50 @@
                                 <span><i class="far fa-clock"></i> {{article.created}}</span>
                                 <span><i class="fas fa-map-marker-alt"></i> 国: {{article.country}}</span>
                                 <span><i class="far fa-user"></i> 投稿者: {{article.user_name}}
-                                    {% if article.is_new_user %}
-                                    <img class = "other-image" src="{% static 'app1/img/New.png' %}" 
-                                    alt="New Comer" 
-                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
-                                    {% elif article.bronze_user %}
-                                    <img class = "other-image" src="{% static 'app1/img/Bronze.png' %}"
-                                    alt="Bronze User"
-                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
-                                    {% elif article.silver_user %}
-                                    <img class = "other-image" src="{% static 'app1/img/Silver.png' %}"
-                                    alt="Silver User"
-                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
-                                    {% elif article.gold_user %}
-                                    <img class = "other-image" src="{% static 'app1/img/Gold.png' %}"
-                                    alt="Gold User"
-                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% if article.rank1_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/1.png' %}" 
+                                    alt="Rank1 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank2_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/2.png' %}"
+                                    alt="Rank2 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank3_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/3.png' %}"
+                                    alt="Rank3 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank4_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/4.png' %}"
+                                    alt="Rank4 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank5_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/5.png' %}"
+                                    alt="Rank5 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank6_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/6.png' %}"
+                                    alt="Rank6 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank7_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/7.png' %}"
+                                    alt="Rank7 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank8_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/8.png' %}"
+                                    alt="Rank8 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank9_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/9.png' %}"
+                                    alt="Rank9 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.rank10_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/10.png' %}"
+                                    alt="Rank10 User"
+                                    style="width:100px !important; height:30px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% else %}
+                                    <img class = "other-image" src="{% static 'app1/img/New.png' %}"
+                                    alt="Guest"
+                                    style="width:50px !important; height:15px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
                                     {% endif %}
                             </div>
                             <!-- タグ表示を追加 -->
