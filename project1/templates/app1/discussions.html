@@ -105,8 +105,19 @@
                                     <img class = "other-image" src="{% static 'app1/img/New.png' %}" 
                                     alt="New Comer" 
                                     style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.bronze_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/Bronze.png' %}"
+                                    alt="Bronze User"
+                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.silver_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/Silver.png' %}"
+                                    alt="Silver User"
+                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
+                                    {% elif article.gold_user %}
+                                    <img class = "other-image" src="{% static 'app1/img/Gold.png' %}"
+                                    alt="Gold User"
+                                    style="width:50px !important; height:50px !important; vertical-align:middle !important; margin:0 !important; box-shadow:none !important; ">
                                     {% endif %}
-                                </span>
                             </div>
                             <!-- タグ表示を追加 -->
                             {% if article.tag.all %}

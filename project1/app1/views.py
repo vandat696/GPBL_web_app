@@ -108,7 +108,16 @@ class DiscussionsView(View):
             try:
                 if article.user_name != "ゲスト":
                     user_obj = UserName.objects.get(user_name=article.user_name)
-                    article.is_new_user = (user_obj.score < 100)
+                    if user_obj.score < 100:
+                        article.is_new_user = True
+                    elif user_obj.score >= 200 & user_obj.score < 500:
+                        article.bronze_user = True      
+                    elif user_obj.score >= 500 & user_obj.score < 1000:
+                        article.silver_user = True
+                    elif user_obj.score >= 1000:
+                        article.gold_user = True
+                    else:
+                        article.is_new_user = False
                 else:
                     article.is_new_user = False
             except UserName.DoesNotExist:
