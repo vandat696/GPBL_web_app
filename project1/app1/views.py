@@ -1,3 +1,4 @@
+from datetime import timedelta, timezone
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .forms import ArticleModelForm,CommentForm,UserRegistrationForm
@@ -102,6 +103,16 @@ class DiscussionsView(View):
         
         if keyword:
             articles = articles.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
+        
+        for article in articles:
+            try:
+                if article.user_name != "ゲスト":
+                    user_obj = UserName.objects.get(user_name=article.user_name)
+                    article.is_new_user = (user_obj.score < 100)
+                else:
+                    article.is_new_user = False
+            except UserName.DoesNotExist:
+                article.is_new_user = False
         
         comments = Comment.objects.all()
         tags = Tags.objects.all()
