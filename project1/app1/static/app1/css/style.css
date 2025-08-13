@@ -375,12 +375,19 @@ body {
     color: #7f8c8d;
     margin-bottom: 1.5rem;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 1rem;
     padding: 0.8rem 1.2rem;
     background-color: #f8fafa;
     border-radius: 8px;
     border-left: 4px solid #27ae60;
+}
+
+.post-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
 }
 
 /* Xử lý bài viết có ảnh và không có ảnh */
@@ -1111,7 +1118,28 @@ body {
     .search-button i,
     #general-search-button i {
         font-size: 1rem;
-    }
-    
-    
+    }  
 }
+
+/* Cải thiện hiển thị post-meta */
+.post-meta {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    background-color: #f8fafa;
+    border-radius: 8px;
+    border-left: 4px solid #27ae60;
+}
+
+.post-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
