@@ -397,6 +397,11 @@ body {
     gap: 1.5rem;
 }
 
+.other-image {
+    height: auto;
+    display: block; /* Để căn giữa */
+}
+
 .post-detail img {
     max-width: 100%;
     height: auto;
