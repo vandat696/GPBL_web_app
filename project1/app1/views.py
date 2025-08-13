@@ -109,25 +109,25 @@ class DiscussionsView(View):
                 if article.user_name != "ゲスト":
                     user_obj = UserName.objects.get(user_name=article.user_name)
                     score = user_obj.score
-                    if score < 100:
+                    if score < 5:
                         article.rank1_user = True
-                    elif 200 <= score < 300:
+                    elif 5 <= score < 15:
                         article.rank2_user = True
-                    elif 300 <= score < 400:
+                    elif 15 <= score < 100:
                         article.rank3_user = True
-                    elif 400 <= score < 500:
+                    elif 100 <= score < 500:
                         article.rank4_user = True
-                    elif 500 <= score < 600:
+                    elif 500 <= score < 2000:
                         article.rank5_user = True
-                    elif 600 <= score < 700:
+                    elif 2000 <= score < 5000:
                         article.rank6_user = True
-                    elif 700 <= score < 800:
+                    elif 5000 <= score < 10000:
                         article.rank7_user = True
-                    elif 800 <= score < 900:
+                    elif 10000 <= score < 30000:
                         article.rank8_user = True
-                    elif 900 <= score < 1000:
+                    elif 30000 <= score < 100000:
                         article.rank9_user = True
-                    elif score >= 1000:
+                    elif score >= 100000:
                         article.rank10_user = True
                     else:
                         article.rank1_user = True
