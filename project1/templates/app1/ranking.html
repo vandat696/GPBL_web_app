@@ -51,9 +51,78 @@
         <!-- Header  -->
         <div class="ranking-header">
             <h1>
+            
+
                 <i class="fas fa-trophy"></i>
                 ユーザーランキング
             </h1>
+    <div class="tooltip-container">
+        <i class="fas fa-question-circle rank-info-icon"></i>
+        <span class="tooltip-text">
+            <h4>ランクについて</h4>
+            <div class="rank-table">
+                <div class="rank-row header">
+                    <div class="rank-cell">ランク</div>
+                    <div class="rank-cell">ランク名</div>
+                    <div class="rank-cell">スコア</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">1</div> 
+                    <div class="rank-cell"><img src="{% static 'app1/img/1.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">0-5</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">2</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/2.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">5-15</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">3</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/3.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">15-100</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">4</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/4.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">100-500</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">5</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/5.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">500-2000</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">6</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/6.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">2000-5000</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">7</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/7.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">5000-10000</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">8</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/8.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">10000-30000</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">9</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/9.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">30000-100000</div>
+                </div>
+                <div class="rank-row">
+                    <div class="rank-cell">10</div>
+                    <div class="rank-cell"><img src="{% static 'app1/img/10.png' %}" alt="Rank 1"></div>
+                    <div class="rank-cell">100000+</div>
+                </div>
+
+            </div>
+            <p class="table-description">
+                ランクはあなたのコミュニティへの貢献度を反映しています。
+            </p>
+        </span>
+    </div>
             <div class="ranking-description">
                 <i class="fas fa-info-circle"></i>
                 スコアの計算式：獲得した高評価数 × 1 - 獲得した低評価数 × 2
