@@ -222,6 +222,140 @@ body {
     color: #cd7f32;
 }
 
+/* Tooltip styles */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.rank-info-icon {
+    font-size: 1.5rem;
+    color: #007bff;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 900px; /* Rộng hơn để chứa bảng */
+    background-color: #f8f9fa;
+    color: #333;
+    text-align: left;
+    border-radius: 8px;
+    padding: 20px;
+    position: absolute;
+    z-index: 10;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid #dee2e6;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-text h4 {
+    margin-top: 0;
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+/* Hiệu ứng khi hover dấu "?" */
+.rank-info-icon {
+    font-size: 1.5rem;
+    color: #28a745; /* Đổi màu xanh lá cây */
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.tooltip-container:hover .rank-info-icon {
+    color: #218838; /* Màu đậm hơn khi hover */
+    transform: scale(1.1); /* Phóng to nhẹ */
+}
+
+/* Vùng hover bao gồm cả biểu tượng và tooltip */
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+/* Bảng rank trong tooltip - Đổi màu chủ đạo và thêm hiệu ứng */
+.rank-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #4CAF50; /* Viền xanh lá cây đậm */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho toàn bộ bảng */
+}
+
+.rank-row {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease-in-out; /* Hiệu ứng chuyển màu khi hover */
+}
+
+.rank-row:last-child {
+    border-bottom: none;
+}
+
+.rank-row:hover {
+    background-color: #f1f8e9; /* Màu nền xanh nhạt khi hover vào hàng */
+}
+
+.rank-row.header {
+    /* Tạo nền gradient cho tiêu đề */
+    background: linear-gradient(135deg, #8bc34a, #4caf50); 
+    color: #ffffff; /* Chữ trắng */
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Đổ bóng cho chữ */
+}
+
+.rank-cell {
+    padding: 12px; /* Tăng padding để bảng rộng hơn */
+    text-align: center;
+    border-right: 1px solid #e0e0e0;
+}
+
+.rank-cell:last-child {
+    border-right: none;
+}
+/* Định nghĩa kích thước cụ thể cho từng cột */
+.rank-row .rank-cell:nth-child(1) { /* Cột đầu tiên (số rank) */
+    flex: 1; /* Chiếm 0.5 phần */
+}
+
+.rank-row .rank-cell:nth-child(2) { /* Cột ở giữa (ảnh rank) */
+    flex: 2; /* Chiếm 2 phần, rộng hơn */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rank-row .rank-cell:nth-child(3) { /* Cột cuối cùng (điểm số) */
+    flex: 1; /* Chiếm 1 phần */
+}
+/* Đổi kích thước và căn giữa hình ảnh rank */
+.rank-cell img {
+    width: 120px;
+    height: 30px;
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+.table-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-align: center;
+    margin: 0;
+}
+
+
 .user-name {
     font-weight: 600;
     font-size: 1.1rem;
