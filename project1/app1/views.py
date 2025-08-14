@@ -11,6 +11,7 @@ cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
 #apiキーはこのアプリ以外で使用しないでください
 #commentcomment
 
+
 def create_summary(id):
     #反応が上位10件の投稿を抽出する
     articles = Article.objects.filter(tag__id=id).order_by('-score')
@@ -24,32 +25,34 @@ def create_summary(id):
     ・文章には何かの問題を解決する方法を必ず入れてください。
     ・全体が"""+tag_name+"""に一切関係ない投稿や、明らかに嘘の投稿は無視してください。
     ・「質問に対する返答または情報の補足」以外のコメントは無視してください。
+    ・ユーザ名は無視してください。
     ・太文字や改行は使わずに、文字のみを使ってください。
     ・項目を大きく３つ程度に分けて段落分けしてください。
     ・文字数は1000文字を超えないようにしてください。
     """
+
+    prompt_article=""
     article_count=1
     minimum_score=0
     for article in articles:
         if article.score>=minimum_score:
-            prompt=prompt+"\n投稿"+str(article_count)+"\n"
-            prompt=prompt+str(article.body)+"\n"
+            prompt_article=prompt_article+"\n投稿"+str(article_count)+" (ユーザ名："+str(article.user_name)+")"+"\n"
+            prompt_article=prompt_article+str(article.body)+"\n"
             comments = Comment.objects.filter(article_id=article).order_by('created')
             if len(comments)!=0:
-                prompt=prompt+"投稿"+str(article_count)+"に対するコメント\n"
+                prompt_article=prompt_article+"投稿"+str(article_count)+"に対するコメント\n"
                 for comment in comments:
-                    prompt=prompt+"・"+str(comment.body)+"\n"
+                    prompt_article=prompt_article+"・"+str(comment.body)+"\n"
             article_count=article_count+1
+    prompt=prompt+prompt_article
     print("プロンプト："+prompt)
     response=cliant.models.generate_content(model="gemini-2.5-flash-lite",contents=prompt)
     response=str(response.text)
-    print("レスポンス："+response)
+    #print("レスポンス："+response)
     guidebook = GuideBook.objects.get(tag__name=tag_name)
-    guidebook.body=response
+    guidebook.body=response+"\n\n<元となった投稿>\n"+prompt_article
     guidebook.save()
     return response
-
-
 
 
 class IndexView(View):
