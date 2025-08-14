@@ -17,7 +17,7 @@ class  Article(models.Model):
     dislikes=models.IntegerField(default=0,verbose_name="dislikes_count")
     comments=models.IntegerField(default=0,verbose_name="comments_count")
     score=models.IntegerField(default=0,verbose_name="score")
-    
+
     def __str__(self):
         return self.title
     
