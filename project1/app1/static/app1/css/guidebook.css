@@ -91,3 +91,20 @@ p {
 .back-button-container {
     text-align: center;
 }
+
+.guidebook-image {
+text-align: center; 
+margin-bottom: 30px; 
+}
+
+.guidebook-image img {
+max-width: 50%; /* Giảm kích thước tối đa để không chiếm hết chiều ngang, tạo cảm giác cân đối */
+height: auto; 
+border-radius: 12px; 
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+margin-top: 20px;
+display: block; 
+margin-left: auto;
+margin-right: auto;
+border: 2px solid #e0f7fa;
+}

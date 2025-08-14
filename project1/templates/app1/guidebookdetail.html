@@ -13,6 +13,13 @@
             <i class="fas fa-arrow-left"></i> 戻る
         </button>
         <h3 class="text-center">{{guidebook.title}}</h3>
+        
+        {% if guidebook.picture %}
+            <div class="guidebook-image">
+                <img src="{{ guidebook.picture.url }}" alt="{{ guidebook.title }}">
+            </div>
+        {% endif %}
+
         <p>{{guidebook.body}}</p>
     </div>
 </body>
