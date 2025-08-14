@@ -25,10 +25,13 @@ def create_summary(id):
     ・全体が"""+tag_name+"""に一切関係ない投稿や、明らかに嘘の投稿は無視してください。
     ・「質問に対する返答または情報の補足」以外のコメントは無視してください。
     ・太文字や改行は使わずに、文字のみを使ってください。
+    ・項目を大きく３つ程度に分けて段落分けしてください。
+    ・文字数は1000文字を超えないようにしてください。
     """
     article_count=1
+    minimum_score=0
     for article in articles:
-        if article.score>=0:
+        if article.score>=minimum_score:
             prompt=prompt+"\n投稿"+str(article_count)+"\n"
             prompt=prompt+str(article.body)+"\n"
             comments = Comment.objects.filter(article_id=article).order_by('created')
@@ -37,10 +40,10 @@ def create_summary(id):
                 for comment in comments:
                     prompt=prompt+"・"+str(comment.body)+"\n"
             article_count=article_count+1
-    #print(prompt)
-    response=cliant.models.generate_content(model="gemini-2.5-pro",contents=prompt)
+    print("プロンプト："+prompt)
+    response=cliant.models.generate_content(model="gemini-2.5-flash-lite",contents=prompt)
     response=str(response.text)
-    #print(response)
+    print("レスポンス："+response)
     guidebook = GuideBook.objects.get(tag__name=tag_name)
     guidebook.body=response
     guidebook.save()
