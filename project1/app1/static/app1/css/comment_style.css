@@ -505,3 +505,16 @@ body {
     align-items: center;
     gap: 0.5rem;
 }
+
+.fas.fa-tag {
+    margin-right: 2px !important;
+    vertical-align: middle; 
+}
+
+.tag-item i {
+    margin-right: 2px;
+}
+.tag-item {
+    margin-right: 2px;
+}
+
