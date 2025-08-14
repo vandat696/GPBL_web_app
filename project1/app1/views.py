@@ -14,9 +14,6 @@ cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
 def create_summary(id):
     #反応が上位10件の投稿を抽出する
     articles = Article.objects.filter(tag__id=id).order_by('-score')
-    max=10
-    if max>len(articles):
-        max=len(articles)
     tag_name=str(Tags.objects.get(id=id))
     #プロンプトを決める
     prompt="""
@@ -31,16 +28,17 @@ def create_summary(id):
     """
     article_count=1
     for article in articles:
-        prompt=prompt+"\n投稿"+str(article_count)+"\n"
-        prompt=prompt+str(article.body)+"\n"
-        comments = Comment.objects.filter(article_id=article).order_by('created')
-        if len(comments)!=0:
-            prompt=prompt+"投稿"+str(article_count)+"に対するコメント\n"
-            for comment in comments:
-                prompt=prompt+"・"+str(comment.body)+"\n"
-        article_count=article_count+1
+        if article.score>=0:
+            prompt=prompt+"\n投稿"+str(article_count)+"\n"
+            prompt=prompt+str(article.body)+"\n"
+            comments = Comment.objects.filter(article_id=article).order_by('created')
+            if len(comments)!=0:
+                prompt=prompt+"投稿"+str(article_count)+"に対するコメント\n"
+                for comment in comments:
+                    prompt=prompt+"・"+str(comment.body)+"\n"
+            article_count=article_count+1
     #print(prompt)
-    response=cliant.models.generate_content(model="gemini-2.0-flash-lite",contents=prompt)
+    response=cliant.models.generate_content(model="gemini-2.5-pro",contents=prompt)
     response=str(response.text)
     #print(response)
     guidebook = GuideBook.objects.get(tag__name=tag_name)
