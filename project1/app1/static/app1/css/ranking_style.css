@@ -245,7 +245,7 @@ body {
     padding: 20px;
     position: absolute;
     z-index: 10;
-    top: 150%;
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
@@ -279,6 +279,12 @@ body {
     transform: scale(1.1); /* Phóng to nhẹ */
 }
 
+/* Vùng hover bao gồm cả biểu tượng và tooltip */
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
 /* Bảng rank trong tooltip - Đổi màu chủ đạo và thêm hiệu ứng */
 .rank-table {
     display: flex;
