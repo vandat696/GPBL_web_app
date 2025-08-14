@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.ngrok-free.app',  # .で始めるとサブドメイン全部OK
+    '.onrender.com',         # cho tất cả subdomain của Render
 ]
 
 # Application definition
