@@ -39,6 +39,29 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.body
+    
+
+class ArticleLike(models.Model):
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    article_id=models.ForeignKey(Article,verbose_name="ArticleID",on_delete=models.CASCADE)
+    user_name=models.TextField(default="ゲスト",verbose_name="user_name")
+    likes=models.IntegerField(default=0,verbose_name="likes_count")
+    dislikes=models.IntegerField(default=0,verbose_name="dislikes_count")
+
+    def __str__(self):
+        return self.str(id)
+    
+class CommentLike(models.Model):
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    comment_id=models.ForeignKey(Comment,verbose_name="CommentID",on_delete=models.CASCADE)
+    user_name=models.TextField(default="ゲスト",verbose_name="user_name")
+    likes=models.IntegerField(default=0,verbose_name="likes_count")
+    dislikes=models.IntegerField(default=0,verbose_name="dislikes_count")
+
+    def __str__(self):
+        return self.str(id)
+
+
 
 class UserName(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)

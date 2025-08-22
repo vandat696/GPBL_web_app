@@ -2,7 +2,7 @@ from datetime import timedelta, timezone
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .forms import ArticleModelForm,CommentForm,UserRegistrationForm
-from .models import Article,Comment,Tags,UserName,GuideBook
+from .models import Article,Comment,Tags,UserName,GuideBook,ArticleLike,CommentLike
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -28,7 +28,7 @@ def create_summary(id):
     ・ユーザ名は無視してください。
     ・太文字や改行は使わずに、文字のみを使ってください。
     ・項目を大きく３つ程度に分けて段落分けしてください。
-    ・文字数は1000文字を超えないようにしてください。
+    ・文字数は600文字を超えないようにしてください。
     """
 
     prompt_article=""
@@ -253,6 +253,24 @@ class SearchGuidebookView(View):
 class LikeView(View):
     def get(self,request,id):
         article=get_object_or_404(Article,id=id)
+
+        user=str(request.user)
+        if user=="AnonymousUser":
+            return redirect("app1:discussions")
+        
+        try:
+            articlelike = ArticleLike.objects.get(article_id=article)
+        except ArticleLike.DoesNotExist:
+            articlelike=ArticleLike()
+            articlelike.article_id=article
+            articlelike.user_name=str(request.user)
+
+        if articlelike.likes>0:
+            return redirect("app1:discussions")
+
+        articlelike.likes=articlelike.likes+1
+        articlelike.save()
+
         article.likes=article.likes+1
         article.score=article.likes-article.dislikes*2
         article.save()
@@ -271,6 +289,24 @@ class LikeView(View):
 class DislikeView(View):
     def get(self,request,id):
         article=get_object_or_404(Article,id=id)
+
+        user=str(request.user)
+        if user=="AnonymousUser":
+            return redirect("app1:discussions")
+        
+        try:
+            articlelike = ArticleLike.objects.get(article_id=article)
+        except ArticleLike.DoesNotExist:
+            articlelike=ArticleLike()
+            articlelike.article_id=article
+            articlelike.user_name=str(request.user)
+
+        if articlelike.dislikes>0:
+            return redirect("app1:discussions")
+
+        articlelike.dislikes=articlelike.dislikes+1
+        articlelike.save()
+
         article.dislikes=article.dislikes+1
         article.score=article.likes-article.dislikes*2
         article.save()
@@ -289,6 +325,24 @@ class DislikeView(View):
 class CommentLikeView(View):
     def get(self,request,id):
         comment=get_object_or_404(Comment,id=id)
+
+        user=str(request.user)
+        if user=="AnonymousUser":
+            return redirect("app1:discussions")
+        
+        try:
+            commentlike = CommentLike.objects.get(comment_id=comment)
+        except CommentLike.DoesNotExist:
+            commentlike=CommentLike()
+            commentlike.comment_id=comment
+            commentlike.user_name=str(request.user)
+
+        if commentlike.likes>0:
+            return redirect("app1:discussions")
+
+        commentlike.likes=commentlike.likes+1
+        commentlike.save()
+
         comment.likes=comment.likes+1
         comment.save()
         if comment.user_name != "ゲスト":
@@ -301,6 +355,24 @@ class CommentLikeView(View):
 class CommentDislikeView(View):
     def get(self,request,id):
         comment=get_object_or_404(Comment,id=id)
+
+        user=str(request.user)
+        if user=="AnonymousUser":
+            return redirect("app1:discussions")
+        
+        try:
+            commentlike = CommentLike.objects.get(comment_id=comment)
+        except CommentLike.DoesNotExist:
+            commentlike=CommentLike()
+            commentlike.comment_id=comment
+            commentlike.user_name=str(request.user)
+
+        if commentlike.dislikes>0:
+            return redirect("app1:discussions")
+
+        commentlike.dislikes=commentlike.dislikes+1
+        commentlike.save()
+
         comment.dislikes=comment.dislikes+1
         comment.save()
         if comment.user_name != "ゲスト":
