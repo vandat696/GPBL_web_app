@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from google import genai
+from django.core.paginator import Paginator
 cliant=genai.Client(api_key="AIzaSyCprYIJp44VWLGc-DK3pZigDmYapOAucDE")
 #apiキーはこのアプリ以外で使用しないでください
 #commentcomment
@@ -108,7 +109,12 @@ class DiscussionsView(View):
         if keyword:
             articles = articles.filter(Q(title__icontains=keyword) | Q(body__icontains=keyword))
         
-        for article in articles:
+        # Thêm logic phân trang
+        paginator = Paginator(articles, 30)  # Hiển thị 10 bài viết mỗi trang
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        for article in page_obj:
             try:
                 if article.user_name != "ゲスト":
                     user_obj = UserName.objects.get(user_name=article.user_name)
@@ -145,11 +151,12 @@ class DiscussionsView(View):
         
         context = {
             'form': form,
-            'articles': articles,
+            'articles': page_obj,
             'comments': comments,
             'tags': tags,
             'selected_tags': tag_id,
-            'keyword': keyword
+            'keyword': keyword,
+            'page_obj': page_obj  # Thêm đối tượng phân trang vào context
         }
         return render(request, 'app1/discussions.html', context)
     

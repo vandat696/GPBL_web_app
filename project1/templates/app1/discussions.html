@@ -206,12 +206,33 @@
                         {% endif %}
                     </article>
                     <hr>
+                    
                     {% endfor %}
+                    
                 </div>
+
+                    <div class="pagination">
+                        {% if articles.has_previous %}
+                            <a href="?page={{ articles.previous_page_number }}" class="page-link">&laquo; 前</a>
+                        {% endif %}
+
+                        {% for num in articles.paginator.page_range %}
+                            {% if articles.number == num %}
+                                <span class="page-link active">{{ num }}</span>
+                            {% else %}
+                             <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if articles.has_next %}
+                            <a href="?page={{ articles.next_page_number }}" class="page-link">次 &raquo;</a>
+                        {% endif %}
+                    </div>
             </div>
         </div>
+        
     </main>
-
+    
     <!-- post Modal -->
     <div id="post-modal" class="modal-backdrop" style="display: none;">
         <div class="modal-content">
